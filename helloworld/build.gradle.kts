@@ -49,3 +49,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+
+tasks.register("hello") {
+    group = "samples"
+    doLast {
+        println("Hello, World!")
+    }
+}
