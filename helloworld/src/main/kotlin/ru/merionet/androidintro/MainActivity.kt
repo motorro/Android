@@ -1,6 +1,7 @@
 package ru.merionet.androidintro
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import ru.merionet.androidintro.databinding.ActivityMainBinding
 
@@ -14,5 +15,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.hello.text = getString(R.string.hello_world)
+        Log.i(TAG, "Activity created")
+    }
+
+    companion object {
+        const val TAG = "MainActivity"
     }
 }
