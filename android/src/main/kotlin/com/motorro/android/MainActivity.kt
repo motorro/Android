@@ -1,15 +1,21 @@
 package com.motorro.android
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
+import java.io.File
+import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,9 +63,22 @@ class MainActivity : AppCompatActivity() {
     private fun onShare() {
         val intent = Intent().apply {
             action = Intent.ACTION_SEND
-            type = "text/*"
+            type = "image/png"
             putExtra(Intent.EXTRA_TEXT, txt.text)
+            putExtra(Intent.EXTRA_STREAM, getStatusPicture())
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         startActivity(Intent.createChooser(intent, getString(R.string.share_status)))
+    }
+
+    private fun getStatusPicture(): Uri {
+        val context = applicationContext
+        val bitmap = img.drawable.toBitmap()
+        val output = File(context.cacheDir, "status.png")
+        FileOutputStream(output).use {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+            it.flush()
+        }
+        return FileProvider.getUriForFile(context, context.packageName, output)
     }
 }
