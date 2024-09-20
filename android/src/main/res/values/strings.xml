@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">android</string>
+    <string name="app_name">Android</string>
     <string name="btn_set_ok">Set OK</string>
     <string name="btn_set_error">Set Error</string>
     <string name="content_image">Image</string>
     <string name="looks_good">Looks good!</string>
     <string name="looks_bad">Looks bad!</string>
+    <string name="share">Share</string>
+    <string name="share_status">Share status</string>
 </resources>

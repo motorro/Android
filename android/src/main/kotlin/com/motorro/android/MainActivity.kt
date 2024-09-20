@@ -1,5 +1,6 @@
 package com.motorro.android
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -8,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.appbar.MaterialToolbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,5 +41,25 @@ class MainActivity : AppCompatActivity() {
             img.setImageResource(R.drawable.ic_error)
             txt.text = getString(R.string.looks_bad)
         }
+
+        // Bind share button action
+        findViewById<MaterialToolbar>(R.id.topAppBar).setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.share -> {
+                    onShare()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun onShare() {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/*"
+            putExtra(Intent.EXTRA_TEXT, txt.text)
+        }
+        startActivity(Intent.createChooser(intent, getString(R.string.share_status)))
     }
 }
