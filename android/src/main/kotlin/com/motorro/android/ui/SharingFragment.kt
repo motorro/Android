@@ -15,6 +15,9 @@ import com.motorro.android.databinding.FragmentSharingBinding
 import java.io.File
 import java.io.FileOutputStream
 
+/**
+ * Illustrates data sharing between applications and a file-provider to share resource file
+ */
 class SharingFragment : Fragment() {
     private var _binding: FragmentSharingBinding? = null
     private val binding get() = requireNotNull(_binding) { "Binding not created or destroyed" }
@@ -58,6 +61,10 @@ class SharingFragment : Fragment() {
         startActivity(Intent.createChooser(intent, getString(R.string.share_status)))
     }
 
+    /**
+     * Converts drawable to bitmap and saves to the cache-dir
+     * Then creates an URL using application file provider
+     */
     private fun getStatusPicture(): Uri = with(binding) {
         val context = requireContext().applicationContext
         val bitmap = imageView.drawable.toBitmap()
