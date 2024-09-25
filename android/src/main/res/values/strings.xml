@@ -3,7 +3,7 @@
 
     <string name="title_sharing">Sharing</string>
     <string name="title_content">Content provider</string>
-    <string name="title_service">Service</string>
+    <string name="title_service">Service &amp; broadcast</string>
 
     <string name="btn_set_ok">Set OK</string>
     <string name="btn_set_error">Set Error</string>
@@ -12,4 +12,6 @@
     <string name="looks_bad">Looks bad!</string>
     <string name="share">Share</string>
     <string name="share_status">Share status</string>
+    <string name="btn_start_service">Start service</string>
+    <string name="btn_stop_service">Stop service</string>
 </resources>
