@@ -1,7 +1,10 @@
 package com.motorro.android.ui
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -13,14 +16,21 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.motorro.android.PlayerService
 import com.motorro.android.databinding.FragmentServiceBinding
 
+/**
+ * Demonstrates launched foreground service and local broadcasts
+ */
 class ServiceFragment : Fragment() {
     private var _binding: FragmentServiceBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var permissionRequestLauncher: ActivityResultLauncher<String>
+
+    // Listens to song broadcasts
+    private var songReceiver: BroadcastReceiver? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentServiceBinding.inflate(inflater, container, false)
@@ -63,6 +73,7 @@ class ServiceFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        listenToSong()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)) {
@@ -75,8 +86,30 @@ class ServiceFragment : Fragment() {
         }
     }
 
+    private fun listenToSong() {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                binding.currentLine.text = intent?.getStringExtra(PlayerService.SONG_LINE) ?: "No line provided"
+            }
+        }
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
+            receiver,
+            IntentFilter(PlayerService.SONG_ACTION)
+        )
+        songReceiver = receiver
+    }
+
+    private fun stopListening() {
+        songReceiver?.let {
+            LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(it)
+            songReceiver = null
+        }
+        binding.currentLine.text = ""
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        stopListening()
         _binding = null
     }
 }

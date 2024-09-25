@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -54,12 +55,21 @@ class PlayerService : LifecycleService() {
 
     private fun sing(message: String) {
         Log.i(TAG, message)
+
+        // Change notification with the current message
         val notificationManager = getSystemService(NotificationManager::class.java)
         val notifications = notificationManager.activeNotifications
         val ongoingNotification = notifications.find { NOTIFICATION_ID == it.id }
         if (null != ongoingNotification) {
             notificationManager.notify(NOTIFICATION_ID, buildNotification(message))
         }
+
+        // Broadcast current message
+        val intent = Intent(SONG_ACTION)
+        intent.putExtra(SONG_LINE, message)
+        LocalBroadcastManager
+            .getInstance(this)
+            .sendBroadcast(intent)
     }
 
     /**
@@ -101,6 +111,9 @@ class PlayerService : LifecycleService() {
         private const val TAG = "Player service"
         private const val CHANNEL_ID = "player_channel"
         private const val NOTIFICATION_ID = 100500
+
+        const val SONG_ACTION = "actionSong"
+        const val SONG_LINE = "extraLine"
 
         private val lyrics = listOf(
             "Baby shark, doo doo doo doo doo doo",
