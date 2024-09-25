@@ -125,6 +125,7 @@ androidx-camera-ml = { group = "androidx.camera", name = "camera-mlkit-vision", 
 androidx-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "crypto"}
 androidx-sqlight = { group = "androidx.sqlite", name = "sqlite", version.ref = "sqlite"}
 androidx-sqlight-ktx = { group = "androidx.sqlite", name = "sqlite-ktx", version.ref = "sqlite"}
+androidx-localbroadcast = { group = "androidx.localbroadcastmanager", name = "localbroadcastmanager", version.ref = "localbroadcast"}
 google-ml-textRecognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkit"}
 javax-inject-annotations = { group = "javax.inject", name = "javax.inject", version = "1" }
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }

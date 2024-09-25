@@ -14,4 +14,5 @@
     <string name="share_status">Share status</string>
     <string name="btn_start_service">Start service</string>
     <string name="btn_stop_service">Stop service</string>
+    <string name="lbl_current_line">Current line:</string>
 </resources>
