@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.motorro.android"
+    namespace = "com.motorro.android.listener"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.motorro.android.app"
+        applicationId = "com.motorro.android.listener"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
@@ -41,18 +41,9 @@ android {
 
 dependencies {
     implementation(project(":android:player"))
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.service)
-    implementation(libs.androidx.localbroadcast)
 }
