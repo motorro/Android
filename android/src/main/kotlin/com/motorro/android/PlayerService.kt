@@ -6,12 +6,14 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
+import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.motorro.android.player.IPlayerService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -21,7 +23,6 @@ import kotlinx.coroutines.launch
  * Plays the song
  */
 class PlayerService : LifecycleService() {
-
     private var job: Job? = null
 
     /**
@@ -32,6 +33,11 @@ class PlayerService : LifecycleService() {
         Log.i(TAG, "Service created")
         startForeground()
         startPlayback()
+    }
+
+    override fun onBind(intent: Intent): IBinder {
+        super.onBind(intent)
+        return playerService
     }
 
     override fun onDestroy() {
@@ -107,6 +113,13 @@ class PlayerService : LifecycleService() {
         .setOngoing(true)
         .build()
 
+
+    private val playerService = object : IPlayerService.Stub() {
+        override fun asBinder(): IBinder = this
+
+        override fun getTrackTitle(): String = title
+    }
+
     companion object {
         private const val TAG = "Player service"
         private const val CHANNEL_ID = "player_channel"
@@ -115,6 +128,7 @@ class PlayerService : LifecycleService() {
         const val SONG_ACTION = "actionSong"
         const val SONG_LINE = "extraLine"
 
+        private const val title = "Baby Shark"
         private val lyrics = listOf(
             "Baby shark, doo doo doo doo doo doo",
             "Baby shark, doo doo doo doo doo doo",

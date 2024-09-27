@@ -27,3 +27,5 @@ rootProject.name = "Android"
 include(":core")
 include(":composecore")
 include(":android")
+include(":android:player")
+include(":android:listener")
