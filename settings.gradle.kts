@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Merion Android"
 include(":helloworld")
- 
+include(":tasks")
