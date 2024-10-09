@@ -23,4 +23,9 @@ sealed class LoginUiState {
         val loginEnabled: Boolean,
         val message: String? = null
     ) : LoginUiState()
+
+    /**
+     * The flow has terminated
+     */
+    data object Terminated : LoginUiState()
 }
