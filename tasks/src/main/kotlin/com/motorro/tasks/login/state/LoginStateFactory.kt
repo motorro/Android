@@ -30,4 +30,28 @@ interface LoginStateFactory {
      * No updates after this state is set to state machine
      */
     fun terminated(): LoginState
+
+    class Impl: LoginStateFactory {
+
+        private val context = object : LoginContext {
+            override val factory: LoginStateFactory = this@Impl
+        }
+
+        override fun init(userName: String?, message: String?) = form(LoginData(
+            userName = userName.orEmpty(),
+            message = message
+        ))
+
+        override fun form(data: LoginData) = LoginFormState(
+            context,
+            data
+        )
+
+        override fun loggingIn(data: LoginData) = LoggingInState(
+            context,
+            data
+        )
+
+        override fun terminated() = TerminatedState(context)
+    }
 }
