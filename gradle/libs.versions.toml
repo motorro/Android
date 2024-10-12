@@ -10,6 +10,7 @@ serialization = "1.7.1"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
+androidXTestVersion = "1.6.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
@@ -28,6 +29,7 @@ mockk = "1.13.13"
 jetbrainsKotlinJvm = "2.0.10"
 ktor = "2.3.12"
 logback = "1.5.6"
+datastore = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +43,8 @@ kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidXTestVersion" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidXTestVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -61,6 +65,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-datastore-ptoto = { group = "androidx.datastore", name = "datastore", version.ref = "datastore"}
 commonstatemachine-machine = { module = "com.motorro.commonstatemachine:commonstatemachine", version.ref = "statemachine"}
 commonstatemachine-coroutines = { module = "com.motorro.commonstatemachine:coroutines", version.ref = "statemachine"}
 napier = { module = "io.github.aakira:napier", version = "2.7.1" }

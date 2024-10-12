@@ -1,7 +1,7 @@
 package ru.merionet.tasks.login.state
 
 import com.motorro.commonstatemachine.coroutines.CoroutineState
-import ru.merionet.tasks.Logging
+import ru.merionet.core.log.Logging
 import ru.merionet.tasks.login.data.LoginGesture
 import ru.merionet.tasks.login.data.LoginUiState
 
