@@ -1,4 +1,4 @@
-package ru.merionet.tasks
+package ru.merionet.core.log
 
 import io.github.aakira.napier.LogLevel
 import io.github.aakira.napier.Napier
