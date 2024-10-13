@@ -6,7 +6,7 @@ import io.ktor.http.appendPathSegments
 import ru.merionet.tasks.core.getStaticConfig
 
 /**
- * Builds server URL
+ * Builds server URL using static application config
  */
 fun HttpRequestBuilder.platformUrl(endpoint: List<String>, extra: URLBuilder.() -> Unit = {}) {
     url {
