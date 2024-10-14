@@ -1,4 +1,4 @@
-package ru.merionet.tasks.ui
+package com.jetsmarter.composecore.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues

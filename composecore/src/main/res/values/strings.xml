@@ -1,0 +1,9 @@
+<resources>
+    <string name="title_loading">Loading</string>
+    <string name="msg_default_loading">Loading…</string>
+
+    <string name="title_error">Error</string>
+    <string name="msg_default_error">Error</string>
+    <string name="btn_retry">Retry</string>
+    <string name="btn_dismiss">Dismiss</string>
+</resources>

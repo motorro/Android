@@ -1,4 +1,4 @@
-package ru.merionet.tasks.ui.theme
+package com.jetsmarter.composecore.ui.theme
 
 import androidx.compose.material3.Typography
 

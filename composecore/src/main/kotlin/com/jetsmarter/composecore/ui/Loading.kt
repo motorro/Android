@@ -1,4 +1,4 @@
-package ru.merionet.tasks.ui
+package com.jetsmarter.composecore.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import ru.merionet.tasks.R
+import com.jetsmarter.composecore.R
 
 @Composable
 fun Loading(message: String? = null, contentPadding: PaddingValues = PaddingValues(0.dp)) {
@@ -23,20 +23,18 @@ fun Loading(message: String? = null, contentPadding: PaddingValues = PaddingValu
         verticalArrangement = Arrangement.Center
     ) {
         CircularProgressIndicator()
-        message?.let {
-            Text(
-                text = it,
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
+        Text(
+            text = message ?: stringResource(R.string.msg_default_loading),
+            modifier = Modifier.padding(16.dp),
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
 @Composable
 fun LoadingScreen(message: String? = null, onBack: () -> Unit) {
     ScreenScaffold(
-        title = message ?: stringResource(R.string.msg_loading),
+        title = stringResource(R.string.title_loading),
         onBack = onBack,
         content = { Loading(message, it) }
     )
