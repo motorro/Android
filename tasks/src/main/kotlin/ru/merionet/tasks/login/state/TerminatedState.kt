@@ -1,13 +1,20 @@
 package ru.merionet.tasks.login.state
 
-import ru.merionet.tasks.login.data.LoginUiState
+import ru.merionet.tasks.login.data.LoginData
 
-class TerminatedState(context: LoginContext) : BaseLoginState(context) {
+/**
+ * Terminating state that updates the parent flow with cancellation
+ */
+class TerminatedState(
+    context: LoginContext,
+    private val data: LoginData
+) : BaseLoginState(context) {
     /**
      * A part of [start] template to initialize state
      */
     override fun doStart() {
         super.doStart()
-        setUiState(LoginUiState.Terminated)
+        d { "User did not log in" }
+        data.flowHost.onNotAuthenticated()
     }
 }

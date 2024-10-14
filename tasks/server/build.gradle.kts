@@ -5,10 +5,10 @@ plugins {
     application
 }
 
-group = "ru.merionet.tasks"
+group = "ru.merionet.tasks.server"
 version = "1.0.0"
 application {
-    mainClass.set("ru.merionet.tasks.ApplicationKt")
+    mainClass.set("ru.merionet.tasks.server.ApplicationKt")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=${extra["io.ktor.development"] ?: "false"}")
 }
 

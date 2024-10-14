@@ -4,6 +4,7 @@ import io.mockk.Ordering
 import io.mockk.every
 import io.mockk.verify
 import org.junit.Test
+import ru.merionet.tasks.USER_NAME
 import ru.merionet.tasks.login.data.LoginGesture
 import ru.merionet.tasks.login.data.LoginUiState
 import kotlin.test.assertEquals
@@ -125,12 +126,12 @@ internal class LoginFormStateTest : BaseStateTest() {
 
     @Test
     fun terminatesOnBack() {
-        every { factory.terminated() } returns  nextState
+        every { factory.terminated(any()) } returns  nextState
 
         state.start(stateMachine)
         state.process(LoginGesture.Back)
         verify(ordering = Ordering.ORDERED) {
-            factory.terminated()
+            factory.terminated(loginData)
             stateMachine.setMachineState(nextState)
         }
     }

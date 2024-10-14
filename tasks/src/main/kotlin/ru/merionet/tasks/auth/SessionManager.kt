@@ -50,7 +50,7 @@ interface SessionManager {
     /**
      * Logs current user out
      */
-    suspend fun logout(): Flow<LceState<Session.NONE, SessionError>>
+    fun logout(): Flow<LceState<Session.NONE, SessionError>>
 
     /**
      * Session manager implementation using
@@ -134,7 +134,7 @@ interface SessionManager {
         /**
          * Logs current user out
          */
-        override suspend fun logout(): Flow<LceState<Session.NONE, SessionError>> = flow {
+        override fun logout(): Flow<LceState<Session.NONE, SessionError>> = flow {
             d { "Logging user out..." }
             this.emitIfSaved(Session.NONE)
         }

@@ -1,4 +1,4 @@
-package ru.merionet.tasks.login.view
+package ru.merionet.tasks.login.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,10 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.jetsmarter.composecore.ui.ScreenScaffold
 import ru.merionet.tasks.R
 import ru.merionet.tasks.login.data.LoginGesture
 import ru.merionet.tasks.login.data.LoginUiState
-import ru.merionet.tasks.ui.ScreenScaffold
 
 @Composable
 fun LoginScreen(state: LoginUiState.Form, onGesture: (LoginGesture) -> Unit) {

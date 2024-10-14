@@ -52,7 +52,7 @@ fun FatalError(
 }
 
 @Composable
-fun FatalErrorScreen(error: String, retriable: Boolean, onDismiss: () -> Unit, onBack: () -> Unit) {
+fun FatalErrorScreen(error: String?, retriable: Boolean, onDismiss: () -> Unit, onBack: () -> Unit) {
     ScreenScaffold(
         title = stringResource(R.string.title_error),
         onBack = onBack,

@@ -5,7 +5,7 @@ package ru.merionet.core.lce
  * @param DATA Expected data type
  * @param ERR Expected error type
  */
-sealed class LceState<out DATA: Any, out ERR: Any> {
+sealed class LceState<out DATA: Any, out ERR: Throwable> {
     /**
      * State data
      */
@@ -32,5 +32,5 @@ sealed class LceState<out DATA: Any, out ERR: Any> {
      * @property error Load error
      * @property data Data so far (if any)
      */
-    data class Error<out DATA: Any, out ERR: Throwable>(val error: ERR, override val data: DATA? = null) : LceState<DATA, ERR>()
+    data class Error<out DATA: Any, out ERR : Throwable>(val error: ERR, override val data: DATA? = null) : LceState<DATA, ERR>()
 }

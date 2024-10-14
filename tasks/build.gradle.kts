@@ -59,6 +59,7 @@ composeCompiler {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":composecore"))
     implementation(project(":tasks:data"))
 
     implementation(libs.androidx.core.ktx)
