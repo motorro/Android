@@ -14,6 +14,7 @@ import ru.merionet.tasks.data.AuthRequest
 import ru.merionet.tasks.data.ErrorCode
 import ru.merionet.tasks.data.HttpResponse
 import ru.merionet.tasks.data.SessionClaims
+import ru.merionet.tasks.data.UserName
 import ru.merionet.tasks.data.httpResponseModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -65,7 +66,7 @@ class ApplicationTest {
             accept(ContentType.Application.Json)
             contentType(ContentType.Application.Json)
             setBody(
-                json.encodeToString(AuthRequest.serializer(), AuthRequest("cool", "hacker"))
+                json.encodeToString(AuthRequest.serializer(), AuthRequest(UserName("cool"), "hacker"))
             )
         }
         assertEquals(HttpStatusCode.Forbidden, response.status)

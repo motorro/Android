@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.merionet.core.lce.LceState
 import ru.merionet.tasks.auth.SessionManager
 import ru.merionet.tasks.data.AuthRequest
+import ru.merionet.tasks.data.UserName
 import ru.merionet.tasks.login.data.LoginData
 import ru.merionet.tasks.login.data.LoginGesture
 import ru.merionet.tasks.login.data.LoginUiState
@@ -28,7 +29,7 @@ class LoggingInState(
     }
 
     private fun login() {
-        sessionManager.authenticate(AuthRequest(data.userName, data.password))
+        sessionManager.authenticate(AuthRequest(UserName(data.userName), data.password))
             .onEach {
                 when(it) {
                     is LceState.Loading -> {

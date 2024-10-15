@@ -23,15 +23,18 @@ import ru.merionet.core.lce.LceState
 import ru.merionet.tasks.auth.SessionManager.Impl.Companion.SessionSerializer
 import ru.merionet.tasks.auth.data.Session
 import ru.merionet.tasks.auth.data.SessionError
+import ru.merionet.tasks.auth.data.asTokens
 import ru.merionet.tasks.auth.net.AuthApi
 import ru.merionet.tasks.data.AuthRequest
 import ru.merionet.tasks.data.ErrorCode
 import ru.merionet.tasks.data.HttpResponse
 import ru.merionet.tasks.data.SessionClaims
+import ru.merionet.tasks.data.UserName
 import java.io.File
 import java.io.IOException
 import java.util.LinkedList
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -41,11 +44,11 @@ import kotlin.test.assertTrue
 class SessionManagerTest {
 
     private val request = AuthRequest(
-        username = "user",
+        username = UserName("user"),
         password = "password"
     )
     private val claims = SessionClaims(
-        username = "user",
+        username = UserName("user"),
         token = "token"
     )
 
@@ -84,6 +87,15 @@ class SessionManagerTest {
             ),
             manager.session.take(2).toList()
         )
+    }
+
+    @Test
+    fun throwsUnauthorizedErrorIfNoSessionSaved() = runTest(testDispatcher) {
+        val manager = createManager()
+
+        assertFailsWith<SessionError.Authentication> {
+            manager.getTokens()
+        }
     }
 
     @Test
@@ -130,6 +142,20 @@ class SessionManagerTest {
                 LceState.Content(Session.Active(claims))
             ),
             manager.session.take(2).toList()
+        )
+    }
+
+    @Test
+    fun respondsWithTokensIfSessionIsActive() = runTest(testDispatcher) {
+        val dataStore = createDataStore()
+        val manager = createManager(dataStore)
+
+        coEvery { api.login(request) } returns HttpResponse.Data(claims)
+        manager.authenticate(request).toList()
+
+        assertEquals(
+            claims.asTokens(),
+            manager.getTokens()
         )
     }
 

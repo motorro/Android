@@ -12,6 +12,7 @@ import ru.merionet.tasks.core.net.platformUrl
 import ru.merionet.tasks.data.AuthRequest
 import ru.merionet.tasks.data.HttpResponse
 import ru.merionet.tasks.data.SessionClaims
+import ru.merionet.tasks.di.LoginHttp
 import javax.inject.Inject
 
 /**
@@ -24,7 +25,7 @@ interface AuthApi {
      * Ktor API implementation
      */
     class Impl @Inject constructor(
-        private val httpClient: HttpClient,
+        @LoginHttp private val httpClient: HttpClient,
         private val dispatchers: DispatcherProvider
     ) : AuthApi {
         override suspend fun login(credentials: AuthRequest): HttpResponse<SessionClaims> {

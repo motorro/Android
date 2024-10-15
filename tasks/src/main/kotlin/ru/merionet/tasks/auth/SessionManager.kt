@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -24,6 +25,8 @@ import ru.merionet.core.lce.LceState
 import ru.merionet.core.log.Logging
 import ru.merionet.tasks.auth.data.Session
 import ru.merionet.tasks.auth.data.SessionError
+import ru.merionet.tasks.auth.data.Tokens
+import ru.merionet.tasks.auth.data.asTokens
 import ru.merionet.tasks.auth.net.AuthApi
 import ru.merionet.tasks.data.AuthRequest
 import ru.merionet.tasks.data.ErrorCode
@@ -40,6 +43,12 @@ interface SessionManager {
      * Current session state
      */
     val session: StateFlow<LceState<Session, SessionError>>
+
+    /**
+     * Retrieves tokens for authentication
+     * @throws SessionError.Authentication if user is not authenticated
+     */
+    suspend fun getTokens(): Tokens
 
     /**
      * Authenticates user
@@ -78,6 +87,26 @@ interface SessionManager {
                 started = SharingStarted.Lazily,
                 LceState.Loading()
             )
+
+        /**
+         * Retrieves tokens for authentication
+         * @throws SessionError.Authentication if user is not authenticated
+         * @throws SessionError.Storage if storage error occurred
+         */
+        override suspend fun getTokens(): Tokens {
+            val session = try {
+                dataStore.data.first()
+            } catch (e: Throwable) {
+                currentCoroutineContext().ensureActive()
+                w(e) { "Error reading session storage" }
+                throw SessionError.Storage(e)
+            }
+
+            when(session) {
+                is Session.NONE -> throw SessionError.Authentication(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.defaultMessage)
+                is Session.Active -> return session.claims.asTokens()
+            }
+        }
 
         /**
          * Emits session result if successfully saved

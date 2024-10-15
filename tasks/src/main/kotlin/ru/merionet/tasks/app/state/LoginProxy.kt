@@ -4,6 +4,7 @@ import com.motorro.commonstatemachine.ProxyMachineState
 import ru.merionet.core.log.Logging
 import ru.merionet.tasks.app.data.AppGesture
 import ru.merionet.tasks.app.data.AppUiState
+import ru.merionet.tasks.data.UserName
 import ru.merionet.tasks.domain.data.User
 import ru.merionet.tasks.login.LoginFlowHost
 import ru.merionet.tasks.login.data.LoginGesture
@@ -16,7 +17,7 @@ import javax.inject.Inject
  */
 class LoginProxy(
     private val context: AppContext,
-    private val userName: String?,
+    private val userName: UserName?,
     private val message: String?,
     private val onAuthGranted: (User) -> AppState,
     private val loginFactory: LoginStateFactory
@@ -76,7 +77,7 @@ class LoginProxy(
     class Factory @Inject constructor(private val loginFactory: LoginStateFactory) {
         operator fun invoke(
             context: AppContext,
-            userName: String?,
+            userName: UserName?,
             message: String?,
             onAuthGranted: (User) -> AppState
         ): AppState = LoginProxy(

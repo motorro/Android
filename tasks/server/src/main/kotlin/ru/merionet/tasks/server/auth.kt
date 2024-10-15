@@ -13,11 +13,12 @@ import org.jetbrains.annotations.VisibleForTesting
 import ru.merionet.tasks.data.AuthRequest
 import ru.merionet.tasks.data.HttpResponse
 import ru.merionet.tasks.data.SessionClaims
+import ru.merionet.tasks.data.UserName
 
 @VisibleForTesting
 internal const val TOKEN = "token123"
 @VisibleForTesting
-internal const val USERNAME = "username"
+internal val USERNAME = UserName("username")
 @VisibleForTesting
 internal const val PASSWORD = "password"
 
@@ -26,7 +27,7 @@ fun AuthenticationConfig.stubBearer(name: String? = null) {
         realm = name
         authenticate { credential ->
             if (TOKEN == credential.token) {
-                UserIdPrincipal(USERNAME)
+                UserIdPrincipal(USERNAME.value)
             } else {
                 null
             }
