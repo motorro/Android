@@ -9,18 +9,10 @@ import io.ktor.server.auth.bearer
 import io.ktor.server.request.receiveNullable
 import io.ktor.server.response.respond
 import io.ktor.util.pipeline.PipelineContext
-import org.jetbrains.annotations.VisibleForTesting
 import ru.merionet.tasks.data.AuthRequest
 import ru.merionet.tasks.data.HttpResponse
 import ru.merionet.tasks.data.SessionClaims
-import ru.merionet.tasks.data.UserName
 
-@VisibleForTesting
-internal const val TOKEN = "token123"
-@VisibleForTesting
-internal val USERNAME = UserName("username")
-@VisibleForTesting
-internal const val PASSWORD = "password"
 
 fun AuthenticationConfig.stubBearer(name: String? = null) {
     bearer(name) {

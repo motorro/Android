@@ -32,6 +32,8 @@ dependencies {
     implementation(libs.ktor.serialization.contentJson)
     implementation(libs.ktor.server.auth)
     testImplementation(libs.ktor.server.tests)
+    testImplementation(libs.ktor.client.core)
+    testImplementation(libs.ktor.client.content.negotiation)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.junit)
 }
