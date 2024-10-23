@@ -37,7 +37,7 @@ class MemoryTaskStorage  @Inject constructor(private val dispatchers: Dispatcher
     /**
      * Updates storage with new data
      */
-    override suspend fun update(userName: UserName, update: TaskUpdates) {
+    override suspend fun update(userName: UserName, update: TaskUpdates): Version {
         d { "Updating tasks..." }
         val data = tasks.value.toMutableMap()
         val tasks = data[userName]?.tasks.orEmpty().toMutableMap()
@@ -63,6 +63,7 @@ class MemoryTaskStorage  @Inject constructor(private val dispatchers: Dispatcher
         )
 
         this.tasks.emit(data)
+        return update.latestVersion
     }
 }
 

@@ -37,9 +37,10 @@ class DbTaskStorage @Inject constructor(
     /**
      * Updates storage with new data
      */
-    override suspend fun update(userName: UserName, update: TaskUpdates) {
+    override suspend fun update(userName: UserName, update: TaskUpdates): Version {
         withContext(dispatchers.io) {
             dao.update(userName, update)
         }
+        return update.latestVersion
     }
 }

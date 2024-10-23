@@ -35,7 +35,7 @@ interface ReadWriteTasks : ReadonlyTasks {
      * @param userName Active user
      * @param update Task updates
      */
-    suspend fun update(userName: UserName, update: TaskUpdates)
+    suspend fun update(userName: UserName, update: TaskUpdates): Version
 }
 
 
