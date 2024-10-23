@@ -10,10 +10,15 @@ import ru.merionet.tasks.app.data.AppError
 import ru.merionet.tasks.app.data.toApp
 import ru.merionet.tasks.app.net.TasksApi
 import ru.merionet.tasks.app.net.netResult
+import ru.merionet.tasks.data.ErrorCode
 import ru.merionet.tasks.data.Task
+import ru.merionet.tasks.data.TaskCommand
 import ru.merionet.tasks.data.TaskId
+import ru.merionet.tasks.data.TaskUpdateRequest
+import ru.merionet.tasks.data.TaskUpdates
 import ru.merionet.tasks.data.UserName
 import ru.merionet.tasks.data.Version
+import ru.merionet.tasks.data.nextVersion
 import javax.inject.Inject
 
 /**
@@ -37,14 +42,14 @@ interface TasksRepository : ReadonlyTasks {
      * @param userName Bound user
      * @param task Task to update
      */
-    fun upsertTask(userName: UserName, task: Task): Flow<LceState<Unit, AppError>>
+    suspend fun upsertTask(userName: UserName, task: Task)
 
     /**
      * Delete task
      * @param userName Bound user
      * @param taskId Task ID
      */
-    fun deleteTask(userName: UserName, taskId: TaskId): Flow<LceState<Unit, AppError>>
+    suspend fun deleteTask(userName: UserName, taskId: TaskId)
 
     /**
      * Repository implementation (memory caching)
@@ -75,30 +80,84 @@ interface TasksRepository : ReadonlyTasks {
         private fun load(userName: UserName, version: Version?): Flow<LceState<Unit, AppError>> = flow {
             emit(LceState.Loading(Unit))
 
-            d { "Updating task list..." }
-            val changes = netResult { tasksApi.getUpdates(version) }.getOrElse {
+            doLoad(userName, version).getOrElse {
                 emit(LceState.Error(it.toApp(), Unit))
                 return@flow
             }
-
-            storage.update(userName, changes)
 
             emit(LceState.Content(Unit))
         }
 
         /**
+         * Does the update
+         */
+        private suspend fun doLoad(userName: UserName, version: Version?): Result<Version> {
+            d { "Updating task list..." }
+            return netResult { tasksApi.getUpdates(version) }.mapCatching { changes -> storage.update(userName, changes) }
+        }
+
+        /**
          * Insert / update
          */
-        override fun upsertTask(userName: UserName, task: Task): Flow<LceState<Unit, AppError>> {
-            TODO("Not yet implemented")
+        override suspend fun upsertTask(userName: UserName, task: Task) {
+            d { "Upserting task: $task" }
+            updateServer(userName, listOf(TaskCommand.Upsert(task)))
         }
 
         /**
          * Delete task
          * @param taskId Task ID
          */
-        override fun deleteTask(userName: UserName, taskId: TaskId): Flow<LceState<Unit, AppError>> {
-            TODO("Not yet implemented")
+        override suspend fun deleteTask(userName: UserName, taskId: TaskId) {
+            d { "Deleting task: $taskId" }
+            updateServer(userName, listOf(TaskCommand.Delete(taskId)))
+        }
+
+        /**
+         * Runs update from server
+         * @param userName Bound user
+         * @param commands Commands to run
+         * @param currentVersion Current version override
+         */
+        private suspend fun updateServer(
+            userName: UserName,
+            commands: List<TaskCommand>,
+            currentVersion: Version? = null
+        ) {
+            // Loads data and retries the update
+            suspend fun syncAndRetry(version: Version?) {
+                updateServer(
+                    userName,
+                    commands,
+                    doLoad(userName, version).getOrThrow()
+                )
+            }
+
+            val effectiveCurrentVersion = currentVersion ?: storage.getVersion(userName).firstOrNull()
+            if (null == effectiveCurrentVersion) {
+                d { "Empty version. Updating data..." }
+                syncAndRetry(null)
+                return
+            }
+
+            val newVersion = nextVersion()
+            d { "Updating server" }
+            d { "Current version: $currentVersion" }
+            d { "New version: $newVersion" }
+
+            val update = netResult { tasksApi.postUpdates(TaskUpdateRequest(effectiveCurrentVersion, newVersion, commands)) }
+                .recover { error ->
+                    w(error) { "Error updating tasks" }
+                    if (error is AppError.WorkFlow && ErrorCode.CONFLICT == error.code) {
+                        d { "Data conflict. Retrying after data sync" }
+                        syncAndRetry(effectiveCurrentVersion)
+                        return
+                    }
+                    throw error
+                }
+                .getOrThrow()
+
+            storage.update(userName, TaskUpdates(update.latestVersion, commands))
         }
     }
 }

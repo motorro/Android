@@ -7,6 +7,7 @@ import ru.merionet.tasks.auth.data.SessionError
 import ru.merionet.tasks.data.ErrorCode
 import ru.merionet.tasks.data.HttpResponse
 import java.io.IOException
+import java.net.UnknownServiceException
 
 /**
  * Runs network `block` and returns data on success
@@ -26,18 +27,24 @@ suspend inline fun <R: Any> netResult(block: () -> HttpResponse<R>): Result<R> {
         return Result.failure(AppError.Network(e))
     }
 
-    when(response) {
+    return when(response) {
         is HttpResponse.Data -> {
-            return Result.success(response.data)
+            Result.success(response.data)
         }
         is HttpResponse.Error -> {
             when(response.code) {
                 ErrorCode.UNAUTHORIZED, ErrorCode.FORBIDDEN -> {
-                    return Result.failure(AppError.Authentication(SessionError.Authentication(response.code, response.message)))
+                    Result.failure(AppError.Authentication(SessionError.Authentication(response.code, response.message)))
+                }
+                ErrorCode.CONFLICT, ErrorCode.NOT_FOUND, ErrorCode.BAD_REQUEST -> {
+                    Result.failure(AppError.WorkFlow(response.code, response.message))
+                }
+                ErrorCode.UNKNOWN -> {
+                    Result.failure(AppError.Unknown(UnknownServiceException("Unknown server exception")))
                 }
                 else -> {
                     // If tested with a working system, consider all errors as connectivity
-                    return Result.failure(AppError.Network(IOException(response.message)))
+                    Result.failure(AppError.Network(IOException(response.message)))
                 }
             }
         }

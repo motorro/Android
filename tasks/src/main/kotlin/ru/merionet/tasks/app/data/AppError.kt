@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import ru.merionet.core.error.WithRetry
 import ru.merionet.tasks.R
 import ru.merionet.tasks.auth.data.SessionError
+import ru.merionet.tasks.data.ErrorCode
 
 /**
  * Application error
@@ -29,6 +30,16 @@ sealed class AppError : Exception(), WithRetry {
          * No point in retrying before user changes the input
          */
         override val retriable: Boolean = cause.retriable
+    }
+
+    /**
+     * Flow error. Session data conflict, illegal state, etc
+     */
+    class WorkFlow(val code: ErrorCode, override val message: String) : AppError() {
+        /**
+         * No point in retrying before altering the flow
+         */
+        override val retriable: Boolean = false
     }
 
     /**
@@ -67,6 +78,7 @@ fun AppError.getMessage(context: Context): String {
     val originalMessage = message ?: cause?.message
     return when (this) {
         is AppError.Authentication -> context.getString(R.string.err_authentication, originalMessage ?: context.getString(R.string.err_unknown))
+        is AppError.WorkFlow -> context.getString(R.string.err_workflow, originalMessage ?: context.getString(R.string.err_unknown))
         is AppError.Network -> context.getString(R.string.err_network)
         is AppError.Storage -> context.getString(R.string.err_storage)
         is AppError.Unknown -> originalMessage ?: context.getString(R.string.err_unknown)
