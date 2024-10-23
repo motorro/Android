@@ -1,6 +1,8 @@
 package ru.merionet.tasks.app.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import ru.merionet.core.lce.LceState
 import ru.merionet.core.log.Logging
@@ -54,9 +56,9 @@ interface TasksRepository : ReadonlyTasks {
         /**
          * Update task list from server
          */
-        override fun update(userName: UserName): Flow<LceState<Unit, AppError>> {
+        override fun update(userName: UserName): Flow<LceState<Unit, AppError>> = flow {
             d { "Updating..." }
-            return load(userName, storage.getVersion(userName).value)
+            emitAll(load(userName, storage.getVersion(userName).firstOrNull()))
         }
 
         /**

@@ -1,6 +1,6 @@
 package ru.merionet.tasks.app.repository
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import ru.merionet.tasks.data.Task
 import ru.merionet.tasks.data.TaskUpdates
 import ru.merionet.tasks.data.UserName
@@ -14,13 +14,13 @@ interface ReadonlyTasks {
      * Latest version
      * @param userName Bound user
      */
-    fun getVersion(userName: UserName): StateFlow<Version?>
+    fun getVersion(userName: UserName): Flow<Version?>
 
     /**
      * Flow of tasks
      * @param userName Bound user
      */
-    fun getTasks(userName: UserName): StateFlow<Collection<Task>>
+    fun getTasks(userName: UserName): Flow<Collection<Task>>
 }
 
 /**
@@ -36,11 +36,6 @@ interface ReadWriteTasks : ReadonlyTasks {
      * @param update Task updates
      */
     suspend fun update(userName: UserName, update: TaskUpdates)
-
-    /**
-     * Stores tasks in memory
-     */
-    class Memory
 }
 
 

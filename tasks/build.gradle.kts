@@ -57,6 +57,12 @@ composeCompiler {
     stabilityConfigurationFile = project.layout.projectDirectory.file("stability_config.conf")
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+    arg("room.generateKotlin", "true")
+}
+
 dependencies {
     implementation(project(":core"))
     implementation(project(":composecore"))
@@ -102,9 +108,15 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
 
+    // Room
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.room.testing)
     testImplementation(libs.mockk.mockk)
 
     androidTestImplementation(libs.kotlin.test)

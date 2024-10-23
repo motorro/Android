@@ -11,7 +11,8 @@ dateTime = "0.6.1"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
-androidXTestVersion = "1.6.1"
+androidxTesting = "1.6.1"
+coreTesting = "1.1.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
@@ -32,6 +33,7 @@ ktor = "2.3.12"
 logback = "1.5.6"
 datastore = "1.1.1"
 hilt = "2.52"
+room = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,8 +48,9 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "dateTime" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidXTestVersion" }
-androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidXTestVersion" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTesting" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTesting" }
+androidx-core-testing = { group = "android.arch.core", name = "core-testing", version.ref = "coreTesting" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -69,6 +72,10 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-datastore-ptoto = { group = "androidx.datastore", name = "datastore", version.ref = "datastore"}
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
+androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room"}
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 commonstatemachine-machine = { module = "com.motorro.commonstatemachine:commonstatemachine", version.ref = "statemachine"}

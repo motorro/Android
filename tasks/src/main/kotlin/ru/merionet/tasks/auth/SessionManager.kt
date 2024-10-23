@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,9 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -197,3 +200,17 @@ interface SessionManager {
         }
     }
 }
+
+/**
+ * Maps session data to flow
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
+inline fun <R> SessionManager.flatMapSession(crossinline block: (Session) -> Flow<R>): Flow<R> = session
+    .map { state ->
+        when {
+            state is LceState.Error -> throw state.error
+            else -> state.data
+        }
+    }
+    .filterNotNull()
+    .flatMapLatest(block)
