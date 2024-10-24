@@ -1,5 +1,6 @@
 package ru.merionet.tasks.app
 
+import kotlinx.datetime.LocalDateTime
 import ru.merionet.tasks.USER_NAME
 import ru.merionet.tasks.data.Task
 import ru.merionet.tasks.data.TaskId
@@ -9,7 +10,14 @@ internal val task1 = Task(
     author = USER_NAME,
     title = "Task 1",
     description = "The first task",
-    complete = false
+    complete = false,
+    due = LocalDateTime(
+        2024,
+        10,
+        24,
+        22,
+        0
+    )
 )
 
 internal val task2 = Task(

@@ -6,4 +6,6 @@
     <string name="msg_default_error">Error</string>
     <string name="btn_retry">Retry</string>
     <string name="btn_dismiss">Dismiss</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
 </resources>

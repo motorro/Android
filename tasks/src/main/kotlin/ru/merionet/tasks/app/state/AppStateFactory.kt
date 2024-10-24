@@ -1,6 +1,7 @@
 package ru.merionet.tasks.app.state
 
 import ru.merionet.tasks.app.data.AppData
+import ru.merionet.tasks.data.Task
 import ru.merionet.tasks.data.UserName
 import javax.inject.Inject
 
@@ -41,6 +42,16 @@ interface AppStateFactory {
     fun taskList(data: AppData): AppState
 
     /**
+     * Add/edit task
+     */
+    fun task(data: AppData, task: Task? = null): AppState
+
+    /**
+     * Saving task to task list
+     */
+    fun savingTask(data: AppData, task: Task): AppState
+
+    /**
      * Application terminated
      */
     fun terminated(): AppState
@@ -52,7 +63,8 @@ interface AppStateFactory {
         private val createCheckingAuthState: CheckingAuthState.Factory,
         private val createLogin: LoginProxy.Factory,
         private val createLoggingOut: LoggingOutState.Factory,
-        private val createTaskList: TaskListState.Factory
+        private val createTaskList: TaskListState.Factory,
+        private val createTask: TaskState.Factory
     ) : AppStateFactory {
         private val context = object : AppContext {
             override val factory: AppStateFactory = this@Impl
@@ -93,6 +105,16 @@ interface AppStateFactory {
             context,
             data,
         )
+
+        override fun task(data: AppData, task: Task?) = createTask(
+            context,
+            data,
+            task
+        )
+
+        override fun savingTask(data: AppData, task: Task): AppState {
+            TODO("Not yet implemented")
+        }
 
         override fun terminated(): AppState = Terminated(context)
     }

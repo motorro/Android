@@ -2,6 +2,7 @@ package ru.merionet.tasks.data
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 /**
  * Task id
@@ -10,6 +11,11 @@ import kotlinx.serialization.Serializable
 @JvmInline
 @Serializable
 value class TaskId(val id: String)
+
+/**
+ * Creates next Task ID
+ */
+fun nextTaskId(): TaskId = TaskId(UUID.randomUUID().toString())
 
 /**
  * Task data
@@ -25,6 +31,19 @@ data class Task(
 )
 
 /**
+ * Creates new empty task
+ */
+fun newTaskTemplate(userName: UserName): Task = Task(
+    id = nextTaskId(),
+    author = userName,
+    title = "",
+    description = "",
+    complete = false,
+    due = null
+)
+
+
+    /**
  * Task update batch
  * Server -> Client
  * @property latestVersion Latest version on server

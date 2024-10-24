@@ -20,12 +20,11 @@ import kotlinx.serialization.json.Json
 import ru.merionet.tasks.data.ErrorCode
 import ru.merionet.tasks.data.HttpResponse
 import ru.merionet.tasks.data.Task
-import ru.merionet.tasks.data.TaskId
 import ru.merionet.tasks.data.TaskUpdates
 import ru.merionet.tasks.data.Version
 import ru.merionet.tasks.data.VersionResponse
 import ru.merionet.tasks.data.httpResponseModule
-import java.util.UUID
+import ru.merionet.tasks.data.nextTaskId
 
 fun main() {
     embeddedServer(
@@ -38,7 +37,7 @@ fun main() {
 
 private val taskUpdates = TaskUpdates(sequenceOf(
     Task(
-        id = TaskId(UUID.randomUUID().toString()),
+        id = nextTaskId(),
         author = USERNAME,
         title = "My first task",
         description = "Description 1",

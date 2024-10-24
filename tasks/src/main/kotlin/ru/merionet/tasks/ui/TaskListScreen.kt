@@ -4,7 +4,6 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -103,7 +105,7 @@ fun TaskListScreen(state: AppUiState.TaskList, onGesture: (AppGesture) -> Unit) 
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
-                    modifier = Modifier.border(2.dp, MaterialTheme.colorScheme.primary).padding(8.dp),
+                    modifier = Modifier.padding(8.dp),
                     action = {
                         Text(
                             text = data.visuals.actionLabel ?: stringResource(R.string.btn_close),
@@ -124,6 +126,11 @@ fun TaskListScreen(state: AppUiState.TaskList, onGesture: (AppGesture) -> Unit) 
                         Text(data. visuals. message)
                     }
                 )
+            }
+        },
+        fab = {
+            FloatingActionButton(onClick = { onGesture(AppGesture.TaskList.AddClicked) }) {
+                Icon(Icons.Filled.Add, stringResource(R.string.btn_add))
             }
         },
         content = { padding ->
@@ -158,7 +165,7 @@ private val DUE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIU
 fun TaskItem(data: Task, onGesture: (AppGesture) -> Unit) {
     val due = data.due?.toJavaLocalDateTime()?.let(DUE_FORMAT::format)
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onGesture(AppGesture.TaskList.TaskClicked(data.id)) },
         horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    api(libs.kotlinx.datetime)
     implementation(libs.napier)
     implementation(libs.kotlinx.coroutines)
 }

@@ -1,5 +1,6 @@
 package ru.merionet.tasks.app.data
 
+import kotlinx.datetime.LocalDateTime
 import ru.merionet.tasks.data.Task
 import ru.merionet.tasks.login.data.LoginUiState
 
@@ -25,6 +26,17 @@ sealed class AppUiState {
         val tasks: Collection<Task>,
         val isLoading: Boolean,
         val error: AppError?
+    ) : AppUiState()
+
+    /**
+     * Task edit screen
+     */
+    data class EditTask(
+        val title: String,
+        val description: String,
+        val due: LocalDateTime?,
+        val completeVisible: Boolean,
+        val saveEnabled: Boolean
     ) : AppUiState()
 
     /**

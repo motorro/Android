@@ -9,6 +9,7 @@ import ru.merionet.core.error.WithRetry
 import ru.merionet.tasks.app.data.AppGesture
 import ru.merionet.tasks.app.data.AppUiState
 import ru.merionet.tasks.login.ui.LoginFlowScreen
+import ru.merionet.tasks.ui.TaskEditScreen
 import ru.merionet.tasks.ui.TaskListScreen
 
 @Composable
@@ -22,6 +23,7 @@ fun MainScreen(state: AppUiState, onComplete: () -> Unit, onGesture: (AppGesture
                 onGesture(AppGesture.Login(it))
             }
             is AppUiState.TaskList -> TaskListScreen(state, onGesture)
+            is AppUiState.EditTask -> TaskEditScreen(state, onGesture)
             is AppUiState.Error -> FatalErrorScreen(
                 error = state.error.message,
                 retriable = true == (state.error as? WithRetry)?.retriable,
