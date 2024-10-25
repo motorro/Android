@@ -89,7 +89,7 @@ fun TaskEditScreen(state: AppUiState.EditTask, onGesture: (AppGesture) -> Unit) 
                         value = state.description,
                         onValueChange = { onGesture(AppGesture.EditTask.DescriptionChanged(it)) },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text(stringResource(R.string.hint_title)) },
+                        label = { Text(stringResource(R.string.hint_description)) },
                         singleLine = false,
                         minLines = 6,
                         maxLines = 6
