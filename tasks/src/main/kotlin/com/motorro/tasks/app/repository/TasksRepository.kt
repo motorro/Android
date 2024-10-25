@@ -117,24 +117,22 @@ interface TasksRepository : ReadonlyTasks {
          * Runs update from server
          * @param userName Bound user
          * @param commands Commands to run
-         * @param currentVersion Current version override
          */
         private suspend fun updateServer(
             userName: UserName,
-            commands: List<TaskCommand>,
-            currentVersion: Version? = null
+            commands: List<TaskCommand>
         ) {
             // Loads data and retries the update
             suspend fun syncAndRetry(version: Version?) {
+                doLoad(userName, version).getOrThrow()
                 updateServer(
                     userName,
-                    commands,
-                    doLoad(userName, version).getOrThrow()
+                    commands
                 )
             }
 
-            val effectiveCurrentVersion = currentVersion ?: storage.getVersion(userName).firstOrNull()
-            if (null == effectiveCurrentVersion) {
+            val currentVersion = storage.getVersion(userName).firstOrNull()
+            if (null == currentVersion) {
                 d { "Empty version. Updating data..." }
                 syncAndRetry(null)
                 return
@@ -145,12 +143,12 @@ interface TasksRepository : ReadonlyTasks {
             d { "Current version: $currentVersion" }
             d { "New version: $newVersion" }
 
-            val update = netResult { tasksApi.postUpdates(TaskUpdateRequest(effectiveCurrentVersion, newVersion, commands)) }
+            val update = netResult { tasksApi.postUpdates(TaskUpdateRequest(currentVersion, newVersion, commands)) }
                 .recover { error ->
                     w(error) { "Error updating tasks" }
                     if (error is AppError.WorkFlow && ErrorCode.CONFLICT == error.code) {
                         d { "Data conflict. Retrying after data sync" }
-                        syncAndRetry(effectiveCurrentVersion)
+                        syncAndRetry(currentVersion)
                         return
                     }
                     throw error

@@ -1,7 +1,9 @@
 package com.motorro.tasks.app.state
 
 import com.motorro.tasks.app.data.AppData
+import com.motorro.tasks.app.data.AppError
 import com.motorro.tasks.data.Task
+import com.motorro.tasks.data.TaskId
 import com.motorro.tasks.data.UserName
 import javax.inject.Inject
 
@@ -52,6 +54,21 @@ interface AppStateFactory {
     fun savingTask(data: AppData, task: Task): AppState
 
     /**
+     * Saving task error
+     */
+    fun savingTaskError(data: AppData, task: Task, error: AppError): AppState
+
+    /**
+     * Deleting task
+     */
+    fun deletingTask(data: AppData, taskId: TaskId): AppState
+
+    /**
+     * Deleting task error
+     */
+    fun deletingTaskError(data: AppData, taskId: TaskId, error: AppError): AppState
+
+    /**
      * Application terminated
      */
     fun terminated(): AppState
@@ -64,7 +81,8 @@ interface AppStateFactory {
         private val createLogin: LoginProxy.Factory,
         private val createLoggingOut: LoggingOutState.Factory,
         private val createTaskList: TaskListState.Factory,
-        private val createTask: TaskState.Factory
+        private val createTask: TaskState.Factory,
+        private val updateTask: UpdatingTaskState.Factory
     ) : AppStateFactory {
         private val context = object : AppContext {
             override val factory: AppStateFactory = this@Impl
@@ -112,9 +130,31 @@ interface AppStateFactory {
             task
         )
 
-        override fun savingTask(data: AppData, task: Task): AppState {
-            TODO("Not yet implemented")
-        }
+        override fun savingTask(data: AppData, task: Task) = updateTask.upsert(
+            context,
+            data,
+            task
+        )
+
+        override fun savingTaskError(data: AppData, task: Task, error: AppError) = ErrorState(
+            context,
+            error,
+            onRetry = { context.factory.savingTask(data, task) },
+            onBack = { context.factory.task(data, task) }
+        )
+
+        override fun deletingTask(data: AppData, taskId: TaskId) = updateTask.delete(
+            context,
+            data,
+            taskId
+        )
+
+        override fun deletingTaskError(data: AppData, taskId: TaskId, error: AppError) = ErrorState(
+            context,
+            error,
+            onRetry = { context.factory.deletingTask(data, taskId) },
+            onBack = { context.factory.taskList(data) }
+        )
 
         override fun terminated(): AppState = Terminated(context)
     }
