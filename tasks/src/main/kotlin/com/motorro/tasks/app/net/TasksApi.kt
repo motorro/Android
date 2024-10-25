@@ -72,7 +72,7 @@ interface TasksApi {
         override suspend fun postUpdates(request: TaskUpdateRequest): HttpResponse<VersionResponse> {
             val result = withContext(dispatchers.io) {
                 httpClient.post {
-                    platformUrl(listOf("tasks/version"))
+                    platformUrl(listOf("tasks/updates"))
                     contentType(ContentType.Application.Json)
                     setBody(request)
                 }
