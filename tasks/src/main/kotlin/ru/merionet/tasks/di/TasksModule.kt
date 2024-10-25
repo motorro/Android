@@ -15,6 +15,7 @@ import ru.merionet.tasks.app.repository.ReadWriteTasks
 import ru.merionet.tasks.app.repository.TasksRepository
 import ru.merionet.tasks.app.repository.db.TasksDao
 import ru.merionet.tasks.app.repository.db.TasksDb
+import ru.merionet.tasks.app.work.TaskUpdateWorker
 import javax.inject.Singleton
 
 @Module
@@ -51,4 +52,8 @@ interface TasksBindingModule {
     @Binds
     @Singleton
     fun tasksRepository(impl: TasksRepository.Impl): TasksRepository
+
+    @Binds
+    @Singleton
+    fun updateScheduler(impl: TaskUpdateWorker.Scheduler.Impl): TaskUpdateWorker.Scheduler
 }
