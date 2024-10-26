@@ -1,6 +1,7 @@
 package com.motorro.tasks.app.state
 
 import com.motorro.core.lce.LceState
+import com.motorro.tasks.TestDispatchers
 import com.motorro.tasks.USER_NAME
 import com.motorro.tasks.app.data.AppError
 import com.motorro.tasks.app.data.AppGesture
@@ -11,8 +12,11 @@ import com.motorro.tasks.app.task2
 import com.motorro.tasks.auth.data.SessionError
 import com.motorro.tasks.data.ErrorCode
 import io.mockk.Ordering
+import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -23,7 +27,12 @@ import java.io.IOException
 
 internal class TaskListStateTest : BaseStateTest() {
     private val tasksRepository: TasksRepository = mockk()
-    private val state = TaskListState(context, appData, tasksRepository)
+    private val state = TaskListState(
+        context,
+        appData,
+        tasksRepository,
+        TestDispatchers(dispatcher)
+    )
 
     @Test
     @Suppress("UnusedFlow")
@@ -243,6 +252,26 @@ internal class TaskListStateTest : BaseStateTest() {
         coVerify {
             factory.task(appData, task1)
             stateMachine.setMachineState(nextState)
+        }
+    }
+
+    @Test
+    fun completesTask() = runTest {
+        every { tasksRepository.getTasks(any()) } returns flowOf(listOf(task1, task2)).stateIn(this)
+        every { tasksRepository.update(any()) } returns flowOf(
+            LceState.Loading(),
+            LceState.Content(Unit)
+        )
+        coEvery { tasksRepository.upsertTaskAsync(any(), any()) } just Runs
+
+        state.start(stateMachine)
+        state.process(AppGesture.TaskList.TaskToggled(task1.id))
+
+        coVerify {
+            tasksRepository.upsertTaskAsync(
+                USER_NAME,
+                task1.copy(complete = true)
+            )
         }
     }
 
