@@ -1,8 +1,11 @@
 package ru.merionet.tasks.app.state
 
 import io.mockk.Ordering
+import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import ru.merionet.core.lce.LceState
+import ru.merionet.tasks.TestDispatchers
 import ru.merionet.tasks.USER_NAME
 import ru.merionet.tasks.app.data.AppError
 import ru.merionet.tasks.app.data.AppGesture
@@ -24,7 +28,12 @@ import java.io.IOException
 
 internal class TaskListStateTest : BaseStateTest() {
     private val tasksRepository: TasksRepository = mockk()
-    private val state = TaskListState(context, appData, tasksRepository)
+    private val state = TaskListState(
+        context,
+        appData,
+        tasksRepository,
+        TestDispatchers(dispatcher)
+    )
 
     @Test
     fun subscribesAndUpdatesTasksOnStart() = runTest(dispatcher) {
@@ -238,6 +247,26 @@ internal class TaskListStateTest : BaseStateTest() {
         verify(ordering = Ordering.ORDERED) {
             factory.task(appData, task1)
             stateMachine.setMachineState(nextState)
+        }
+    }
+
+    @Test
+    fun completesTask() = runTest {
+        every { tasksRepository.getTasks(any()) } returns flowOf(listOf(task1, task2)).stateIn(this)
+        every { tasksRepository.update(any()) } returns flowOf(
+            LceState.Loading(),
+            LceState.Content(Unit)
+        )
+        coEvery { tasksRepository.upsertTaskAsync(any(), any()) } just Runs
+
+        state.start(stateMachine)
+        state.process(AppGesture.TaskList.TaskToggled(task1.id))
+
+        coVerify(Ordering.ORDERED) {
+            tasksRepository.upsertTaskAsync(
+                USER_NAME,
+                task1.copy(complete = true)
+            )
         }
     }
 
