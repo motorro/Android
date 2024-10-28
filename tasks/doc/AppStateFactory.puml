@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide empty members
+
+class AppStateFactory {
+    -createCheckingAuth(): CheckingAuthFactory
+    -createLogin(): LoginProxyFactory
+    -createLoggingOut(): LoggingOutFactory
+}
+
+AppStateFactory --> CheckingAuthFactory
+AppStateFactory --> LoginProxyFactory
+AppStateFactory --> LoggingOutFactory
+
+class CheckingAuthFactory {
+    -sessionManager: SessionManager
+}
+class LoginProxyFactory
+class LoginProxyFactory
+class LoggingOutFactory
+
+CheckingAuthFactory --> SessionManager
+
+class SessionManager {
+    -context: Context
+    -scope: CoroutineScope
+    -authApi: AuthApi
+    -dataStore: DataStore
+}
+
+SessionManager --> Context
+SessionManager --> CoroutineScope
+SessionManager --> AuthApi
+SessionManager --> DataStore
+
+class Context
+class CoroutineScope
+class AuthApi
+class DataStore
+
+@enduml
