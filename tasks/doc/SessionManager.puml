@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide empty members
+
+enum LceState {
+    +Loading()
+    +Content(data)
+    +Error(error)
+}
+
+class SessionManager {
+    +session: LceState<Session>
+    +getTokens(): Tokens
+    +authenticate(request: AuthRequest): Flow<LceState<Session>>
+    +logout(): Flow<LceState<Session>>
+}
+
+class DataStore
+
+interface AuthApi {
+    +login(credentials: AuthRequest): HttpResponse<SessionClaims>
+}
+
+SessionManager -up-> LceState: emits
+SessionManager -> DataStore: stores session
+SessionManager --> AuthApi: authenticates
+
+@enduml

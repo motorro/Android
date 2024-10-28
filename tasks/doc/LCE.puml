@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide empty members
+
+enum LceState<DATA, ERR> {
+    +Loading()
+    +Content(data)
+    +Error(error)
+}
+
+LceState <|-- Loading
+LceState <|-- Content
+LceState <|-- Error
+
+class Loading<DATA> {
+    +data: DATA?
+}
+
+class Content<DATA> {
+    +data: DATA
+}
+
+class Error<DATA, ERR> {
+    +data: DATA?
+    +err: ERR
+}
+
+@enduml
