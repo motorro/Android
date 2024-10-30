@@ -13,7 +13,9 @@ import com.motorro.activity.ui.MarginDecorator
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val adapter = EmailAdapter()
+    private val adapter = EmailAdapter { id ->
+        startActivity(MailActivity.getStartIntent(this, id))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

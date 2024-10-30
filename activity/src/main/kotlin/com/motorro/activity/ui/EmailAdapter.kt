@@ -11,20 +11,25 @@ import com.motorro.activity.databinding.ItemEmailBinding
 /**
  * Email adapter
  */
-class EmailAdapter : ListAdapter<Email, EmailAdapter.EmailHolder>(EmailDiff) {
+class EmailAdapter(private val onClick: (Int) -> Unit) : ListAdapter<Email, EmailAdapter.EmailHolder>(EmailDiff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = EmailHolder(
-        ItemEmailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ItemEmailBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        onClick
     )
 
     override fun onBindViewHolder(holder: EmailHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class EmailHolder(private val binding: ItemEmailBinding) : ViewHolder(binding.root) {
+    class EmailHolder(private val binding: ItemEmailBinding, private val onClick: (Int) -> Unit) : ViewHolder(binding.root) {
+        private var id: Int = -1
+
         fun bind(email: Email) = with(binding) {
+            id = email.id
             subject.text = email.subject
             address.text = email.address
             date.text = email.created.formatLocal()
+            root.setOnClickListener { onClick(id) }
         }
     }
 }
