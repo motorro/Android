@@ -3,4 +3,7 @@
     <string name="list_title">Mail</string>
     <string name="hint_email">Mail</string>
     <string name="hint_new">Write new</string>
+    <string name="hint_to">To</string>
+    <string name="hint_subject">Subject</string>
+    <string name="hint_send">Send</string>
 </resources>
