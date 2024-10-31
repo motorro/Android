@@ -31,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupRecycler()
+        binding.add.setOnClickListener {
+            startActivity(NewMailActivity.getStartIntent(this))
+        }
     }
 
     /**
