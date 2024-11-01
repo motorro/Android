@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">Activity</string>
     <string name="list_title">Mail</string>
+    <string name="contacts_title">Contacts</string>
     <string name="hint_email">Mail</string>
     <string name="hint_new">Write new</string>
     <string name="hint_to">To</string>
     <string name="hint_subject">Subject</string>
     <string name="hint_send">Send</string>
     <string name="hint_photo">Photo</string>
+    <string name="hint_contact">Contact</string>
 </resources>
