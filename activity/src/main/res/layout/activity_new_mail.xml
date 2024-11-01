@@ -33,7 +33,7 @@
         android:autofillHints="emailAddress"
         android:hint="@string/hint_to"
         android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@+id/send"
+        app:layout_constraintEnd_toStartOf="@+id/photo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"/>
 
@@ -46,9 +46,20 @@
         android:autofillHints="emailSubject"
         android:hint="@string/hint_subject"
         android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@+id/send"
+        app:layout_constraintEnd_toStartOf="@+id/photo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/to"/>
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="@dimen/icon_big"
+        android:layout_height="@dimen/icon_big"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:contentDescription="@string/hint_photo"
+        android:src="@drawable/ic_photo"
+        app:layout_constraintEnd_toStartOf="@id/send"
+        app:layout_constraintTop_toTopOf="@+id/to"
+        app:layout_constraintBottom_toBottomOf="@+id/subject"/>
 
     <ImageView
         android:id="@+id/send"
@@ -73,6 +84,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subject"
+        app:layout_constraintBottom_toTopOf="@id/attachment"/>
+
+    <ImageView
+        android:id="@+id/attachment"
+        android:layout_width="wrap_content"
+        android:layout_height="96dp"
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin"
+        android:contentDescription="@string/hint_photo"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:src="@drawable/ic_photo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
