@@ -44,6 +44,9 @@ class NewMailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewMailBinding
 
+    /**
+     * Contract to take a picture
+     */
     private val takePicture: ActivityResultLauncher<Void?> = registerForActivityResult(
 
         // Contract to take a picture
@@ -60,6 +63,17 @@ class NewMailActivity : AppCompatActivity() {
                     android.view.View.GONE
                 }
             }
+        }
+    )
+
+    private val selectContact = registerForActivityResult(
+        // Contract to pick a contact
+        ContactsActivity.PickContactContract(),
+
+        // Callback to handle the result
+        { contact ->
+            // Handle selected contact
+            binding.to.setText(contact?.email ?: "")
         }
     )
 
@@ -87,6 +101,10 @@ class NewMailActivity : AppCompatActivity() {
         binding.photo.setOnClickListener {
             // Take photo
             takePicture.launch(null)
+        }
+        binding.selectContact.setOnClickListener {
+            // Request contact selection with the current "to" field value
+            selectContact.launch(binding.to.text.toString())
         }
 
         loadLetter()
