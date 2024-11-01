@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -42,6 +44,25 @@ class NewMailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewMailBinding
 
+    private val takePicture: ActivityResultLauncher<Void?> = registerForActivityResult(
+
+        // Contract to take a picture
+        ActivityResultContracts.TakePicturePreview(),
+
+        // Callback to handle the result
+        { photo ->
+            // Handle photo
+            with(binding.attachment) {
+                setImageBitmap(photo)
+                visibility = if (photo != null) {
+                    android.view.View.VISIBLE
+                } else {
+                    android.view.View.GONE
+                }
+            }
+        }
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -62,6 +83,10 @@ class NewMailActivity : AppCompatActivity() {
         binding.send.setOnClickListener {
             // Send mail
             finish()
+        }
+        binding.photo.setOnClickListener {
+            // Take photo
+            takePicture.launch(null)
         }
 
         loadLetter()
