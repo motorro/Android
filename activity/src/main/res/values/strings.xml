@@ -9,4 +9,7 @@
     <string name="hint_send">Send</string>
     <string name="hint_photo">Photo</string>
     <string name="hint_contact">Contact</string>
+    <string name="btn_ok">OK</string>
+    <string name="contacts_rationale">Please give me access to your contacts. Please-please-please!!!</string>
+    <string name="contacts_settings">Please go to settings and give me permission to read contacts!</string>
 </resources>
