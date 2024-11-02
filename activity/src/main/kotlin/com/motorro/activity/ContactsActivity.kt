@@ -3,15 +3,18 @@ package com.motorro.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.snackbar.Snackbar
 import com.motorro.activity.data.Contact
-import com.motorro.activity.data.contactList
 import com.motorro.activity.databinding.ActivityContactsBinding
 import com.motorro.activity.ui.ContactsAdapter
 import com.motorro.activity.ui.MarginDecorator
@@ -54,6 +57,65 @@ class ContactsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Request permission to read calendar
+     */
+    private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) {
+            // Permission granted - get contacts
+            getContacts()
+        } else {
+            // Permission denied - show snackbar with settings link
+            // to allow user to change permissions
+            showSettingsPrompt()
+        }
+    }
+
+    /**
+     * Launch permission request
+     */
+    private fun launchPermissionRequest() {
+        permissionLauncher.launch(android.Manifest.permission.READ_CONTACTS)
+    }
+
+    /**
+     * Check if we have permission to read contacts
+     */
+    private fun checkPermissions() {
+        // 1. Check if we have permission to read contacts
+        val granted = PackageManager.PERMISSION_GRANTED == checkSelfPermission(android.Manifest.permission.READ_CONTACTS)
+        if (granted) {
+            getContacts()
+            return
+        }
+
+        // 2. If not - check if we should show rationale
+        //    Rationale is shown if user denied permission before (once)
+        if(shouldShowRequestPermissionRationale(android.Manifest.permission.READ_CONTACTS)) {
+            showRationale()
+            return
+        }
+
+        // 3. Launch permission request
+        launchPermissionRequest()
+    }
+
+    /**
+     * Ask user for contacts permission if he refused before
+     */
+    private fun showRationale() = askUser(R.string.contacts_rationale) {
+        launchPermissionRequest()
+    }
+
+    /**
+     * Ask user to go to settings if he refused before
+     */
+    private fun showSettingsPrompt() = askUser(R.string.contacts_settings) {
+        val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = android.net.Uri.parse("package:$packageName")
+        startActivity(intent)
+    }
+
     private val adapter = ContactsAdapter { contact ->
         // Return selected contact
         setResult(Activity.RESULT_OK, Intent().apply {
@@ -64,6 +126,7 @@ class ContactsActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityContactsBinding
+    private lateinit var loader: ContactsLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +134,7 @@ class ContactsActivity : AppCompatActivity() {
 
         binding = ActivityContactsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        loader = ContactsLoader(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -80,11 +144,18 @@ class ContactsActivity : AppCompatActivity() {
 
         binding.topAppBar.setNavigationOnClickListener {
             // Cancel selection
-            setResult(Activity.RESULT_CANCELED)
-            finish()
+            cancel()
         }
 
         setupRecycler()
+    }
+
+    /**
+     * Check permissions on start
+     */
+    override fun onStart() {
+        super.onStart()
+        checkPermissions()
     }
 
     /**
@@ -93,15 +164,25 @@ class ContactsActivity : AppCompatActivity() {
     private fun setupRecycler() = with(binding) {
         list.adapter = adapter
         list.addItemDecoration(MarginDecorator(resources.getDimensionPixelSize(R.dimen.margin)))
+    }
 
+    /**
+     * Get contacts
+     */
+    private fun getContacts() {
         // Take input data from intent and filter contacts
-        var contacts = contactList
         val toSearch = intent.getStringExtra(EXTRA_SEARCH) ?: ""
-        if (toSearch.isNotBlank()) {
-            contacts = contactList.filter {
-                it.email.contains(toSearch, ignoreCase = true) || it.name.contains(toSearch, ignoreCase = true)
-            }
-        }
-        adapter.submitList(contacts)
+        adapter.submitList(loader.getContacts(toSearch))
+    }
+
+    private fun cancel() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+    }
+
+    private fun askUser(@StringRes message: Int, action: () -> Unit) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.btn_ok) { action() }
+            .show()
     }
 }
