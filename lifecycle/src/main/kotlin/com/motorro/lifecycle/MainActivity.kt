@@ -8,6 +8,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.motorro.core.log.Logging
 
 class MainActivity : AppCompatActivity(), Logging {
+
+    init {
+        logCurrentState(this, "init")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,5 +26,6 @@ class MainActivity : AppCompatActivity(), Logging {
         }
 
         i { "onCreate" }
+        logCurrentState(this, "onCreate")
     }
 }
