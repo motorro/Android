@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Lifecycle</string>
+    <string name="btn_set_text">Set Text</string>
 </resources>

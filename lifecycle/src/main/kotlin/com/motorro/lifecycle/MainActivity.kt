@@ -1,6 +1,9 @@
 package com.motorro.lifecycle
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +16,7 @@ class MainActivity : AppCompatActivity(), Logging {
         logCurrentState(this, "init")
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,5 +31,10 @@ class MainActivity : AppCompatActivity(), Logging {
 
         i { "onCreate" }
         logCurrentState(this, "onCreate")
+
+        // Initialize view components
+        findViewById<Button>(R.id.button).setOnClickListener {
+            findViewById<TextView>(R.id.textView).text = "Hello, Activity!"
+        }
     }
 }
