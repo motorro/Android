@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide empty members
+
+interface LifecycleOwner {
+    +getLifecycle(): Lifecycle
+}
+LifecycleOwner <|-- Activity
+LifecycleOwner -> Lifecycle: provides
+
+class Activity
+
+interface LifecycleObserver {
+    +onStateChanged(source: Lifecycle, state: State)
+}
+
+interface Lifecycle {
+    +addObserver(observer: LifecycleObserver)
+    +removeObserver(observer: LifecycleObserver)
+    +getCurrentState(): State
+}
+Lifecycle -> State: in one of
+Lifecycle <-- LifecycleObserver: oberves changes
+
+
+enum State {
+    DESTROYED
+    INITIALIZED
+    CREATED
+    STARTED
+    RESUMED
+}
+
+@enduml
