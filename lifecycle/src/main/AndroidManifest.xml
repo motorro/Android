@@ -20,6 +20,17 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:exported="false"
+            android:name=".OpaqueActivity">
+        </activity>
+
+        <activity
+            android:exported="false"
+            android:name=".TranslucentActivity"
+            android:theme="@style/Theme.AppCompat.Translucent">
+        </activity>
+
     </application>
 
 </manifest>
