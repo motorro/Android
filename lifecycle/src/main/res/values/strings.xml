@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Lifecycle</string>
-    <string name="btn_set_text">Set Text</string>
+    <string name="btn_start_opaque">Start Opaque</string>
+    <string name="btn_start_translucent">Start Translucent</string>
+    <string name="btn_close">Close</string>
+    <string name="text_opaque_activity">Opaque Activity</string>
+    <string name="text_translucent_activity">Translucent Activity</string>
+    <string name="lbl_time_created">Time created:</string>
+    <string name="lbl_time_started">Time started:</string>
+    <string name="lbl_time_resumed">Time resumed:</string>
 </resources>
