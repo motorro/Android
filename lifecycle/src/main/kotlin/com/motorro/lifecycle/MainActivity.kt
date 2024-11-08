@@ -10,6 +10,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.motorro.core.log.Logging
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 class MainActivity : AppCompatActivity(), Logging {
 
@@ -18,6 +20,24 @@ class MainActivity : AppCompatActivity(), Logging {
          * Instance counter
          */
         private var instanceCounter = 0
+
+        private const val STATE_CREATED = "created"
+        private const val STATE_STARTED = "started"
+        private const val STATE_RESUMED = "resumed"
+
+        /**
+         * Reading duration from bundle
+         */
+        private fun Bundle.getDuration(key: String): Duration {
+            return getLong(key).milliseconds
+        }
+
+        /**
+         * Writing duration to bundle
+         */
+        private fun Bundle.putDuration(key: String, value: Duration) {
+            putLong(key, value.inWholeMilliseconds)
+        }
     }
 
     private lateinit var createdTimer: Timer
@@ -46,11 +66,23 @@ class MainActivity : AppCompatActivity(), Logging {
         // Increment instance counter
         findViewById<TextView>(R.id.instanceCounter).text = "${++instanceCounter}"
 
-        createdTimer = Timer(lifecycleScope, updateTimerView(R.id.timeCreated))
+        createdTimer = Timer(
+            lifecycleScope,
+            updateTimerView(R.id.timeCreated),
+            savedInstanceState?.getDuration(STATE_CREATED)
+        )
         createdTimer.start()
 
-        startedTimer = Timer(lifecycleScope, updateTimerView(R.id.timeStarted))
-        resumedTimer = Timer(lifecycleScope, updateTimerView(R.id.timeResumed))
+        startedTimer = Timer(
+            lifecycleScope,
+            updateTimerView(R.id.timeStarted),
+            savedInstanceState?.getDuration(STATE_STARTED)
+        )
+        resumedTimer = Timer(
+            lifecycleScope,
+            updateTimerView(R.id.timeResumed),
+            savedInstanceState?.getDuration(STATE_RESUMED)
+        )
 
         // Initialize view components
         findViewById<Button>(R.id.startOpaque).setOnClickListener {
@@ -62,6 +94,17 @@ class MainActivity : AppCompatActivity(), Logging {
         findViewById<Button>(R.id.close).setOnClickListener {
             finish()
         }
+    }
+
+    /**
+     * Saves current data state
+     */
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putDuration(STATE_CREATED, createdTimer.time)
+        outState.putDuration(STATE_STARTED, startedTimer.time)
+        outState.putDuration(STATE_RESUMED, resumedTimer.time)
     }
 
     override fun onStart() {
