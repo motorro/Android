@@ -22,7 +22,11 @@ fun Duration.format(): String {
 /**
  * Timer
  */
-class Timer(private val scope: CoroutineScope, val update: (State) -> Unit) {
+class Timer(
+    private val scope: CoroutineScope,
+    private val update: (State) -> Unit,
+    startTime: Duration? = null
+) {
 
     /**
      * Timer state
@@ -31,7 +35,7 @@ class Timer(private val scope: CoroutineScope, val update: (State) -> Unit) {
 
     private var job: Job? = null
 
-    var time: Duration = Duration.ZERO
+    var time: Duration = startTime ?: Duration.ZERO
         private set
 
     fun start() {
