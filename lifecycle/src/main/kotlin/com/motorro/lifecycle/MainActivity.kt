@@ -13,6 +13,13 @@ import com.motorro.core.log.Logging
 
 class MainActivity : AppCompatActivity(), Logging {
 
+    companion object {
+        /**
+         * Instance counter
+         */
+        private var instanceCounter = 0
+    }
+
     private lateinit var createdTimer: Timer
     private lateinit var startedTimer: Timer
     private lateinit var resumedTimer: Timer
@@ -35,6 +42,9 @@ class MainActivity : AppCompatActivity(), Logging {
 
         i { "onCreate" }
         logCurrentState(this, "onCreate")
+
+        // Increment instance counter
+        findViewById<TextView>(R.id.instanceCounter).text = "${++instanceCounter}"
 
         createdTimer = Timer(lifecycleScope, updateTimerView(R.id.timeCreated))
         createdTimer.start()
