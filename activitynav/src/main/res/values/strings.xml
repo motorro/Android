@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Activity Tasks</string>
     <string name="btn_launch_standard">Launch Standard</string>
+    <string name="btn_launch_singleTop">Launch SingleTop</string>
 </resources>

@@ -28,5 +28,8 @@ open class MainActivity : BaseActivity() {
         binding.launchStandard.setOnClickListener {
             startActivity(StandardActivity.createIntent(this))
         }
+        binding.launchSingleTop.setOnClickListener {
+            startActivity(SingleTopActivity.createIntent(this))
+        }
     }
 }
