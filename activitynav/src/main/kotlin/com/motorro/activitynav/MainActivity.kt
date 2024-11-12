@@ -34,5 +34,8 @@ open class MainActivity : BaseActivity() {
         binding.launchSingleTask.setOnClickListener {
             startActivity(SingleTaskActivity.createIntent(this))
         }
+        binding.launchSingleInstance.setOnClickListener {
+            startActivity(SingleInstanceActivity.createIntent(this))
+        }
     }
 }
