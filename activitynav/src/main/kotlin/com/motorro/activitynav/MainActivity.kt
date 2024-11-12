@@ -6,7 +6,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.motorro.activitynav.databinding.ActivityMainBinding
 
-class MainActivity : BaseActivity() {
+open class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -25,5 +25,8 @@ class MainActivity : BaseActivity() {
 
 
         binding.name.text = activityId.id
+        binding.launchStandard.setOnClickListener {
+            startActivity(StandardActivity.createIntent(this))
+        }
     }
 }
