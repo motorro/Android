@@ -4,4 +4,5 @@
     <string name="btn_launch_singleTop">Launch SingleTop</string>
     <string name="btn_launch_singleTask">Launch SingleTask</string>
     <string name="btn_launch_singleInstance">Launch SingleInstance</string>
+    <string name="btn_launch_anotherTask">Launch Another Task</string>
 </resources>
