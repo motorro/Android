@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Launch mode</string>
+    <string name="title_activity_a">Activity A</string>
+    <string name="title_activity_b">Activity B</string>
+    <string name="title_activity_c">Activity C</string>
+    <string name="title_activity_d">Activity D</string>
+    <string name="title_activity_e">Activity E</string>
+    <string name="btn_open_a">Open Activity A</string>
+    <string name="btn_open_b">Open Activity B</string>
+    <string name="btn_open_c">Open Activity C</string>
+    <string name="btn_open_d">Open Activity D</string>
+    <string name="btn_open_e">Open Activity E</string>
+    <string name="btn_close">Close</string>
+    <string name="btn_return_to_c">Return to ActivityC</string>
+</resources>
