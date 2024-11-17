@@ -21,5 +21,10 @@
    ![7](readme/7.png)
 9. При нажатии кнопки `Open ActivityD` в `ActivityE` создается новый экземпляр `ActivityD` в той же задаче, что и `ActivityE`.
 10. При нажатии кнопки `Return to ActivityC` в `ActivityE` очистить текущую задачу до находящейся внизу стека `ActivityC`, которая получает новый Intent.
-    ![8](readme/8.png)
+   ![8](readme/8.png)
+
+## Полезные ссылки
+
+1. [Статья о LaunchMode](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+2. [Intent и флаги](https://developer.android.com/reference/android/content/Intent)
 
