@@ -1,7 +1,7 @@
 # Практическая работа Activity - LaunchMode
 
-В проекте создано 4 Activity: `ActivityA`, `ActivityB`, `ActivityC`, `ActivityD`.
-
+## Задача
+В проекте создано 5 Activity: `ActivityA`, `ActivityB`, `ActivityC`, `ActivityD`, `ActivityE`.
 Вам предстоит расставить параметры манифеста и флаги Intent для Activity так, чтобы приложение вело себя следующим образом:
 
 1. `ActivityA` - стартовая Activity для приложения, нужно добавить необходимые параметры в манифест.
