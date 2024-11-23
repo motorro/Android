@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:checkCameraPermission();
+if (GRANTED) then (true)
+  :shouldShowRequestPermissionRationale();
+  if (YES) then (true)
+    :showRationale();
+    stop
+  else (false)
+    :launchPermissionRequest();
+    if (GRANTED) then (true)
+        label showCamera;
+    else (false)
+        :showSettings();
+        stop
+    endif
+  endif
+else (false)
+endif
+
+label showCamera
+:showCamera();
+@enduml
