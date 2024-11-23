@@ -27,3 +27,4 @@ rootProject.name = "Android"
 include(":core")
 include(":composecore")
 include(":practice:activity:launchmode")
+include(":practice:activity:contracts")
