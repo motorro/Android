@@ -17,7 +17,7 @@
    ![5](readme/5.png)
 7. При нажатии кнопки `Open ActivityD` в `ActivityD` она получает новый Intent.
    ![6](readme/6.png)
-8. При нажатии кнопки `Open ActivityE` в `ActivityE` создается новый экземпляр `ActivityE` в той же задаче.
+8. При нажатии кнопки `Open ActivityE` в `ActivityD` создается новый экземпляр `ActivityE` в той же задаче.
    ![7](readme/7.png)
 9. При нажатии кнопки `Open ActivityD` в `ActivityE` создается новый экземпляр `ActivityD` в той же задаче, что и `ActivityE`.
 10. При нажатии кнопки `Return to ActivityC` в `ActivityE` очистить текущую задачу до находящейся внизу стека `ActivityC`, которая получает новый Intent.
