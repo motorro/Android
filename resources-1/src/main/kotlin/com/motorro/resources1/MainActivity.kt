@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
-        binding.textView.text = "Hello, Android"
+        binding.textView.text = getString(R.string.txt_hello_android)
     }
 }
