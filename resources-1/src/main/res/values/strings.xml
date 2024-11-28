@@ -2,4 +2,11 @@
     <string name="app_name" translatable="false">Resources-1</string>
     <string name="txt_hello_world">Hello World!</string>
     <string name="txt_hello_android">Hello, Android</string>
+
+    <!--
+      - %d - placeholder.
+      - % - placeholder start,
+      - d - type of the argument
+    -->
+    <string name="cats_in_house" translatable="false">Cats in the house: %d</string>
 </resources>
