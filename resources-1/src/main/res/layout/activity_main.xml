@@ -29,4 +29,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catsInHouse" />
 
+    <TextView
+        android:id="@+id/weightOfCat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/cat_weight"
+        style="?attr/textAppearanceHeadlineSmall"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animalName" />
+
+    <TextView
+        android:id="@+id/bdOfCat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/cats_birthday"
+        style="?attr/textAppearanceHeadlineSmall"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightOfCat" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

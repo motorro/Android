@@ -12,4 +12,11 @@
 
     <!-- 1$s - defines the number of the passed argument and its type -->
     <string name="animal_name" translatable="false">Name of the %1$s is %2$s. %2$s is a %1$s</string>
+
+    <!-- .2f - number of digits after decimal separator -->
+    <string name="cat_weight" translatable="false">The cat weights %.2f kilos</string>
+
+    <!-- t - argument type - time, b,e,Y - flags specific for this type -->
+    <string name="cats_birthday" translatable="false">Cat\'s birthday is on: %1$tb %1$te %1$tY</string>
+
 </resources>
