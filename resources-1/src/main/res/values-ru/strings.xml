@@ -2,4 +2,12 @@
 <resources>
     <string name="txt_hello_world">Здравствуй, Мир!</string>
     <string name="txt_hello_android">Здравствуй, Android!</string>
+    <string name="hint_cat_name">Имя кота</string>
+
+    <array name="cat_names">
+        <item>Мурзик</item>
+        <item>Мурка</item>
+        <item>Пушок</item>
+    </array>
+
 </resources>
