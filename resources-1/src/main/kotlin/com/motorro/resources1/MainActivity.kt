@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.motorro.resources1.databinding.ActivityMainBinding
+import java.time.LocalDate
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         setCatsInHouse()
         setAnimalName()
+        setCatWeight()
+        setCatBd()
     }
 
     private fun setCatsInHouse() = with(binding) {
@@ -34,5 +37,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun setAnimalName() = with(binding) {
         animalName.text = getString(R.string.animal_name, "Cat", "Tom")
+    }
+
+    private fun setCatWeight() = with(binding) {
+        weightOfCat.text = getString(R.string.cat_weight, 7.546534F)
+    }
+
+    private fun setCatBd() = with(binding) {
+        bdOfCat.text = getString(
+            R.string.cats_birthday,
+            LocalDate.of(2007, 10, 17)
+        )
     }
 }
