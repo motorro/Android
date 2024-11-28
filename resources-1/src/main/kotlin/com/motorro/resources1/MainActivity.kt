@@ -24,6 +24,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        binding.textView.text = getString(R.string.txt_hello_android)
+        setCatsInHouse()
+    }
+
+    private fun setCatsInHouse() = with(binding) {
+        catsInHouse.text = getString(R.string.cats_in_house, 25)
     }
 }
