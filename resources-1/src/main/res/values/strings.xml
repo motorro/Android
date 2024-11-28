@@ -9,4 +9,7 @@
       - d - type of the argument
     -->
     <string name="cats_in_house" translatable="false">Cats in the house: %d</string>
+
+    <!-- 1$s - defines the number of the passed argument and its type -->
+    <string name="animal_name" translatable="false">Name of the %1$s is %2$s. %2$s is a %1$s</string>
 </resources>

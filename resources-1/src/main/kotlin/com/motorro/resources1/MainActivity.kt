@@ -25,9 +25,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         setCatsInHouse()
+        setAnimalName()
     }
 
     private fun setCatsInHouse() = with(binding) {
         catsInHouse.text = getString(R.string.cats_in_house, 25)
+    }
+
+    private fun setAnimalName() = with(binding) {
+        animalName.text = getString(R.string.animal_name, "Cat", "Tom")
     }
 }
