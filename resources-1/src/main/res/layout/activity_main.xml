@@ -53,6 +53,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/catName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin"
@@ -71,5 +72,16 @@
             app:simpleItems="@array/cat_names"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/catCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="I have 0 cats"
+        style="?attr/textAppearanceHeadlineSmall"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/catName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

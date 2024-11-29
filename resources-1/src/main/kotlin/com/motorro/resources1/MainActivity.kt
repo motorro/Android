@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setAnimalName()
         setCatWeight()
         setCatBd()
+        fillCatCount()
     }
 
     private fun setCatsInHouse() = with(binding) {
@@ -48,5 +49,12 @@ class MainActivity : AppCompatActivity() {
             R.string.cats_birthday,
             LocalDate.of(2007, 10, 17)
         )
+    }
+
+    private fun fillCatCount() = with(binding) {
+        val counts = listOf(0, 1, 3, 4, 5, 10, 23, 102)
+        catCount.text = counts.joinToString("\n") { i ->
+            resources.getQuantityString(R.plurals.cats_quantity, i, i)
+        }
     }
 }
