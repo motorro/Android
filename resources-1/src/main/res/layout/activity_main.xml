@@ -89,7 +89,9 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@drawable/ic_face"
+        android:background="@drawable/custom_shape"
         android:contentDescription="@string/face"
+        android:layout_marginTop="@dimen/margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catCount" />
