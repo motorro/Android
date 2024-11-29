@@ -84,4 +84,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catName" />
 
+    <ImageView
+        android:id="@+id/vector"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_face"
+        android:contentDescription="@string/face"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/catCount" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
