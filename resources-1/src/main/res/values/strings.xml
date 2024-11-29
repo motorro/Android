@@ -20,6 +20,7 @@
     <string name="cats_birthday" translatable="false">Cat\'s birthday is on: %1$tb %1$te %1$tY</string>
 
     <string name="hint_cat_name">Cat name</string>
+    <string name="face" translatable="false">Face</string>
 
     <!-- String array -->
     <array name="cat_names">

@@ -3,6 +3,7 @@ package com.motorro.resources1
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.motorro.resources1.databinding.ActivityMainBinding
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         setCatWeight()
         setCatBd()
         fillCatCount()
+        setImage()
     }
 
     private fun setCatsInHouse() = with(binding) {
@@ -56,5 +58,10 @@ class MainActivity : AppCompatActivity() {
         catCount.text = counts.joinToString("\n") { i ->
             resources.getQuantityString(R.plurals.cats_quantity, i, i)
         }
+    }
+
+    private fun setImage() = with(binding) {
+        val drawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.ic_face2)
+        vector.setImageDrawable(drawable)
     }
 }
