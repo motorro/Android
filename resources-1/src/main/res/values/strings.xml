@@ -28,4 +28,10 @@
         <item>Pushok</item>
     </array>
 
+    <!-- Plurals, see other languages for details -->
+    <plurals name="cats_quantity">
+        <item quantity="one">I have %d cat</item>
+        <item quantity="other">I have %d cats</item>
+    </plurals>
+
 </resources>

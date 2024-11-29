@@ -10,4 +10,10 @@
         <item>Пушок</item>
     </array>
 
+    <plurals name="cats_quantity">
+        <item quantity="one">У меня %d кот</item>
+        <item quantity="few">У меня %d кота</item>
+        <item quantity="many">У меня %d котов</item>
+        <item quantity="other">У меня %d котов</item>
+    </plurals>
 </resources>
