@@ -21,6 +21,7 @@
 
     <string name="hint_cat_name">Cat name</string>
     <string name="face" translatable="false">Face</string>
+    <string name="btn_face" translatable="false">Face</string>
 
     <!-- String array -->
     <array name="cat_names">
