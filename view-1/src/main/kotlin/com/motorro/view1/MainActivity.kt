@@ -2,13 +2,13 @@ package com.motorro.view1
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.Button
+import android.util.TypedValue
+import android.view.ViewGroup.LayoutParams
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("InflateParams")
@@ -16,24 +16,39 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val inflater = LayoutInflater.from(this)
-        val root = inflater.inflate(R.layout.activity_main, null)
-
-        setContentView(root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // Create layout
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = android.view.Gravity.CENTER
         }
+        val layoutParams = LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        setContentView(layout, layoutParams)
 
-        setupChange()
-    }
-
-    private fun setupChange() {
-        val change: Button = findViewById(R.id.change)
-        change.setOnClickListener {
-            val text: TextView = findViewById(R.id.text)
-            text.text = getString(R.string.changed_text)
+        // Create text view
+        val text = TextView(this).apply {
+            text = getString(R.string.hello_world)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+            setLayoutParams(LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ))
         }
+        layout.addView(text)
+
+        // Create change button
+        val changeButton = MaterialButton(this).apply {
+            setText(getString(R.string.change))
+            setLayoutParams(LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ))
+            setOnClickListener {
+                text.text = getString(R.string.changed_text)
+            }
+        }
+        layout.addView(changeButton)
     }
 }
