@@ -6,6 +6,9 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        viewBinding = true
+    }
     namespace = "com.motorro.view1"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
@@ -33,6 +36,9 @@ android {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_17
         }
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
