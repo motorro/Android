@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">View-1</string>
+    <string name="change">Change</string>
+    <string name="changed_text">Changed text</string>
+</resources>
