@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">View-1</string>
     <string name="change">Change</string>
+    <string name="frame">Frame Layout</string>
     <string name="changed_text">Changed text</string>
     <string name="hello_world">Hello World!</string>
 </resources>
