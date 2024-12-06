@@ -21,6 +21,7 @@
         <activity android:name=".FrameActivity" android:exported="false"/>
         <activity android:name=".LinearActivity" android:exported="false"/>
         <activity android:name=".NestedActivity" android:exported="false"/>
+        <activity android:name=".ConstraintActivity" android:exported="false"/>
     </application>
 
 </manifest>

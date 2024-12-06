@@ -4,10 +4,13 @@
     <string name="frame">Frame Layout</string>
     <string name="linear">Linear Layout</string>
     <string name="nested">Nested Linear Layout</string>
+    <string name="constraint">Constraint Layout</string>
     <string name="changed_text">Changed text</string>
     <string name="hello_world">Hello World!</string>
     <string name="to">To</string>
     <string name="subject">Subject</string>
     <string name="message">Message</string>
     <string name="send">Send</string>
+
+    <string name="button1">Button 1</string>
 </resources>
