@@ -43,5 +43,8 @@ class MainActivity : AppCompatActivity() {
         binding.toLinear.setOnClickListener {
             startActivity(Intent(this, LinearActivity::class.java))
         }
+        binding.toNested.setOnClickListener {
+            startActivity(Intent(this, NestedActivity::class.java))
+        }
     }
 }
