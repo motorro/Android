@@ -46,5 +46,8 @@ class MainActivity : AppCompatActivity() {
         binding.toNested.setOnClickListener {
             startActivity(Intent(this, NestedActivity::class.java))
         }
+        binding.toConstraint.setOnClickListener {
+            startActivity(Intent(this, ConstraintActivity::class.java))
+        }
     }
 }
