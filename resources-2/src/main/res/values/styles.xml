@@ -4,7 +4,7 @@
 
         <item name="strokeColor">#33FFFFFF</item>
         <item name="strokeWidth">4dp</item>
-        <item name="backgroundTint">#FF11AACC</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
 
     </style>
 </resources>
