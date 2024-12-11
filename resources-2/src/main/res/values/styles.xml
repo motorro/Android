@@ -7,4 +7,8 @@
         <item name="backgroundTint">?attr/colorPrimary</item>
 
     </style>
+
+    <style name="DefaultButton.Custom">
+        <item name="strokeColor">@color/red</item>
+    </style>
 </resources>
