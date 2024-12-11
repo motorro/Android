@@ -11,6 +11,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Do this before inflating layout!
+        setTheme(R.style.Theme_Android)
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
