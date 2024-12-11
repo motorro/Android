@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Android" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#FF11AACC</item>
+        <item name="materialButtonStyle">@style/DefaultButton</item>
     </style>
 
 
