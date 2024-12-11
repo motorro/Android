@@ -1,6 +1,8 @@
 package com.motorro.resources2
 
 import android.os.Bundle
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,14 +13,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        // Do this before inflating layout!
-        setTheme(R.style.Theme_Android)
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        val context = ContextThemeWrapper(this, R.style.Theme_Android)
+        val inflater = LayoutInflater.from(context)
+
+        binding = ActivityMainBinding.inflate(inflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
