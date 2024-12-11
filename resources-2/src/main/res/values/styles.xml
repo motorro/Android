@@ -11,4 +11,8 @@
     <style name="DefaultButton.Custom">
         <item name="strokeColor">@color/red</item>
     </style>
+
+    <style name="AllCaps" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textAllCaps">true</item>
+    </style>
 </resources>
