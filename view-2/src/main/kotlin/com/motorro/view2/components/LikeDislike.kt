@@ -2,6 +2,7 @@ package com.motorro.view2.components
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity.CENTER
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.motorro.view2.R
@@ -17,7 +18,21 @@ class LikeDislike @JvmOverloads constructor(
     private var likes = 0
 
     init {
+        initPanel(attrs, defStyleAttr, defStyleRes)
         initLikes()
+    }
+
+    private fun initPanel(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
+        layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        orientation = HORIZONTAL
+        gravity = CENTER
+        setPadding(
+            0,
+            dpToPx(8),
+            0,
+            dpToPx(8)
+        )
+        setBackgroundResource(R.drawable.like_bg)
     }
 
     private fun initLikes() = with(binding) {
