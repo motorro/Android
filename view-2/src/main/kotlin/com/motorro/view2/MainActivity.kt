@@ -9,7 +9,6 @@ import com.motorro.view2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var likes = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,25 +22,5 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        initLikes()
-    }
-
-    private fun initLikes() = with(binding) {
-        updateLikes()
-        likeButton.setOnClickListener {
-            ++likes
-            updateLikes()
-        }
-        dislikeButton.setOnClickListener {
-            if (likes > 0) {
-                --likes
-            }
-            updateLikes()
-        }
-    }
-
-    private fun updateLikes() = with(binding) {
-        numLikes.text = getString(R.string.likes, likes)
     }
 }

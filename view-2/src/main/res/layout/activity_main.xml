@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <com.motorro.view2.components.LikeDislike
         android:background="@drawable/like_bg"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
@@ -17,37 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageButton
-            android:id="@+id/dislikeButton"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/dislike"
-            android:src="@drawable/thumb_down_24"
-            android:background="@android:color/transparent"/>
-
-        <TextView
-            android:id="@+id/numLikes"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            tools:text="100500"/>
-
-        <ImageButton
-            android:id="@+id/likeButton"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/like"
-            android:src="@drawable/thumb_up_24"
-            android:background="@android:color/transparent"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
