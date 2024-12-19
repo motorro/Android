@@ -16,7 +16,11 @@ class LikeDislike @JvmOverloads constructor(
     defStyleRes: Int = R.style.LikeDislike
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
     private val binding = LikeDislikeBinding.inflate(LayoutInflater.from(context), this)
-    private var likes = 0
+    var likes = 0
+        set(value) {
+            field = value
+            updateLikes()
+        }
 
     init {
         initPanel(attrs, defStyleAttr, defStyleRes)
@@ -50,13 +54,11 @@ class LikeDislike @JvmOverloads constructor(
         updateLikes()
         likeButton.setOnClickListener {
             ++likes
-            updateLikes()
         }
         dislikeButton.setOnClickListener {
             if (likes > 0) {
                 --likes
             }
-            updateLikes()
         }
     }
 
