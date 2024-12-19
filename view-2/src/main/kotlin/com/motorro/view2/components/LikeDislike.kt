@@ -20,7 +20,7 @@ class LikeDislike @JvmOverloads constructor(
 
     init {
         initPanel(attrs, defStyleAttr, defStyleRes)
-        initLikes()
+        initLikes(attrs, defStyleAttr, defStyleRes)
     }
 
     private fun initPanel(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
@@ -42,7 +42,11 @@ class LikeDislike @JvmOverloads constructor(
         )
     }
 
-    private fun initLikes() = with(binding) {
+    private fun initLikes(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) = with(binding) {
+        context.withStyledAttributes(attrs, R.styleable.LikeDislike, defStyleAttr, defStyleRes) {
+            likes = getInt(R.styleable.LikeDislike_likeCount, 0)
+        }
+
         updateLikes()
         likeButton.setOnClickListener {
             ++likes

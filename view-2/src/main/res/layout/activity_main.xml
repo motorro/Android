@@ -8,6 +8,17 @@
     tools:context=".MainActivity">
 
     <com.motorro.view2.components.LikeDislike
+        android:id="@+id/like1"
+        app:likeCount="10"
+        app:layout_constraintBottom_toTopOf="@id/like2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.motorro.view2.components.LikeDislike
+        android:id="@+id/like2"
+        app:likeCount="20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

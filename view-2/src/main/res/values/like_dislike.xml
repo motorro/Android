@@ -4,4 +4,9 @@
     <style name="LikeDislike">
         <item name="android:background">@drawable/like_bg</item>
     </style>
+
+    <!-- Propitiatory attributes -->
+    <declare-styleable name="LikeDislike">
+        <attr name="likeCount" format="integer"/>
+    </declare-styleable>
 </resources>
