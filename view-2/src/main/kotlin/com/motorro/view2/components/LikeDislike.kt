@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.Gravity.CENTER
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.core.content.withStyledAttributes
 import com.motorro.view2.R
 import com.motorro.view2.databinding.LikeDislikeBinding
 
@@ -23,6 +24,13 @@ class LikeDislike @JvmOverloads constructor(
     }
 
     private fun initPanel(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
+        val toRetrieve = intArrayOf(
+            android.R.attr.background
+        )
+        context.withStyledAttributes(attrs, toRetrieve, defStyleAttr, defStyleRes) {
+            background = getDrawable(toRetrieve.indexOf(android.R.attr.background))
+        }
+
         layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         orientation = HORIZONTAL
         gravity = CENTER
@@ -32,7 +40,6 @@ class LikeDislike @JvmOverloads constructor(
             0,
             dpToPx(8)
         )
-        setBackgroundResource(R.drawable.like_bg)
     }
 
     private fun initLikes() = with(binding) {
