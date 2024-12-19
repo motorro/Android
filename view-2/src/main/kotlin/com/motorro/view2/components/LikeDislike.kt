@@ -1,6 +1,7 @@
 package com.motorro.view2.components
 
 import android.content.Context
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.Gravity.CENTER
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.core.content.withStyledAttributes
 import com.motorro.view2.R
 import com.motorro.view2.databinding.LikeDislikeBinding
+import kotlinx.parcelize.Parcelize
 
 class LikeDislike @JvmOverloads constructor(
     context: Context,
@@ -23,8 +25,29 @@ class LikeDislike @JvmOverloads constructor(
         }
 
     init {
+        isSaveEnabled = true
         initPanel(attrs, defStyleAttr, defStyleRes)
         initLikes(attrs, defStyleAttr, defStyleRes)
+    }
+
+    @Parcelize
+    private data class SavedState(
+        val superState: Parcelable?,
+        val likes: Int
+    ): Parcelable
+
+    override fun onSaveInstanceState(): Parcelable {
+        return SavedState(
+            super.onSaveInstanceState(),
+            likes
+        )
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+            likes = state.likes
+        }
     }
 
     private fun initPanel(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
