@@ -13,7 +13,7 @@ class LikeDislike @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
+    defStyleRes: Int = R.style.LikeDislike
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
     private val binding = LikeDislikeBinding.inflate(LayoutInflater.from(context), this)
     private var likes = 0
