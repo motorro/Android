@@ -12,7 +12,7 @@ import com.motorro.view2.databinding.LikeDislikeBinding
 class LikeDislike @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
+    defStyleAttr: Int = R.attr.likeDislikePanelStyle,
     defStyleRes: Int = R.style.LikeDislike
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
     private val binding = LikeDislikeBinding.inflate(LayoutInflater.from(context), this)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="likeDislikePanelStyle" format="reference"/>
     <style name="LikeDislike">
         <item name="android:background">@drawable/like_bg</item>
     </style>
