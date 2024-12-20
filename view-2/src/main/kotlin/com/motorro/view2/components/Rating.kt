@@ -22,10 +22,21 @@ class Rating @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     private var maxRating: Int = 0
-    private var rating = 0
+
+    var rating: Int = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
+
     private var stroke: Int = 0
     private lateinit var emptyPaint: Paint
     private lateinit var filledPaint: Paint
+
+    private var listener: ((Int) -> Unit)? = null
+    fun setOnRatingChangedListener(listener: (Int) -> Unit) {
+        this.listener = listener
+    }
 
     init {
         context.withStyledAttributes(attrs, R.styleable.Rating, defStyleAttr, defStyleRes) {
@@ -78,8 +89,10 @@ class Rating @JvmOverloads constructor(
                 val relativeTouch = ceil(event.x / (width/maxRating)).toInt()
                 Log.i(TAG, "Touched at: ${event.x}")
                 Log.i(TAG, "Touched at relative: $relativeTouch")
-                rating = relativeTouch
-                invalidate()
+                if (rating != relativeTouch) {
+                    rating = relativeTouch
+                    listener?.invoke(rating)
+                }
                 return true
             }
         }
