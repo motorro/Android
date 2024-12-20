@@ -3,6 +3,7 @@ package com.motorro.view2.components
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -12,6 +13,7 @@ import androidx.core.content.res.getDimensionPixelSizeOrThrow
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.withStyledAttributes
 import com.motorro.view2.R
+import kotlinx.parcelize.Parcelize
 import kotlin.math.ceil
 
 class Rating @JvmOverloads constructor(
@@ -39,6 +41,7 @@ class Rating @JvmOverloads constructor(
     }
 
     init {
+        isSaveEnabled = true
         context.withStyledAttributes(attrs, R.styleable.Rating, defStyleAttr, defStyleRes) {
             maxRating = getIntOrThrow(R.styleable.Rating_maxRating)
             rating = getInt(R.styleable.Rating_rating, rating)
@@ -52,6 +55,26 @@ class Rating @JvmOverloads constructor(
                 style = Paint.Style.FILL
                 color = getColorOrThrow(R.styleable.Rating_filledColor)
             }
+        }
+    }
+
+    @Parcelize
+    private data class SavedState(
+        val superState: Parcelable?,
+        val rating: Int
+    ): Parcelable
+
+    override fun onSaveInstanceState(): Parcelable {
+        return SavedState(
+            super.onSaveInstanceState(),
+            rating
+        )
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+            rating = state.rating
         }
     }
 
