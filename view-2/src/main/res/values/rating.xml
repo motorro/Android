@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="ratingStyle" format="reference"/>
+
+    <style name="Rating">
+        <item name="maxRating">5</item>
+        <item name="rating">3</item>
+        <item name="strokeWidth">5dp</item>
+        <item name="emptyColor">@color/green</item>
+        <item name="filledColor">@color/red</item>
+    </style>
+
+    <declare-styleable name="Rating">
+        <attr name="maxRating" format="integer"/>
+        <attr name="rating" format="integer"/>
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="emptyColor" format="color" />
+        <attr name="filledColor" format="color"/>
+    </declare-styleable>
+</resources>
