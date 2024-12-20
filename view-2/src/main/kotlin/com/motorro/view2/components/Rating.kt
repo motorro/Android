@@ -5,12 +5,14 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.getColorOrThrow
 import androidx.core.content.res.getDimensionPixelSizeOrThrow
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.withStyledAttributes
 import com.motorro.view2.R
+import kotlin.math.ceil
 
 class Rating @JvmOverloads constructor(
     context: Context,
@@ -69,6 +71,22 @@ class Rating @JvmOverloads constructor(
             canvas.translate(dpToPx(SIZE * 2 + DISTANCE).toFloat(), 0f)
         }
     }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when (event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                val relativeTouch = ceil(event.x / (width/maxRating)).toInt()
+                Log.i(TAG, "Touched at: ${event.x}")
+                Log.i(TAG, "Touched at relative: $relativeTouch")
+                rating = relativeTouch
+                invalidate()
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
 
     companion object {
         private const val DISTANCE = 8
