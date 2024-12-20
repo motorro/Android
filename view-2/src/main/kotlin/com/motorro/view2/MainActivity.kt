@@ -1,6 +1,7 @@
 package com.motorro.view2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -24,5 +25,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.like1.likes = 100500
+        binding.rating.rating = 4
+        binding.rating.setOnRatingChangedListener { rating ->
+            Log.i(TAG, "Rating changed: $rating")
+        }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }
