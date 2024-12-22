@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_linear">
+
+    <fragment
+        android:id="@+id/navigation_linear"
+        android:name="com.motorro.recyclerview.ui.linear.LinearFragment"
+        android:label="@string/title_linear"
+        tools:layout="@layout/fragment_linear" />
+
+    <fragment
+        android:id="@+id/navigation_grid"
+        android:name="com.motorro.recyclerview.ui.grid.GridFragment"
+        android:label="@string/title_grid"
+        tools:layout="@layout/fragment_grid" />
+
+    <fragment
+        android:id="@+id/navigation_staggered"
+        android:name="com.motorro.recyclerview.ui.staggered.StaggeredFragment"
+        android:label="@string/title_staggered_grid"
+        tools:layout="@layout/fragment_staggered" />
+</navigation>
