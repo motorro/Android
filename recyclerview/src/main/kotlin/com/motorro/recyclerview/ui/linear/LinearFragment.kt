@@ -9,10 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import com.motorro.recyclerview.databinding.FragmentLinearBinding
 import com.motorro.recyclerview.ui.linear.data.loadFlights
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 class LinearFragment : Fragment() {
 
