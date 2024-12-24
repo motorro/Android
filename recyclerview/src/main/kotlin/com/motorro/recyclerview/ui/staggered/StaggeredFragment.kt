@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.motorro.recyclerview.databinding.FragmentStaggeredBinding
+import com.motorro.recyclerview.ui.staggered.data.loadLetters
 
 class StaggeredFragment : Fragment() {
 
     private var _binding: FragmentStaggeredBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var adapter: LettersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +26,9 @@ class StaggeredFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.textNotifications.text = "This is staggered Fragment"
+        adapter = LettersAdapter()
+        binding.recyclerPics.adapter = adapter
+        adapter.setLetters(loadLetters())
     }
 
     override fun onDestroyView() {
