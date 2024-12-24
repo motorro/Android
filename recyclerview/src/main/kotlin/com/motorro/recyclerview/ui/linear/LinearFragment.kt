@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.motorro.recyclerview.databinding.FragmentLinearBinding
 import com.motorro.recyclerview.ui.linear.data.loadFlights
 import kotlinx.coroutines.launch
@@ -35,6 +36,12 @@ class LinearFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = FlightsAdapter()
         binding.recyclerFlights.adapter = adapter
+        binding.recyclerFlights.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
         loadFlights()
     }
 
