@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.motorro.recyclerview.R
 import com.motorro.recyclerview.databinding.FragmentGridBinding
 import com.motorro.recyclerview.ui.grid.data.loadPictures
 
@@ -28,6 +29,10 @@ class GridFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = PicturesAdapter()
         binding.recyclerPics.adapter = adapter
+        binding.recyclerPics.addItemDecoration(GridDecoration(
+            spanCount = resources.getInteger(R.integer.grid_span),
+            spacing = resources.getDimensionPixelSize(R.dimen.content_margin)
+        ))
         adapter.setPictures(loadPictures())
     }
 
