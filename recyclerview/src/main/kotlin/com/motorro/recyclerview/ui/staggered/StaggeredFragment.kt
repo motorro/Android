@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.motorro.recyclerview.R
 import com.motorro.recyclerview.databinding.FragmentStaggeredBinding
 import com.motorro.recyclerview.ui.staggered.data.loadLetters
 
@@ -28,6 +29,12 @@ class StaggeredFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = LettersAdapter()
         binding.recyclerPics.adapter = adapter
+        binding.recyclerPics.addItemDecoration(
+            StaggeredDecoration(
+                spanCount = resources.getInteger(R.integer.grid_span),
+                spacing = resources.getDimensionPixelSize(R.dimen.content_margin)
+            )
+        )
         adapter.setLetters(loadLetters())
     }
 
