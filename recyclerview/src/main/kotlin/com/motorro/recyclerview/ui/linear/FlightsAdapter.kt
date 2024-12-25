@@ -17,6 +17,11 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
         notifyItemRangeInserted(this.flights.size, flights.size)
     }
 
+    fun removeAt(position: Int) {
+        this.flights -= flights[position]
+        notifyItemRemoved(position)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlightViewHolder {
         return FlightViewHolder(VhFlightBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
