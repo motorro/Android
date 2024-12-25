@@ -22,6 +22,16 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
         notifyItemRemoved(position)
     }
 
+    fun swap(from: Int, to: Int) {
+        val fromItem = flights[from]
+        val toItem = flights[to]
+        this.flights = this.flights.toMutableList().also {
+            it[from] = toItem
+            it[to] = fromItem
+        }
+        notifyItemMoved(from, to)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlightViewHolder {
         return FlightViewHolder(VhFlightBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }

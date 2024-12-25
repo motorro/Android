@@ -44,6 +44,7 @@ class LinearFragment : Fragment() {
             )
         )
         ItemTouchHelper(RemoveTouchHelper(adapter)).attachToRecyclerView(binding.recyclerFlights)
+        ItemTouchHelper(SwapTouchHelper(adapter)).attachToRecyclerView(binding.recyclerFlights)
         loadFlights()
     }
 
