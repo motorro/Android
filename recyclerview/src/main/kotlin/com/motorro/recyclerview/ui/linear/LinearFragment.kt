@@ -11,6 +11,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.motorro.recyclerview.R
 import com.motorro.recyclerview.databinding.FragmentLinearBinding
 import com.motorro.recyclerview.ui.linear.data.FlightsDataSource
 import kotlinx.coroutines.launch
@@ -35,7 +37,13 @@ class LinearFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = FlightsAdapter()
+        adapter = FlightsAdapter {
+            Snackbar.make(
+                view,
+                getString(R.string.txt_flight_selected, it.flightNumber),
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
         dataSource = FlightsDataSource(viewLifecycleOwner.lifecycleScope)
         binding.recyclerFlights.adapter = adapter
         binding.recyclerFlights.addItemDecoration(

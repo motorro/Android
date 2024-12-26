@@ -15,7 +15,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.char
 
-class FlightsAdapter : ListAdapter<FlightListItem, FlightsAdapter.FlightViewHolder>(FlightItemDiff) {
+class FlightsAdapter(private val onClick: (FlightListItem.Flight) -> Unit) : ListAdapter<FlightListItem, FlightsAdapter.FlightViewHolder>(FlightItemDiff) {
 
     override fun getItemViewType(position: Int): Int = when(getItem(position)) {
         is FlightListItem.Date -> R.layout.vh_date_header
@@ -34,7 +34,8 @@ class FlightsAdapter : ListAdapter<FlightListItem, FlightsAdapter.FlightViewHold
             VhFlightBinding.inflate(LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            onClick
         )
         R.layout.vh_loading -> FlightViewHolder.Loading(
             VhLoadingBinding.inflate(LayoutInflater.from(parent.context),
@@ -72,8 +73,18 @@ class FlightsAdapter : ListAdapter<FlightListItem, FlightsAdapter.FlightViewHold
             }
         }
 
-        class Flight(private val binding: VhFlightBinding) : FlightViewHolder(binding.root) {
+        class Flight(private val binding: VhFlightBinding, private val onClick: (FlightListItem.Flight) -> Unit) : FlightViewHolder(binding.root) {
+
+            private lateinit var boundFlight: FlightListItem.Flight
+
+            init {
+                binding.root.setOnClickListener {
+                    onClick(boundFlight)
+                }
+            }
+
             fun bind(flight: FlightListItem.Flight) = with(binding) {
+                boundFlight = flight
                 flightNumber.text = flight.flightNumber
                 time.text = timeFormatter.format(flight.dateTime)
                 from.text = flight.from
