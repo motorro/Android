@@ -1,6 +1,7 @@
 package com.motorro.recyclerview.ui.linear.data
 
 import com.github.javafaker.Faker
+import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.atTime
@@ -29,13 +30,20 @@ sealed class FlightListItem {
         val from: String,
         val aircraft: String
     ): FlightListItem()
+
+    /**
+     * Loading item
+     */
+    data object Loading: FlightListItem()
 }
 
 private var nextFlightId = 1
-private const val DELAY = 1000L
+private const val DELAY = 1500L
 private val faker = Faker()
 
 suspend fun loadFlights(atDate: LocalDate): List<FlightListItem> {
+    // Simulate network delay
+    delay(DELAY)
     return listOf(FlightListItem.Date(atDate)) + (0..23).map {
         FlightListItem.Flight(
             id = nextFlightId++,

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.motorro.recyclerview.R
 import com.motorro.recyclerview.databinding.VhDateHeaderBinding
 import com.motorro.recyclerview.databinding.VhFlightBinding
+import com.motorro.recyclerview.databinding.VhLoadingBinding
 import com.motorro.recyclerview.ui.linear.data.FlightListItem
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -26,6 +27,18 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
         notifyItemRemoved(position)
     }
 
+    fun showLoading() {
+        this.flights += FlightListItem.Loading
+        notifyItemInserted(this.flights.size)
+    }
+
+    fun hideLoading() {
+        if (flights.lastOrNull() is FlightListItem.Loading) {
+            this.flights = this.flights.dropLast(1)
+            notifyItemRemoved(this.flights.size)
+        }
+    }
+
     fun swap(from: Int, to: Int) {
         val fromItem = flights[from]
         val toItem = flights[to]
@@ -39,6 +52,7 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
     override fun getItemViewType(position: Int): Int = when(flights[position]) {
         is FlightListItem.Date -> R.layout.vh_date_header
         is FlightListItem.Flight -> R.layout.vh_flight
+        FlightListItem.Loading -> R.layout.vh_loading
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlightViewHolder = when(viewType) {
@@ -50,6 +64,12 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
         )
         R.layout.vh_flight -> FlightViewHolder.Flight(
             VhFlightBinding.inflate(LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+        R.layout.vh_loading -> FlightViewHolder.Loading(
+            VhLoadingBinding.inflate(LayoutInflater.from(parent.context),
                 parent,
                 false
             )
@@ -67,6 +87,7 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
         when (holder) {
             is FlightViewHolder.DateHeader -> holder.bind(flights[position] as FlightListItem.Date)
             is FlightViewHolder.Flight -> holder.bind(flights[position] as FlightListItem.Flight)
+            is FlightViewHolder.Loading -> Unit
         }
     }
 
@@ -103,5 +124,7 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
                 }
             }
         }
+
+        class Loading(private val binding: VhLoadingBinding) : FlightViewHolder(binding.root)
     }
 }
