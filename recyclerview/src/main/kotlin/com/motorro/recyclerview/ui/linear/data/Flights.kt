@@ -44,7 +44,7 @@ private val faker = Faker()
 suspend fun loadFlights(atDate: LocalDate): List<FlightListItem> {
     // Simulate network delay
     delay(DELAY)
-    return listOf(FlightListItem.Date(atDate)) + (0..23).map {
+    return (0..23).map {
         FlightListItem.Flight(
             id = nextFlightId++,
             dateTime = atDate.atTime(it, 0),

@@ -2,12 +2,13 @@ package com.motorro.recyclerview.ui.linear
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.motorro.recyclerview.ui.linear.data.FlightsDataSource
 
-class SwapTouchHelper(private val adapter: FlightsAdapter) : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+class SwapTouchHelper(private val dataSource: FlightsDataSource) : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
         val fromPos = viewHolder.bindingAdapterPosition
         val toPos = target.bindingAdapterPosition
-        adapter.swap(fromPos, toPos)
+        dataSource.swap(fromPos, toPos)
         return true
     }
 
