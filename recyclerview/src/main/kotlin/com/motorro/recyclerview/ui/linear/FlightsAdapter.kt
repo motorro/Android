@@ -1,10 +1,14 @@
 package com.motorro.recyclerview.ui.linear
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.motorro.recyclerview.R
+import com.motorro.recyclerview.databinding.VhDateHeaderBinding
 import com.motorro.recyclerview.databinding.VhFlightBinding
 import com.motorro.recyclerview.ui.linear.data.FlightListItem
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.char
 
@@ -32,8 +36,27 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
         notifyItemMoved(from, to)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlightViewHolder {
-        return FlightViewHolder(VhFlightBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun getItemViewType(position: Int): Int = when(flights[position]) {
+        is FlightListItem.Date -> R.layout.vh_date_header
+        is FlightListItem.Flight -> R.layout.vh_flight
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlightViewHolder = when(viewType) {
+        R.layout.vh_date_header -> FlightViewHolder.DateHeader(
+            VhDateHeaderBinding.inflate(LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+        R.layout.vh_flight -> FlightViewHolder.Flight(
+            VhFlightBinding.inflate(LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+        else -> {
+            throw IllegalArgumentException("Unknown view type: $viewType")
+        }
     }
 
     override fun getItemCount(): Int {
@@ -41,22 +64,43 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
     }
 
     override fun onBindViewHolder(holder: FlightViewHolder, position: Int) {
-        holder.bind(flights[position] as FlightListItem.Flight)
+        when (holder) {
+            is FlightViewHolder.DateHeader -> holder.bind(flights[position] as FlightListItem.Date)
+            is FlightViewHolder.Flight -> holder.bind(flights[position] as FlightListItem.Flight)
+        }
     }
 
-    class FlightViewHolder(private val binding: VhFlightBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(flight: FlightListItem.Flight) = with(binding) {
-            flightNumber.text = flight.flightNumber
-            time.text = timeFormatter.format(flight.dateTime)
-            from.text = flight.from
-            aircraft.text = flight.aircraft
+    sealed class FlightViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        class DateHeader(private val binding: VhDateHeaderBinding) : FlightViewHolder(binding.root) {
+            fun bind(date: FlightListItem.Date) = with(binding) {
+                root.text = dateFormatter.format(date.date)
+            }
+
+            companion object {
+                private val dateFormatter = LocalDate.Format {
+                    year()
+                    char('-')
+                    monthNumber()
+                    char('-')
+                    day()
+                }
+            }
         }
 
-        companion object {
-            val timeFormatter = LocalDateTime.Format {
-                hour()
-                char(':')
-                minute()
+        class Flight(private val binding: VhFlightBinding) : FlightViewHolder(binding.root) {
+            fun bind(flight: FlightListItem.Flight) = with(binding) {
+                flightNumber.text = flight.flightNumber
+                time.text = timeFormatter.format(flight.dateTime)
+                from.text = flight.from
+                aircraft.text = flight.aircraft
+            }
+
+            companion object {
+                private val timeFormatter = LocalDateTime.Format {
+                    hour()
+                    char(':')
+                    minute()
+                }
             }
         }
     }
