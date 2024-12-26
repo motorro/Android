@@ -29,6 +29,15 @@ class LinearFragment : Fragment() {
     private lateinit var adapter: FlightsAdapter
 
     private var latestDate: LocalDate? = null
+    private var loading: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                adapter.showLoading()
+            } else {
+                adapter.hideLoading()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,10 +68,14 @@ class LinearFragment : Fragment() {
     }
 
     private fun loadFlights() {
+        if (loading) return
         viewLifecycleOwner.lifecycleScope.launch {
             val from = getFlightDate()
             Log.i(TAG, "Loading flights from: $from")
-            adapter.addFlights(loadFlights(from))
+            loading = true
+            val flights = loadFlights(from)
+            loading = false
+            adapter.addFlights(flights)
         }
     }
 
