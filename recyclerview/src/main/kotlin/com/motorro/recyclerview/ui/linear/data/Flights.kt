@@ -15,6 +15,11 @@ data class Flights(val flights: List<FlightListItem> = emptyList())
  */
 sealed class FlightListItem {
     /**
+     * Date header
+     */
+    data class Date(val date: LocalDate): FlightListItem()
+
+    /**
      * Flight
      */
     data class Flight(
@@ -31,7 +36,7 @@ private const val DELAY = 1000L
 private val faker = Faker()
 
 suspend fun loadFlights(atDate: LocalDate): List<FlightListItem> {
-    return (0..23).map {
+    return listOf(FlightListItem.Date(atDate)) + (0..23).map {
         FlightListItem.Flight(
             id = nextFlightId++,
             dateTime = atDate.atTime(it, 0),
