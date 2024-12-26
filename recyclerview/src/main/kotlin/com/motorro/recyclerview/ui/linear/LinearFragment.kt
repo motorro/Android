@@ -1,24 +1,19 @@
 package com.motorro.recyclerview.ui.linear
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.motorro.recyclerview.databinding.FragmentLinearBinding
-import com.motorro.recyclerview.ui.linear.data.loadFlights
+import com.motorro.recyclerview.ui.linear.data.FlightsDataSource
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
 
 class LinearFragment : Fragment() {
 
@@ -26,18 +21,8 @@ class LinearFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    private lateinit var dataSource: FlightsDataSource
     private lateinit var adapter: FlightsAdapter
-
-    private var latestDate: LocalDate? = null
-    private var loading: Boolean = false
-        set(value) {
-            field = value
-            if (value) {
-                adapter.showLoading()
-            } else {
-                adapter.hideLoading()
-            }
-        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +36,7 @@ class LinearFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = FlightsAdapter()
+        dataSource = FlightsDataSource(viewLifecycleOwner.lifecycleScope)
         binding.recyclerFlights.adapter = adapter
         binding.recyclerFlights.addItemDecoration(
             DividerItemDecoration(
@@ -58,39 +44,24 @@ class LinearFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
-        ItemTouchHelper(RemoveTouchHelper(adapter)).attachToRecyclerView(binding.recyclerFlights)
-        ItemTouchHelper(SwapTouchHelper(adapter)).attachToRecyclerView(binding.recyclerFlights)
+        ItemTouchHelper(RemoveTouchHelper(dataSource)).attachToRecyclerView(binding.recyclerFlights)
+        ItemTouchHelper(SwapTouchHelper(dataSource)).attachToRecyclerView(binding.recyclerFlights)
         binding.recyclerFlights.addOnScrollListener(LoadMoreScrollListener(
             layoutManager = binding.recyclerFlights.layoutManager as LinearLayoutManager,
-            onLoadMore = ::loadFlights
+            onLoadMore = dataSource::loadMore
         ))
-        loadFlights()
-    }
 
-    private fun loadFlights() {
-        if (loading) return
         viewLifecycleOwner.lifecycleScope.launch {
-            val from = getFlightDate()
-            Log.i(TAG, "Loading flights from: $from")
-            loading = true
-            val flights = loadFlights(from)
-            loading = false
-            adapter.addFlights(flights)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                dataSource.flights.collect {
+                    adapter.submitList(it)
+                }
+            }
         }
-    }
-
-    private fun getFlightDate(): LocalDate {
-        val from = latestDate?.plus(1, DateTimeUnit.DAY) ?: Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-        latestDate = from
-        return from
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private const val TAG = "LinearFragment"
     }
 }

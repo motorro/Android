@@ -3,6 +3,8 @@ package com.motorro.recyclerview.ui.linear
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.motorro.recyclerview.R
 import com.motorro.recyclerview.databinding.VhDateHeaderBinding
@@ -13,43 +15,9 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.char
 
-class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>() {
+class FlightsAdapter : ListAdapter<FlightListItem, FlightsAdapter.FlightViewHolder>(FlightItemDiff) {
 
-    private var flights: List<FlightListItem> = emptyList()
-
-    fun addFlights(flights: List<FlightListItem>) {
-        this.flights += flights
-        notifyItemRangeInserted(this.flights.size, flights.size)
-    }
-
-    fun removeAt(position: Int) {
-        this.flights -= flights[position]
-        notifyItemRemoved(position)
-    }
-
-    fun showLoading() {
-        this.flights += FlightListItem.Loading
-        notifyItemInserted(this.flights.size)
-    }
-
-    fun hideLoading() {
-        if (flights.lastOrNull() is FlightListItem.Loading) {
-            this.flights = this.flights.dropLast(1)
-            notifyItemRemoved(this.flights.size)
-        }
-    }
-
-    fun swap(from: Int, to: Int) {
-        val fromItem = flights[from]
-        val toItem = flights[to]
-        this.flights = this.flights.toMutableList().also {
-            it[from] = toItem
-            it[to] = fromItem
-        }
-        notifyItemMoved(from, to)
-    }
-
-    override fun getItemViewType(position: Int): Int = when(flights[position]) {
+    override fun getItemViewType(position: Int): Int = when(getItem(position)) {
         is FlightListItem.Date -> R.layout.vh_date_header
         is FlightListItem.Flight -> R.layout.vh_flight
         FlightListItem.Loading -> R.layout.vh_loading
@@ -79,14 +47,10 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
         }
     }
 
-    override fun getItemCount(): Int {
-        return flights.size
-    }
-
     override fun onBindViewHolder(holder: FlightViewHolder, position: Int) {
         when (holder) {
-            is FlightViewHolder.DateHeader -> holder.bind(flights[position] as FlightListItem.Date)
-            is FlightViewHolder.Flight -> holder.bind(flights[position] as FlightListItem.Flight)
+            is FlightViewHolder.DateHeader -> holder.bind(getItem(position) as FlightListItem.Date)
+            is FlightViewHolder.Flight -> holder.bind(getItem(position) as FlightListItem.Flight)
             is FlightViewHolder.Loading -> Unit
         }
     }
@@ -127,4 +91,15 @@ class FlightsAdapter() : RecyclerView.Adapter<FlightsAdapter.FlightViewHolder>()
 
         class Loading(private val binding: VhLoadingBinding) : FlightViewHolder(binding.root)
     }
+}
+
+private object FlightItemDiff : DiffUtil.ItemCallback<FlightListItem>() {
+    override fun areItemsTheSame(oldItem: FlightListItem, newItem: FlightListItem): Boolean = when {
+        oldItem is FlightListItem.Date && newItem is FlightListItem.Date -> oldItem.date == newItem.date
+        oldItem is FlightListItem.Flight && newItem is FlightListItem.Flight -> oldItem.id == newItem.id
+        oldItem is FlightListItem.Loading && newItem is FlightListItem.Loading -> true
+        else -> false
+    }
+
+    override fun areContentsTheSame(oldItem: FlightListItem, newItem: FlightListItem): Boolean = oldItem == newItem
 }
