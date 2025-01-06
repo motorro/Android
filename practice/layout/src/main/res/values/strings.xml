@@ -2,4 +2,5 @@
     <string name="app_name">Layout</string>
     <string name="close">Close</string>
     <string name="word">Word</string>
+    <string name="btn_continue">Continue</string>
 </resources>
