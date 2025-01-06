@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ActionButton" parent="Widget.Material3.Button.UnelevatedButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.ActionButton</item>
+        <item name="android:textAppearance">@style/TextAppearance.ActionButton</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+    <style name="ShapeAppearance.ActionButton" parent="ShapeAppearance.Material3.Corner.None">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">22dp</item>
+    </style>
+    <style name="TextAppearance.ActionButton" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/nunito_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+</resources>
