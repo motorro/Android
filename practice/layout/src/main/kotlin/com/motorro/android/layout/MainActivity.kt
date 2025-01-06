@@ -11,6 +11,7 @@ import com.motorro.android.layout.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var answersAdapter: AnswersAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,5 +34,16 @@ class MainActivity : AppCompatActivity() {
             .load(R.drawable.img_restaurant)
             .transform(CenterInside())
             .into(binding.imgWord)
+
+        answersAdapter = AnswersAdapter()
+        binding.answers.adapter = answersAdapter
+        answersAdapter.submitList(
+            listOf(
+                Answer("Магазин"),
+                Answer("Больница"),
+                Answer("АЗС"),
+                Answer("Ресторан", true),
+            )
+        )
     }
 }
