@@ -70,7 +70,10 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
 
+        style="@style/ActionButton"
+
         android:text="@string/btn_continue"
+        android:textColor="@color/correct"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
