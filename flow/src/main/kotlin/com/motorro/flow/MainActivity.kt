@@ -13,7 +13,6 @@ import com.google.android.material.chip.Chip
 import com.motorro.flow.data.Note
 import com.motorro.flow.data.Tag
 import com.motorro.flow.data.User
-import com.motorro.flow.data.getNotesFlow
 import com.motorro.flow.data.getTagsFlow
 import com.motorro.flow.data.getUsers
 import com.motorro.flow.databinding.ActivityMainBinding
@@ -173,14 +172,9 @@ class MainActivity : AppCompatActivity() {
 
         Log.i(TAG, "Loading notes for user: $userId and tags: $tags")
 
-        if (null == userId) {
-            populateNotes(emptyList())
-            return
-        }
-
         feedSubscription = lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                getNotesFlow(userId, tags).collect {
+                GetUserNotes(userId, tags).state.collect {
                     populateNotes(it)
                 }
             }
