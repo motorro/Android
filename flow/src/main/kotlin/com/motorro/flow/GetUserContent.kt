@@ -1,0 +1,63 @@
+package com.motorro.flow
+
+import com.motorro.flow.data.Note
+import com.motorro.flow.data.Tag
+import com.motorro.flow.data.getNotesFlow
+import com.motorro.flow.data.getTagsFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transformLatest
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class GetUserContent {
+    /**
+     * Keeps tags to filter notes
+     */
+    private val userFlow = MutableStateFlow<Int?>(null)
+
+    /**
+     * Sets user to get content for
+     */
+    fun setUser(userId: Int?) {
+        userFlow.value = userId
+    }
+
+    /**
+     * Keeps tags to filter notes
+     */
+    private val tagsFlow = MutableStateFlow(emptySet<Int>())
+
+    /**
+     * Sets tags to filter notes
+     */
+    fun setTags(tags: Set<Int>) {
+        tagsFlow.value = tags
+    }
+
+    val state: Flow<UserContent> = userFlow.transformLatest { user ->
+        emit(UserContent(user, emptySet(), emptyList()))
+
+        getTagsFlow(user).collectLatest { tags ->
+            emit(UserContent(user, tags.toSet(), emptyList()))
+
+            tagsFlow.onStart { emit(emptySet()) }.collectLatest { selectedTags ->
+                emitAll(
+                    getNotesFlow(user, selectedTags).map {
+                        UserContent(user, tags.toSet(), it)
+                    }
+                )
+            }
+        }
+    }
+}
+
+data class UserContent(
+    val userId: Int?,
+    val tags: Set<Tag>,
+    val notes: List<Note>
+)

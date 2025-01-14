@@ -6,17 +6,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.chip.Chip
 import com.motorro.flow.data.Note
 import com.motorro.flow.data.Tag
 import com.motorro.flow.data.User
-import com.motorro.flow.data.getTagsFlow
 import com.motorro.flow.data.getUsers
 import com.motorro.flow.databinding.ActivityMainBinding
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -106,24 +102,7 @@ class MainActivity : AppCompatActivity() {
 
     // region Logic
 
-    private fun getSelectedUser(): Int? {
-        val chipId = binding.groupUsers.checkedChipId
-        return if (chipId == android.view.View.NO_ID) {
-            null
-        } else {
-            binding.groupUsers.findViewById<Chip>(chipId).tag as Int
-        }
-    }
-
-    private fun getSelectedTags(): Set<Int> {
-        return binding.groupTags.checkedChipIds
-            .map { id -> binding.groupTags.findViewById<Chip>(id).tag as Int }
-            .toSet()
-    }
-
-    private var tagsSubscription: Job? = null
-    private var feedSubscription: Job? = null
-    private lateinit var getUserNotes: GetUserNotes
+    private val getUserContent = GetUserContent()
 
     private fun loadUsers() {
         Log.i(TAG, "Loading users")
@@ -131,6 +110,8 @@ class MainActivity : AppCompatActivity() {
             val result = getUsers()
             if (result.isSuccess) {
                 populateUsers(result.getOrThrow())
+                getUserContent.setUser(null)
+                subscribeUserContent()
             } else {
                 Log.e(TAG, "Failed to load users", result.exceptionOrNull())
             }
@@ -139,44 +120,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectUser(userId: Int?) {
         Log.i(TAG, "Selected user: $userId")
-        loadNotes()
-        loadTags()
+        getUserContent.setUser(userId)
     }
 
-    private fun loadTags() {
-        val userId = getSelectedUser()
-        tagsSubscription?.cancel()
-        Log.i(TAG, "Loading tags for user: $userId")
-
-        tagsSubscription = getTagsFlow(userId)
-            .onEach { tags ->
-                populateTags(tags)
-                getUserNotes.setTags(getSelectedTags())
-                if (tags.isEmpty()) {
-                    hideTags()
-                } else {
-                    showTags()
-                }
+    private fun subscribeUserContent() {
+        getUserContent.state.onEach { content ->
+            populateTags(content.tags.toList())
+            populateNotes(content.notes)
+            if (content.tags.isEmpty()) {
+                hideTags()
+            } else {
+                showTags()
             }
-            .launchIn(lifecycleScope)
+        }.launchIn(lifecycleScope)
     }
 
     private fun selectTags(tags: Set<Int>) {
         Log.i(TAG, "Selected tags: $tags")
-        getUserNotes.setTags(tags)
-    }
-
-    private fun loadNotes() {
-        feedSubscription?.cancel()
-        getUserNotes = GetUserNotes(getSelectedUser())
-
-        feedSubscription = lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                getUserNotes.state.collect {
-                    populateNotes(it)
-                }
-            }
-        }
+        getUserContent.setTags(tags)
     }
 
     // endregion
