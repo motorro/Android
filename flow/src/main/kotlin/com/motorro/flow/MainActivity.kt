@@ -17,6 +17,7 @@ import com.motorro.flow.data.getNotesFlow
 import com.motorro.flow.data.getTagsForUser
 import com.motorro.flow.data.getUsers
 import com.motorro.flow.databinding.ActivityMainBinding
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -119,6 +120,8 @@ class MainActivity : AppCompatActivity() {
             .toSet()
     }
 
+    private var feedSubscription: Job? = null
+
     private fun loadUsers() {
         Log.i(TAG, "Loading users")
         lifecycleScope.launch {
@@ -166,6 +169,8 @@ class MainActivity : AppCompatActivity() {
     private fun loadNotes() {
         val userId = getSelectedUser()
         val tags = getSelectedTags()
+        feedSubscription?.cancel()
+
         Log.i(TAG, "Loading notes for user: $userId and tags: $tags")
 
         if (null == userId) {
@@ -173,7 +178,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        lifecycleScope.launch {
+        feedSubscription = lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 getNotesFlow(userId, tags).collect {
                     populateNotes(it)
