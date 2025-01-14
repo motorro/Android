@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity() {
 
     private var tagsSubscription: Job? = null
     private var feedSubscription: Job? = null
+    private lateinit var getUserNotes: GetUserNotes
 
     private fun loadUsers() {
         Log.i(TAG, "Loading users")
@@ -138,6 +139,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectUser(userId: Int?) {
         Log.i(TAG, "Selected user: $userId")
+        loadNotes()
         loadTags()
     }
 
@@ -149,12 +151,11 @@ class MainActivity : AppCompatActivity() {
         tagsSubscription = getTagsFlow(userId)
             .onEach { tags ->
                 populateTags(tags)
+                getUserNotes.setTags(getSelectedTags())
                 if (tags.isEmpty()) {
                     hideTags()
-                    populateNotes(emptyList())
                 } else {
                     showTags()
-                    loadNotes()
                 }
             }
             .launchIn(lifecycleScope)
@@ -162,19 +163,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectTags(tags: Set<Int>) {
         Log.i(TAG, "Selected tags: $tags")
-        loadNotes()
+        getUserNotes.setTags(tags)
     }
 
     private fun loadNotes() {
-        val userId = getSelectedUser()
-        val tags = getSelectedTags()
         feedSubscription?.cancel()
-
-        Log.i(TAG, "Loading notes for user: $userId and tags: $tags")
+        getUserNotes = GetUserNotes(getSelectedUser())
 
         feedSubscription = lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                GetUserNotes(userId, tags).state.collect {
+                getUserNotes.state.collect {
                     populateNotes(it)
                 }
             }
