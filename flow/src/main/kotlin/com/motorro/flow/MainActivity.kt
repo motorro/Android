@@ -14,10 +14,12 @@ import com.motorro.flow.data.Note
 import com.motorro.flow.data.Tag
 import com.motorro.flow.data.User
 import com.motorro.flow.data.getNotesFlow
-import com.motorro.flow.data.getTagsForUser
+import com.motorro.flow.data.getTagsFlow
 import com.motorro.flow.data.getUsers
 import com.motorro.flow.databinding.ActivityMainBinding
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -120,6 +122,7 @@ class MainActivity : AppCompatActivity() {
             .toSet()
     }
 
+    private var tagsSubscription: Job? = null
     private var feedSubscription: Job? = null
 
     private fun loadUsers() {
@@ -141,24 +144,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadTags() {
         val userId = getSelectedUser()
+        tagsSubscription?.cancel()
         Log.i(TAG, "Loading tags for user: $userId")
-        hideTags()
-        populateNotes(emptyList())
-        if (null == userId) {
-            populateTags(emptyList())
-            return
-        }
 
-        lifecycleScope.launch {
-            val result = getTagsForUser(userId)
-            if (result.isSuccess) {
-                populateTags(result.getOrThrow())
-                showTags()
-                loadNotes()
-            } else {
-                Log.e(TAG, "Failed to load tags", result.exceptionOrNull())
+        tagsSubscription = getTagsFlow(userId)
+            .onEach { tags ->
+                populateTags(tags)
+                if (tags.isEmpty()) {
+                    hideTags()
+                    populateNotes(emptyList())
+                } else {
+                    showTags()
+                    loadNotes()
+                }
             }
-        }
+            .launchIn(lifecycleScope)
     }
 
     private fun selectTags(tags: Set<Int>) {
