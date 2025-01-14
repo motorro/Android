@@ -6,12 +6,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.chip.Chip
 import com.motorro.flow.data.Note
 import com.motorro.flow.data.Tag
 import com.motorro.flow.data.User
-import com.motorro.flow.data.getNotesForUser
+import com.motorro.flow.data.getNotesFlow
 import com.motorro.flow.data.getTagsForUser
 import com.motorro.flow.data.getUsers
 import com.motorro.flow.databinding.ActivityMainBinding
@@ -88,6 +90,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun populateNotes(notes: List<Note>) {
+        Log.i(TAG, "Populating notes: $notes")
         adapter.submitList(notes)
     }
 
@@ -171,11 +174,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            val result = getNotesForUser(userId, tags)
-            if (result.isSuccess) {
-                populateNotes(result.getOrThrow())
-            } else {
-                Log.e(TAG, "Failed to load notes", result.exceptionOrNull())
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                getNotesFlow(userId, tags).collect {
+                    populateNotes(it)
+                }
             }
         }
     }
