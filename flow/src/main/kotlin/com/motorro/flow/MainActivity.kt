@@ -8,8 +8,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
+import com.motorro.flow.data.Note
 import com.motorro.flow.data.Tag
 import com.motorro.flow.data.User
+import com.motorro.flow.data.getNotesForUser
 import com.motorro.flow.data.getTagsForUser
 import com.motorro.flow.data.getUsers
 import com.motorro.flow.databinding.ActivityMainBinding
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: NotesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,8 @@ class MainActivity : AppCompatActivity() {
                     .toSet()
                 selectTags(tags)
             }
+            adapter = NotesAdapter()
+            groupNotes.adapter = adapter
         }
 
         loadUsers()
@@ -82,6 +87,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun populateNotes(notes: List<Note>) {
+        adapter.submitList(notes)
+    }
+
     private fun hideTags() {
         binding.controlsTags.visibility = android.view.View.GONE
     }
@@ -91,6 +100,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     // region Logic
+
+    private fun getSelectedUser(): Int? {
+        val chipId = binding.groupUsers.checkedChipId
+        return if (chipId == android.view.View.NO_ID) {
+            null
+        } else {
+            binding.groupUsers.findViewById<Chip>(chipId).tag as Int
+        }
+    }
+
+    private fun getSelectedTags(): Set<Int> {
+        return binding.groupTags.checkedChipIds
+            .map { id -> binding.groupTags.findViewById<Chip>(id).tag as Int }
+            .toSet()
+    }
 
     private fun loadUsers() {
         Log.i(TAG, "Loading users")
@@ -106,12 +130,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectUser(userId: Int?) {
         Log.i(TAG, "Selected user: $userId")
-        loadTags(userId)
+        loadTags()
     }
 
-    private fun loadTags(userId: Int?) {
+    private fun loadTags() {
+        val userId = getSelectedUser()
         Log.i(TAG, "Loading tags for user: $userId")
         hideTags()
+        populateNotes(emptyList())
         if (null == userId) {
             populateTags(emptyList())
             return
@@ -122,6 +148,7 @@ class MainActivity : AppCompatActivity() {
             if (result.isSuccess) {
                 populateTags(result.getOrThrow())
                 showTags()
+                loadNotes()
             } else {
                 Log.e(TAG, "Failed to load tags", result.exceptionOrNull())
             }
@@ -130,10 +157,30 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectTags(tags: Set<Int>) {
         Log.i(TAG, "Selected tags: $tags")
+        loadNotes()
+    }
+
+    private fun loadNotes() {
+        val userId = getSelectedUser()
+        val tags = getSelectedTags()
+        Log.i(TAG, "Loading notes for user: $userId and tags: $tags")
+
+        if (null == userId) {
+            populateNotes(emptyList())
+            return
+        }
+
+        lifecycleScope.launch {
+            val result = getNotesForUser(userId, tags)
+            if (result.isSuccess) {
+                populateNotes(result.getOrThrow())
+            } else {
+                Log.e(TAG, "Failed to load notes", result.exceptionOrNull())
+            }
+        }
     }
 
     // endregion
-
 
     companion object {
         private const val TAG = "MainActivity"
