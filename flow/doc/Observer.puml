@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide empty members
+
+class Observer {
+    +update(data: any): void
+}
+
+class Observable {
+
+}
+
+Observer <- Observable: update
+
+@enduml
