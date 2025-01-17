@@ -13,6 +13,11 @@ fun main(): Unit = runBlocking {
         sharedFlow.collect { value -> println("Collected: $value") }
     }
 
+    val lateCollector = launch {
+        delay(100)
+        sharedFlow.collect { value -> println("Late collected: $value") }
+    }
+
     // region Emit values
     delay(50)
     sharedFlow.emit(1)
@@ -23,5 +28,6 @@ fun main(): Unit = runBlocking {
     // endregion
 
     collector.cancelAndJoin()
+    lateCollector.cancelAndJoin()
     println("Done")
 }
