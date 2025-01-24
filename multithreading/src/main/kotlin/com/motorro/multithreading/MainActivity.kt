@@ -50,7 +50,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendMessage() {
         th?.post {
-            log { "Current time: ${Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time}" }
+            val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
+            log { "Current time: $currentTime" }
+            log { "Logging current time..." }
+            binding.message.text = getString(R.string.updated_at, currentTime)
         }
     }
 }
