@@ -1,6 +1,8 @@
 package com.motorro.multithreading
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -52,8 +54,10 @@ class MainActivity : AppCompatActivity() {
         th?.post {
             val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
             log { "Current time: $currentTime" }
-            log { "Logging current time..." }
-            binding.message.text = getString(R.string.updated_at, currentTime)
+            Handler(Looper.getMainLooper()).post {
+                log { "Logging current time..." }
+                binding.message.text = getString(R.string.updated_at, currentTime)
+            }
         }
     }
 }
