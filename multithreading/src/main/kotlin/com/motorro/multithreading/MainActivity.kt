@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendMessage() {
+        val sendingTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
+        log { "Sending time: $sendingTime" }
         th?.post {
             val currentTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
             log { "Current time: $currentTime" }
