@@ -6,6 +6,7 @@ import android.util.Log
 import com.motorro.coroutines.network.data.LoginRequest
 import com.motorro.coroutines.network.data.Profile
 import com.motorro.coroutines.network.data.User
+import kotlin.concurrent.thread
 import kotlin.time.Instant
 
 private const val NETWORK_DELAY = 1000L
@@ -29,38 +30,48 @@ interface Api {
      * Login
      * @param credentials Login credentials
      */
-    fun login(credentials: LoginRequest): Result<User>
+    fun login(credentials: LoginRequest, onResult: (Result<User>) -> Unit)
 
     /**
      * Retrieves profile
      * @param token User token
      * @param id Profile ID
      */
-    fun getProfile(token: String, id: Long): Result<Profile>
+    fun getProfile(token: String, id: Long, onResult: (Result<Profile>) -> Unit)
 
     companion object {
         /**
          * Creates API service
          */
         fun create(): Api = object : Api {
-            override fun login(credentials: LoginRequest): Result<User> = emulateNetwork {
-                log { "Logging in ${credentials.username}..." }
-                if (LOGIN == credentials.username  && PASSWORD == credentials.password) {
-                    LOGIN_RESPONSE
-                } else {
-                    throw IllegalArgumentException("Invalid credentials")
+            override fun login(credentials: LoginRequest, onResult: (Result<User>) -> Unit) = runInBackground(onResult) {
+                emulateNetwork {
+                    log { "Logging in ${credentials.username}..." }
+                    if (LOGIN == credentials.username  && PASSWORD == credentials.password) {
+                        LOGIN_RESPONSE
+                    } else {
+                        throw IllegalArgumentException("Invalid credentials")
+                    }
                 }
             }
 
-            override fun getProfile(token: String, id: Long): Result<Profile> = emulateNetwork {
-                log { "Getting profile for $id..." }
-                when {
-                    LOGIN_RESPONSE.token != token -> throw IllegalArgumentException("Invalid token")
-                    PROFILE.id != id -> throw IllegalStateException("Unknown profile")
-                    else -> PROFILE
+            override fun getProfile(token: String, id: Long, onResult: (Result<Profile>) -> Unit) = runInBackground(onResult) {
+                emulateNetwork {
+                    log { "Getting profile for $id..." }
+                    when {
+                        LOGIN_RESPONSE.token != token -> throw IllegalArgumentException("Invalid token")
+                        PROFILE.id != id -> throw IllegalStateException("Unknown profile")
+                        else -> PROFILE
+                    }
                 }
             }
         }
+    }
+}
+
+private fun <T> runInBackground(callback: (Result<T>) -> Unit, block: () -> Result<T>) {
+    thread {
+        callback(block())
     }
 }
 
