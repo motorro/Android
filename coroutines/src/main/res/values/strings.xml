@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Coroutines</string>
+    <string name="login_button">Login</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="lbl_name">Name:</string>
+    <string name="lbl_age">Age</string>
+    <string name="lbl_registration_date">Registration date</string>
+    <string name="name">%1$s</string>
+    <string name="age">%1$d</string>
+    <string name="registration_date">%1$tY-%1$tm-%1$td</string>
+    <string name="lbl_logout">Logout</string>
+</resources>
