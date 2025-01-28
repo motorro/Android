@@ -64,13 +64,16 @@ class MainActivity : AppCompatActivity() {
     private fun login(username: String, password: String) {
         showLoading()
         log { "Starting login..." }
-        val user = api.login(LoginRequest(username, password)).getOrThrow()
-        log { "Successfully logged in user: ${user.id}" }
-
-        log { "Loading profile for user: ${user.id}..."}
-        val profile = api.getProfile(user.token, user.id).getOrThrow()
-        log { "Profile loaded for user: ${user.id}" }
-        showContent(MainActivityViewState.Content(profile))
+        api.login(LoginRequest(username, password)) {
+            val user = it.getOrThrow()
+            log { "Successfully logged in user: ${user.id}" }
+            log { "Loading profile for user: ${user.id}..."}
+            api.getProfile(user.token, user.id) {
+                val profile = it.getOrThrow()
+                log { "Profile loaded for user: ${user.id}" }
+                showContent(MainActivityViewState.Content(profile))
+            }
+        }
     }
 
     private fun logout() {
