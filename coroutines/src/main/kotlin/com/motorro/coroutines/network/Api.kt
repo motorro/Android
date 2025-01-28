@@ -1,5 +1,6 @@
 package com.motorro.coroutines.network
 
+import android.os.Handler
 import android.os.Looper
 import android.os.NetworkOnMainThreadException
 import android.util.Log
@@ -71,7 +72,12 @@ interface Api {
 
 private fun <T> runInBackground(callback: (Result<T>) -> Unit, block: () -> Result<T>) {
     thread {
-        callback(block())
+        log { "Switched to background thread..." }
+        val result = block()
+        Handler(Looper.getMainLooper()).post {
+            log { "Switched to main thread..." }
+            callback(result)
+        }
     }
 }
 
