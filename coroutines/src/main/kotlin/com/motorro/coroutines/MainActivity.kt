@@ -68,20 +68,27 @@ class MainActivity : AppCompatActivity() {
     private fun login(username: String, password: String) {
         showLoading()
         log { "Starting login..." }
-        try {
-            api.login(LoginRequest(username, password), willFailOnLogin()) {
-                val user = it.getOrThrow()
-                log { "Successfully logged in user: ${user.id}" }
-                log { "Loading profile for user: ${user.id}..."}
-                api.getProfile(user.token, user.id, willFailOnProfile()) {
-                    val profile = it.getOrThrow()
-                    log { "Profile loaded for user: ${user.id}" }
-                    showContent(MainActivityViewState.Content(profile))
+        api.login(LoginRequest(username, password), willFailOnLogin()) { userResult ->
+            userResult
+                .onSuccess { user ->
+                    log { "Successfully logged in user: ${user.id}" }
+                    log { "Loading profile for user: ${user.id}..."}
+                    api.getProfile(user.token, user.id, willFailOnProfile()) { profileResult ->
+                        profileResult
+                            .onSuccess { profile ->
+                                log { "Profile loaded for user: ${user.id}" }
+                                showContent(MainActivityViewState.Content(profile))
+                            }
+                            .onFailure {
+                                log { "Error loading profile: $it" }
+                                showError(it)
+                            }
+                    }
                 }
-            }
-        } catch (e: Throwable) {
-            log { "Network failed: ${e.message}" }
-            showError(e)
+                .onFailure {
+                    log { "Error logging-in user: $it" }
+                    showError(it)
+                }
         }
     }
 
