@@ -1,13 +1,13 @@
 package com.motorro.coroutines.network
 
-import android.os.Handler
 import android.os.Looper
 import android.os.NetworkOnMainThreadException
 import android.util.Log
 import com.motorro.coroutines.network.data.LoginRequest
 import com.motorro.coroutines.network.data.Profile
 import com.motorro.coroutines.network.data.User
-import kotlin.concurrent.thread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.time.Instant
 
 private const val NETWORK_DELAY = 1000L
@@ -31,21 +31,21 @@ interface Api {
      * Login
      * @param credentials Login credentials
      */
-    fun login(credentials: LoginRequest, willFail: Boolean = false, onResult: (Result<User>) -> Unit)
+    suspend fun login(credentials: LoginRequest, willFail: Boolean = false): User
 
     /**
      * Retrieves profile
      * @param token User token
      * @param id Profile ID
      */
-    fun getProfile(token: String, id: Long, willFail: Boolean = false, onResult: (Result<Profile>) -> Unit)
+    suspend fun getProfile(token: String, id: Long, willFail: Boolean = false): Profile
 
     companion object {
         /**
          * Creates API service
          */
         fun create(): Api = object : Api {
-            override fun login(credentials: LoginRequest, willFail: Boolean, onResult: (Result<User>) -> Unit) = runInBackground(onResult) {
+            override suspend fun login(credentials: LoginRequest, willFail: Boolean): User = runInBackground {
                 emulateNetwork {
                     log { "Logging in ${credentials.username}..." }
                     if (willFail) {
@@ -59,7 +59,7 @@ interface Api {
                 }
             }
 
-            override fun getProfile(token: String, id: Long, willFail: Boolean, onResult: (Result<Profile>) -> Unit) = runInBackground(onResult) {
+            override suspend fun getProfile(token: String, id: Long, willFail: Boolean): Profile = runInBackground {
                 emulateNetwork {
                     log { "Getting profile for $id..." }
                     if (willFail) {
@@ -76,15 +76,14 @@ interface Api {
     }
 }
 
-private fun <T> runInBackground(callback: (Result<T>) -> Unit, block: () -> Result<T>) {
-    thread {
+private suspend inline fun <T> runInBackground(crossinline block: () -> Result<T>): T {
+    log { "Starting background run..." }
+    val result = withContext(Dispatchers.IO) {
         log { "Switched to background thread..." }
-        val result = block()
-        Handler(Looper.getMainLooper()).post {
-            log { "Switched to main thread..." }
-            callback(result)
-        }
+        block().getOrThrow()
     }
+    log { "Back on original context..." }
+    return result
 }
 
 private inline fun <T> emulateNetwork(block: () -> T): Result<T> = try {

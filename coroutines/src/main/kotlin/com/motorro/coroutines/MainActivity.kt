@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.motorro.coroutines.databinding.ActivityMainBinding
 import com.motorro.coroutines.databinding.ContentBinding
 import com.motorro.coroutines.databinding.ErrorBinding
@@ -14,6 +15,8 @@ import com.motorro.coroutines.databinding.LoadingBinding
 import com.motorro.coroutines.databinding.LoginBinding
 import com.motorro.coroutines.network.Api
 import com.motorro.coroutines.network.data.LoginRequest
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
@@ -65,30 +68,20 @@ class MainActivity : AppCompatActivity() {
 
     // region Logic
 
-    private fun login(username: String, password: String) {
+    private fun login(username: String, password: String) = lifecycleScope.launch {
         showLoading()
-        log { "Starting login..." }
-        api.login(LoginRequest(username, password), willFailOnLogin()) { userResult ->
-            userResult
-                .onSuccess { user ->
-                    log { "Successfully logged in user: ${user.id}" }
-                    log { "Loading profile for user: ${user.id}..."}
-                    api.getProfile(user.token, user.id, willFailOnProfile()) { profileResult ->
-                        profileResult
-                            .onSuccess { profile ->
-                                log { "Profile loaded for user: ${user.id}" }
-                                showContent(MainActivityViewState.Content(profile))
-                            }
-                            .onFailure {
-                                log { "Error loading profile: $it" }
-                                showError(it)
-                            }
-                    }
-                }
-                .onFailure {
-                    log { "Error logging-in user: $it" }
-                    showError(it)
-                }
+        try {
+            log { "Starting login..." }
+            val user = api.login(LoginRequest(username, password), willFailOnLogin())
+            log { "Successfully logged in user: ${user.id}" }
+            log { "Loading profile for user: ${user.id}..."}
+            val profile = api.getProfile(user.token, user.id, willFailOnProfile())
+            log { "Profile loaded for user: ${user.id}" }
+            showContent(MainActivityViewState.Content(profile))
+        } catch (e: Throwable) {
+            ensureActive()
+            log { "Network error: $e" }
+            showError(e)
         }
     }
 
