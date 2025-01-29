@@ -11,4 +11,7 @@
     <string name="age">%1$d</string>
     <string name="registration_date">%1$tY-%1$tm-%1$td</string>
     <string name="lbl_logout">Logout</string>
+    <string name="lbl_fail_login">Fail login</string>
+    <string name="lbl_fail_profile">Fail profile</string>
+    <string name="lbl_return">Return</string>
 </resources>

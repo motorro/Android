@@ -31,23 +31,26 @@ interface Api {
      * Login
      * @param credentials Login credentials
      */
-    fun login(credentials: LoginRequest, onResult: (Result<User>) -> Unit)
+    fun login(credentials: LoginRequest, willFail: Boolean = false, onResult: (Result<User>) -> Unit)
 
     /**
      * Retrieves profile
      * @param token User token
      * @param id Profile ID
      */
-    fun getProfile(token: String, id: Long, onResult: (Result<Profile>) -> Unit)
+    fun getProfile(token: String, id: Long, willFail: Boolean = false, onResult: (Result<Profile>) -> Unit)
 
     companion object {
         /**
          * Creates API service
          */
         fun create(): Api = object : Api {
-            override fun login(credentials: LoginRequest, onResult: (Result<User>) -> Unit) = runInBackground(onResult) {
+            override fun login(credentials: LoginRequest, willFail: Boolean, onResult: (Result<User>) -> Unit) = runInBackground(onResult) {
                 emulateNetwork {
                     log { "Logging in ${credentials.username}..." }
+                    if (willFail) {
+                        throw RuntimeException("Login failed")
+                    }
                     if (LOGIN == credentials.username  && PASSWORD == credentials.password) {
                         LOGIN_RESPONSE
                     } else {
@@ -56,9 +59,12 @@ interface Api {
                 }
             }
 
-            override fun getProfile(token: String, id: Long, onResult: (Result<Profile>) -> Unit) = runInBackground(onResult) {
+            override fun getProfile(token: String, id: Long, willFail: Boolean, onResult: (Result<Profile>) -> Unit) = runInBackground(onResult) {
                 emulateNetwork {
                     log { "Getting profile for $id..." }
+                    if (willFail) {
+                        throw RuntimeException("Profile load failed")
+                    }
                     when {
                         LOGIN_RESPONSE.token != token -> throw IllegalArgumentException("Invalid token")
                         PROFILE.id != id -> throw IllegalStateException("Unknown profile")
