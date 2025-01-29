@@ -9,16 +9,16 @@ fun main(): Unit {
         // Child coroutine
         launch {
             repeat(10) { i ->
-                log { "I'm not blocked ${ i + 1 }" }
+                log(thread = true) { "I'm not blocked ${ i + 1 }" }
                 delay(300L)
             }
         }
         // Main coroutine
-        log { "Hello, world!" }
+        log(thread = true) { "Hello, world!" }
         delay(1000L)
-        log { "Goodbye, world!" }
+        log(thread = true) { "Goodbye, world!" }
         delay(1000L)
-        log { "Over and out!" }
+        log(thread = true) { "Over and out!" }
     }
-    log { "Done!" }
+    log(thread = true) { "Done!" }
 }
