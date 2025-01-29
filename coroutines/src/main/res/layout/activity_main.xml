@@ -9,5 +9,6 @@
     <include android:id="@+id/login_screen" layout="@layout/login"/>
     <include android:id="@+id/loading_screen" layout="@layout/loading"/>
     <include android:id="@+id/content_screen" layout="@layout/content"/>
+    <include android:id="@+id/error_screen" layout="@layout/error"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

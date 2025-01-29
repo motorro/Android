@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.motorro.coroutines.databinding.ActivityMainBinding
 import com.motorro.coroutines.databinding.ContentBinding
+import com.motorro.coroutines.databinding.ErrorBinding
 import com.motorro.coroutines.databinding.LoadingBinding
 import com.motorro.coroutines.databinding.LoginBinding
 import com.motorro.coroutines.network.Api
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var login: LoginBinding
     private lateinit var loading: LoadingBinding
     private lateinit var content: ContentBinding
+    private lateinit var error: ErrorBinding
 
     private var viewState: MainActivityViewState by Delegates.observable(MainActivityViewState.Login) { _, _, newValue ->
         when(newValue) {
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         login = binding.loginScreen
         loading = binding.loadingScreen
         content = binding.contentScreen
+        error = binding.errorScreen
 
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         setupLogin()
         setupLoading()
         setupContent()
+        setupError()
 
         viewState = MainActivityViewState.Login
 
@@ -64,19 +68,28 @@ class MainActivity : AppCompatActivity() {
     private fun login(username: String, password: String) {
         showLoading()
         log { "Starting login..." }
-        api.login(LoginRequest(username, password)) {
-            val user = it.getOrThrow()
-            log { "Successfully logged in user: ${user.id}" }
-            log { "Loading profile for user: ${user.id}..."}
-            api.getProfile(user.token, user.id) {
-                val profile = it.getOrThrow()
-                log { "Profile loaded for user: ${user.id}" }
-                showContent(MainActivityViewState.Content(profile))
+        try {
+            api.login(LoginRequest(username, password), willFailOnLogin()) {
+                val user = it.getOrThrow()
+                log { "Successfully logged in user: ${user.id}" }
+                log { "Loading profile for user: ${user.id}..."}
+                api.getProfile(user.token, user.id, willFailOnProfile()) {
+                    val profile = it.getOrThrow()
+                    log { "Profile loaded for user: ${user.id}" }
+                    showContent(MainActivityViewState.Content(profile))
+                }
             }
+        } catch (e: Throwable) {
+            log { "Network failed: ${e.message}" }
+            showError(e)
         }
     }
 
     private fun logout() {
+        showLogin()
+    }
+
+    private fun returnFromError() {
         showLogin()
     }
 
@@ -105,21 +118,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupError() {
+        error.errorGroup.isVisible = false
+        error.btnReturn.setOnClickListener {
+            returnFromError()
+        }
+    }
+
     private fun showLogin() {
         login.loginGroup.isVisible = true
         loading.loadingGroup.isVisible = false
         content.contentGroup.isVisible = false
+        error.errorGroup.isVisible = false
     }
 
     private fun showLoading() {
         login.loginGroup.isVisible = false
         loading.loadingGroup.isVisible = true
         content.contentGroup.isVisible = false
+        error.errorGroup.isVisible = false
     }
 
     private fun showContent(state: MainActivityViewState.Content) {
         login.loginGroup.isVisible = false
         loading.loadingGroup.isVisible = false
+        error.errorGroup.isVisible = false
         with(content) {
             contentGroup.isVisible = true
             name.text = getString(R.string.name, state.profile.name)
@@ -130,6 +153,20 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
+    private fun showError(error: Throwable) {
+        login.loginGroup.isVisible = false
+        loading.loadingGroup.isVisible = false
+        content.contentGroup.isVisible = false
+        with(this.error) {
+            errorGroup.isVisible = true
+            errorText.text = error.message ?: error.toString()
+        }
+    }
+
+    private fun willFailOnLogin(): Boolean = login.failLogin.isChecked
+
+    private fun willFailOnProfile(): Boolean = login.failProfile.isChecked
 
     // endregion
 
