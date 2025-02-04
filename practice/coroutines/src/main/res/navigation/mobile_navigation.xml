@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_timer">
+
+    <fragment
+        android:id="@+id/navigation_timer"
+        android:name="com.motorro.coroutines.ui.timer.TimerFragment"
+        android:label="@string/title_timer"
+        tools:layout="@layout/fragment_timer" />
+
+    <fragment
+        android:id="@+id/navigation_login"
+        android:name="com.motorro.coroutines.ui.login.LoginFragment"
+        android:label="@string/title_login"
+        tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/navigation_network"
+        android:name="com.motorro.coroutines.ui.network.NetworkFragment"
+        android:label="@string/title_network"
+        tools:layout="@layout/fragment_network" />
+</navigation>
