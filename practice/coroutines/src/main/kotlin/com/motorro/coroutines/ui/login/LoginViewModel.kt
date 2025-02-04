@@ -6,8 +6,22 @@ import androidx.lifecycle.ViewModel
 
 class LoginViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is login Fragment"
+    private val _state = MutableLiveData<LoginViewState>(LoginViewState.Login())
+    val state: LiveData<LoginViewState> = _state
+
+    /**
+     * Login to the network
+     * @param name user name
+     * @param password user password
+     */
+    fun login(name: String, password: String) {
+        TODO("Implement login")
     }
-    val text: LiveData<String> = _text
+
+    /**
+     * Logout from the network
+     */
+    fun logout() {
+        TODO("Implement logout")
+    }
 }
