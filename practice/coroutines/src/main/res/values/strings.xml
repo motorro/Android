@@ -9,4 +9,6 @@
     <string name="hint_login">Login</string>
     <string name="hint_password">Password</string>
     <string name="btn_login">Login</string>
+    <string name="hint_number_of_threads">Number of threads</string>
+    <string name="result">%.2fs</string>
 </resources>

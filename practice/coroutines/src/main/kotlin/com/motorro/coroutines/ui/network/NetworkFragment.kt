@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.motorro.coroutines.R
 import com.motorro.coroutines.databinding.FragmentNetworkBinding
 
 class NetworkFragment : Fragment() {
@@ -28,9 +29,23 @@ class NetworkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val textView: TextView = binding.textNotifications
-        networkViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        networkViewModel.running.observe(viewLifecycleOwner) { running ->
+            binding.loading.isVisible = true == running
+            binding.numOfThreadsLayout.isEnabled = true != running
+            binding.btnStart.isEnabled = true != running
+        }
+
+        networkViewModel.result.observe(viewLifecycleOwner) { result ->
+            binding.result.text = result?.let { getString(R.string.result, it.toFloat() / 1000) } ?: ""
+        }
+
+        binding.numOfThreads.setText(
+            resources.getStringArray(R.array.num_of_threads)[0],
+            false
+        )
+
+        binding.btnStart.setOnClickListener {
+            networkViewModel.startTest(binding.numOfThreads.text.toString().toIntOrNull() ?: 1)
         }
     }
 
