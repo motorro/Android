@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.motorro.stateclassic.databinding.ActivitySettingsBinding
-import com.motorro.stateclassic.stat.createPageEvent
+import com.motorro.stateclassic.stat.PageEventHelper
 
 class SettingsActivity : AppCompatActivity() {
     companion object {
@@ -36,31 +36,6 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        (application as App).statService.logEvent(createPageEvent("onCreate"))
-    }
-
-    override fun onStart() {
-        super.onStart()
-        (application as App).statService.logEvent(createPageEvent("onStart"))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (application as App).statService.logEvent(createPageEvent("onResume"))
-    }
-
-    override fun onPause() {
-        super.onPause()
-        (application as App).statService.logEvent(createPageEvent("onPause"))
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (application as App).statService.logEvent(createPageEvent("onStop"))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        (application as App).statService.logEvent(createPageEvent("onDestroy"))
+        lifecycle.addObserver(PageEventHelper((application as App).statService))
     }
 }
