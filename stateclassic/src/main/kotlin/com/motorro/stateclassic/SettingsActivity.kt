@@ -1,23 +1,30 @@
 package com.motorro.stateclassic
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.motorro.stateclassic.databinding.ActivityMainBinding
+import com.motorro.stateclassic.databinding.ActivitySettingsBinding
 import com.motorro.stateclassic.stat.createPageEvent
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class SettingsActivity : AppCompatActivity() {
+    companion object {
+        fun createIntent(context: Context) = android.content.Intent(
+            context,
+            SettingsActivity::class.java
+        )
+    }
+
+    private lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initializeMenu()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -25,19 +32,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        (application as App).statService.logEvent(createPageEvent("onCreate"))
-    }
-
-    private fun initializeMenu() = with(binding) {
-        topAppBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.item_settings -> {
-                    startActivity(SettingsActivity.createIntent(this@MainActivity))
-                    true
-                }
-                else -> false
-            }
+        binding.topAppBar.setNavigationOnClickListener {
+            finish()
         }
+
+        (application as App).statService.logEvent(createPageEvent("onCreate"))
     }
 
     override fun onStart() {
