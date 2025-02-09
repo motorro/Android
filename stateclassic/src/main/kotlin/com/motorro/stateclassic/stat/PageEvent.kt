@@ -1,8 +1,8 @@
 package com.motorro.stateclassic.stat
 
+import androidx.annotation.VisibleForTesting
 import kotlin.time.Clock
 import kotlin.time.Instant
-
 
 data class PageEvent(
     private val page: String,
@@ -17,11 +17,12 @@ data class PageEvent(
         ACTION to action
     )
 
+    @VisibleForTesting
     companion object {
-        private const val PAGE = "page"
-        private const val NAME = "name"
-        private const val TIME = "time"
-        private const val ACTION = "action"
+        const val PAGE = "page"
+        const val NAME = "name"
+        const val TIME = "time"
+        const val ACTION = "action"
     }
 }
 fun createPageEvent(
