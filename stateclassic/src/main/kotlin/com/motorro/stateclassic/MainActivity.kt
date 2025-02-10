@@ -5,7 +5,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import com.motorro.stateclassic.databinding.ActivityMainBinding
+import com.motorro.stateclassic.permissions.PermissionHelper
+import com.motorro.stateclassic.permissions.goToSettings
 import com.motorro.stateclassic.stat.PageEventHelper
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeMenu()
+        binding.btnSettings.setOnClickListener { goToSettings() }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -27,6 +31,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycle.addObserver(PageEventHelper((application as App).statService))
+        lifecycle.addObserver(
+            PermissionHelper(
+                this,
+                activityResultRegistry,
+                setOf(android.Manifest.permission.CAMERA),
+                onGranted = { showCamera() },
+                onDenied = {
+                    with(binding) {
+                        content.isVisible = false
+                        permissionRequest.isVisible = true
+                    }
+                }
+            )
+        )
     }
 
     private fun initializeMenu() = with(binding) {
@@ -39,5 +57,10 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun showCamera() = with(binding) {
+        content.isVisible = true
+        permissionRequest.isVisible = false
     }
 }
