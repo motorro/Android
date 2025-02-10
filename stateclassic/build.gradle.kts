@@ -38,6 +38,14 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    testOptions {
+        packaging {
+            resources.excludes.add("META-INF/*")
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
+    }
 }
 
 dependencies {
@@ -51,4 +59,8 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.mockk.mockk)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.core.testing)
+    androidTestImplementation(libs.mockk.android)
 }
