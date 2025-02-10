@@ -43,6 +43,7 @@ startup = "1.2.0"
 camerax = "1.4.1"
 faker = "1.0.2"
 glide = "4.16.0"
+mlkit = "16.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -94,6 +95,7 @@ androidx-camera-camera = { group = "androidx.camera", name = "camera-camera2", v
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax"}
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax"}
 androidx-camera-ml = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "camerax"}
+google-ml-textRecognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkit"}
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-androidx = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltWork" }
