@@ -4,4 +4,7 @@
     <string name="desc_your_order">Your order</string>
     <string name="title_your_order">Your order</string>
     <string name="title_checkout">Checkout</string>
+    <string name="btn_checkout">Checkout</string>
+    <string name="title_burger">Burger</string>
+    <string name="title_our_dishes">Our dishes</string>
 </resources>
