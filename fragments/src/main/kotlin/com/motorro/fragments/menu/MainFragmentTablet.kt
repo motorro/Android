@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import com.motorro.fragments.OrderViewModel
 import com.motorro.fragments.R
 import com.motorro.fragments.checkout.CheckoutFragment
 import com.motorro.fragments.data.CategoryId
@@ -21,6 +23,10 @@ import com.motorro.fragments.utils.containerId
 
 
 class MainFragmentTablet : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost(), OrderCallback, DishContentCallback {
+
+    // Common view model taken from parent activity
+    private val orderViewModel: OrderViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +42,9 @@ class MainFragmentTablet : Fragment(), WithViewBinding<FragmentMainBinding> by B
                 result.getParcelable(CategoryContentFragment.RESULT, CategoryResult::class.java)
             } else {
                 result.getParcelable(CategoryContentFragment.RESULT)
+            }
+            resultData?.itemsToAdd?.forEach { (itemId, count) ->
+                orderViewModel.add(itemId, count)
             }
             navigateToOrder()
         }
