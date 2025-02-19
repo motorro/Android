@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.motorro.fragments.R
 import com.motorro.fragments.checkout.CheckoutFragment
+import com.motorro.fragments.data.CategoryId
 import com.motorro.fragments.databinding.FragmentMainBinding
 import com.motorro.fragments.order.OrderCallback
 import com.motorro.fragments.order.OrderContentFragment
@@ -21,7 +22,7 @@ import com.motorro.fragments.utils.containerId
 import com.motorro.fragments.utils.withBinding
 
 
-class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost(), WithTitle, OrderCallback {
+class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost(), WithTitle, OrderCallback, DishContentCallback {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -106,5 +107,9 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
             replace(containerId, CheckoutFragment())
             addToBackStack(null)
         }
+    }
+
+    override fun onCategorySelected(categoryId: CategoryId) {
+        TODO("Not yet implemented")
     }
 }
