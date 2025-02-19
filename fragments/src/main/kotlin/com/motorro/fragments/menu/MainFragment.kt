@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import com.motorro.fragments.OrderViewModel
 import com.motorro.fragments.R
 import com.motorro.fragments.checkout.CheckoutFragment
 import com.motorro.fragments.data.CategoryId
@@ -25,6 +27,10 @@ import com.motorro.fragments.utils.withBinding
 
 
 class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost(), WithTitle, OrderCallback, DishContentCallback {
+
+    // Common view model taken from parent activity
+    private val orderViewModel: OrderViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,6 +74,9 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
                 result.getParcelable(CategoryContentFragment.RESULT)
             }
             childFragmentManager.popBackStack()
+            resultData?.itemsToAdd?.forEach { (itemId, count) ->
+                orderViewModel.add(itemId, count)
+            }
         }
     }
 

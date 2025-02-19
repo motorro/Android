@@ -15,5 +15,5 @@ data class Item(val id: ItemId, val name: String, val price: Int)
  * @property quantity Quantity
  */
 data class ItemTotal(val item: Item, val quantity: Int) {
-    val price: Int get() = item.price * quantity
+    val total: Int get() = item.price * quantity
 }

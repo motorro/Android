@@ -10,5 +10,11 @@
     <string name="desc_add_item">Add item</string>
     <string name="desc_remove_item">Remove item</string>
     <string name="btn_add_to_order">Add to order</string>
+    <string name="desc_delete_item">Delete item</string>
+    <string name="header_item">Item</string>
+    <string name="header_price">Price</string>
+    <string name="header_count">Count</string>
+    <string name="header_total">Total</string>
+    <string name="foot_total">Total:</string>
 
 </resources>
