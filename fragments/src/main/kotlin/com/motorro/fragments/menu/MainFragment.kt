@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.motorro.fragments.R
 import com.motorro.fragments.checkout.CheckoutFragment
 import com.motorro.fragments.databinding.FragmentMainBinding
 import com.motorro.fragments.utils.BindingHost
@@ -27,6 +28,12 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
         withBinding {
             btnOrder.setOnClickListener {
                 parentFragmentManager.commit {
+                    setCustomAnimations(
+                        R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                    )
                     replace(containerId, CheckoutFragment())
                     addToBackStack(null)
                 }
