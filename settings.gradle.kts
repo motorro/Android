@@ -26,3 +26,4 @@ plugins {
 rootProject.name = "Android"
 include(":core")
 include(":composecore")
+include(":fragments")

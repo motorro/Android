@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Fragments</string>
+    <string name="title_menu">Menu</string>
+    <string name="desc_your_order">Your order</string>
+    <string name="title_your_order">Your order</string>
+    <string name="title_checkout">Checkout</string>
+</resources>

@@ -1,0 +1,80 @@
+@startuml
+(*) --> "{{
+    salt
+    {
+        - Burger
+        - Side dish
+        - Dessert
+        - Drink
+        [<&basket> Your order]
+    }
+    footer DishFragment
+}}" as menu
+
+menu -right-> "{{
+    salt
+    {
+        <&arrow-left>
+        ----
+        <b>Burger
+        {
+            <&minus> | Meat | <&plus>
+            <&minus> | Cheese | <&plus>
+            <&minus> | Ketchup | <&plus>
+        }
+        [<&plus> Add]
+    }
+    footer BurgerFragment
+}}" as burger
+
+menu -right-> "{{
+    salt
+    {
+        <&arrow-left>
+        ----
+        <b>Side dish
+        {
+            <&minus> | French fries | <&plus>
+            <&minus> | Salad | <&plus>
+            <&minus> | Grilled vegs | <&plus>
+        }
+        [<&plus> Add]
+    }
+    footer BurgerFragment
+}}" as sideDish
+
+menu -down-> "{{
+    salt
+    {
+        <&arrow-left>
+        ----
+        <b>Your order
+        {
+            <&minus> | French fries | <&plus>
+            <&minus> | Burger | <&plus>
+            <&minus> | Grilled vegs | <&plus>
+            <&minus> | Cola | <&plus>
+        }
+        [<&dollar> Checkout]
+    }
+    footer OrderFragment
+}}" as order
+
+order -down-> "{{
+    salt
+    {
+        <&arrow-left>
+        ----
+        <b>Your order
+        {
+            | French fries | 3
+            | Burger | 5
+            | Grilled vegs | 4
+            | Cola | 1
+            | Total | 13
+        }
+        [<&dollar> Pay]
+    }
+    footer
+}}" as checkout
+@enduml
