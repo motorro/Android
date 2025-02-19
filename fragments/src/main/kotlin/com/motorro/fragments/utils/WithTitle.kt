@@ -15,7 +15,14 @@ interface WithTitle {
 
 /**
  * Sets title from child fragment
+ * @param titleRes Title resource
  */
-fun Fragment.setTitle(@StringRes titleRes: Int) {
-    (parentFragment as? WithTitle)?.setTitle(getString(titleRes))
+fun Fragment.setTitle(@StringRes titleRes: Int) = setTitle(getString(titleRes))
+
+/**
+ * Sets title from child fragment
+ * @param title Title
+ */
+fun Fragment.setTitle(title: String) {
+    (parentFragment as? WithTitle)?.setTitle(title)
 }
