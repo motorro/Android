@@ -16,5 +16,7 @@
     <string name="header_count">Count</string>
     <string name="header_total">Total</string>
     <string name="foot_total">Total:</string>
+    <string name="btn_pay">Pay</string>
+    <string name="content_total">Total: %d</string>
 
 </resources>

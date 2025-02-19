@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.motorro.fragments.OrderViewModel
 import com.motorro.fragments.R
 import com.motorro.fragments.databinding.FragmentCheckoutBinding
 import com.motorro.fragments.utils.BindingHost
@@ -14,6 +16,10 @@ import com.motorro.fragments.utils.setTitle
 import com.motorro.fragments.utils.withBinding
 
 class CheckoutFragment : Fragment(), WithViewBinding<FragmentCheckoutBinding> by BindingHost() {
+
+    // Common view model taken from parent activity
+    private val orderViewModel: OrderViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,6 +31,12 @@ class CheckoutFragment : Fragment(), WithViewBinding<FragmentCheckoutBinding> by
         withBinding {
             topAppBar.setNavigationOnClickListener {
                 parentFragmentManager.popBackStack()
+            }
+        }
+
+        orderViewModel.contents.observe(viewLifecycleOwner) {
+            withBinding {
+                total.text = getString(R.string.content_total, it.total)
             }
         }
     }
