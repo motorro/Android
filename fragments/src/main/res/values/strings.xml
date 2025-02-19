@@ -7,5 +7,8 @@
     <string name="btn_checkout">Checkout</string>
     <string name="title_burger">Burger</string>
     <string name="title_our_dishes">Our dishes</string>
+    <string name="desc_add_item">Add item</string>
+    <string name="desc_remove_item">Remove item</string>
+    <string name="btn_add_to_order">Add to order</string>
 
 </resources>
