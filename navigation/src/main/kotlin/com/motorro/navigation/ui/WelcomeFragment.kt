@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.motorro.navigation.R
 import com.motorro.navigation.data.Session
 import com.motorro.navigation.data.sessionManager
@@ -32,14 +32,10 @@ class WelcomeFragment : Fragment() {
         binding.button.setOnClickListener {
             when (sessionManager.getSession()) {
                 is Session.Active -> {
-                    parentFragmentManager.commit {
-                        replace(R.id.fragment_container_view, TabsFragment())
-                    }
+                    findNavController().navigate(R.id.action_welcome_to_tabs)
                 }
                 else -> {
-                    parentFragmentManager.commit {
-                        replace(R.id.fragment_container_view, LoginFragment())
-                    }
+                    findNavController().navigate(R.id.action_welcome_to_login)
                 }
             }
         }
