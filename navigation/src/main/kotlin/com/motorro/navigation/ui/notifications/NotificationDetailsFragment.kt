@@ -9,19 +9,7 @@ import com.motorro.navigation.data.notifications
 import com.motorro.navigation.databinding.FragmentNotificationDetailsBinding
 
 class NotificationDetailsFragment : Fragment() {
-    companion object {
-        private const val NOTIFICATION_ID = "notificationId"
-
-        fun newInstance(notificationId: Int) = NotificationDetailsFragment().apply {
-            arguments = Bundle().apply {
-                putInt(NOTIFICATION_ID, notificationId)
-            }
-        }
-    }
-
-    private val notificationId: Int get() = requireNotNull(arguments?.getInt(NOTIFICATION_ID)?.takeIf { it > 0 }) {
-        "Argument $NOTIFICATION_ID is missing"
-    }
+    private val notificationId: Int get() = NotificationDetailsFragmentArgs.fromBundle(requireArguments()).notificationId
 
     private lateinit var binding: FragmentNotificationDetailsBinding
 
