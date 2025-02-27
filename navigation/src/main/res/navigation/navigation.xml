@@ -12,7 +12,8 @@
         tools:layout="@layout/fragment_welcome">
         <action
             android:id="@+id/action_welcome_to_tabs"
-            app:destination="@id/tabsFragment"/>
+            app:destination="@id/tabsFragment"
+            app:popUpTo="@id/navigation" />
         <action
             android:id="@+id/action_welcome_to_login"
             app:destination="@id/loginFragment"/>
@@ -24,7 +25,8 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_login_to_tabs"
-            app:destination="@id/tabsFragment" />
+            app:destination="@id/tabsFragment"
+            app:popUpTo="@id/navigation" />
     </fragment>
     <fragment
         android:id="@+id/tabsFragment"
