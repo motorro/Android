@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.motorro.navigation.R
 import com.motorro.navigation.data.sessionManager
 import com.motorro.navigation.databinding.FragmentLoginBinding
@@ -41,9 +41,7 @@ class LoginFragment : Fragment(), DialogListener {
                 binding.loginInput.text.toString(),
                 binding.passwordInput.text.toString()
             )
-            parentFragmentManager.commit {
-                replace(R.id.fragment_container_view, TabsFragment())
-            }
+            findNavController().navigate(R.id.action_login_to_tabs)
         } catch (e: Exception) {
             ErrorDialogFragment.newInstance(e.message.orEmpty()).show(
                 childFragmentManager,
@@ -54,9 +52,7 @@ class LoginFragment : Fragment(), DialogListener {
 
     override fun onDialogDismiss(tag: String) {
         if (tag == ErrorDialogFragment.TAG) {
-            parentFragmentManager.commit {
-                replace(R.id.fragment_container_view, WelcomeFragment())
-            }
+            findNavController().popBackStack();
         }
     }
 
