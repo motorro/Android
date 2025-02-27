@@ -35,6 +35,7 @@
         tools:layout="@layout/fragment_tabs">
         <action
             android:id="@+id/action_tabs_to_welcome"
-            app:destination="@id/welcomeFragment" />
+            app:destination="@id/welcomeFragment"
+            app:popUpTo="@id/navigation" />
     </fragment>
 </navigation>
