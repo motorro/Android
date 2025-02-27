@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import com.motorro.navigation.R
 import com.motorro.navigation.data.notifications
 import com.motorro.navigation.databinding.FragmentNotificationsBinding
+import com.motorro.navigation.ui.TabsFragmentDirections
+import com.motorro.navigation.ui.parentNavController
 
 class NotificationsFragment : Fragment() {
 
@@ -40,17 +40,7 @@ class NotificationsFragment : Fragment() {
     }
 
     private fun showNotificationDetails(notificationId: Int) {
-        requireParentFragment().parentFragmentManager.commit {
-            setCustomAnimations(
-                R.anim.slide_in,
-                R.anim.fade_out,
-                R.anim.fade_in,
-                R.anim.slide_out
-            )
-            setReorderingAllowed(true)
-            replace(R.id.fragment_container_view, NotificationDetailsFragment.newInstance(notificationId))
-            addToBackStack(null)
-        }
+        parentNavController().navigate(TabsFragmentDirections.actionTabsToNotificationDetails(notificationId))
     }
 
     override fun onDestroyView() {
