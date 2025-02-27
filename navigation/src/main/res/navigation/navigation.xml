@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_welcome">
         <action
             android:id="@+id/action_welcome_to_tabs"
-            app:destination="@id/tabsFragment"
+            app:destination="@id/content"
             app:popUpTo="@id/navigation" />
         <action
             android:id="@+id/action_welcome_to_login"
@@ -25,34 +25,39 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_login_to_tabs"
-            app:destination="@id/tabsFragment"
+            app:destination="@id/content"
             app:popUpTo="@id/navigation" />
     </fragment>
-    <fragment
-        android:id="@+id/tabsFragment"
-        android:name="com.motorro.navigation.ui.TabsFragment"
-        android:label="TabsFragment"
-        tools:layout="@layout/fragment_tabs">
-        <action
-            android:id="@+id/action_tabs_to_welcome"
-            app:destination="@id/welcomeFragment"
-            app:popUpTo="@id/navigation" />
-        <action
-            android:id="@+id/action_tabs_to_notificationDetails"
-            app:destination="@id/notificationDetailsFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out"
-            app:popUpTo="@id/tabsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/notificationDetailsFragment"
-        android:name="com.motorro.navigation.ui.notifications.NotificationDetailsFragment"
-        android:label="NotificationDetailsFragment"
-        tools:layout="@layout/fragment_notification_details">
-        <argument
-            android:name="notificationId"
-            app:argType="integer" />
-    </fragment>
+    <navigation
+        android:id="@+id/content"
+        android:label="Content"
+        app:startDestination="@id/tabsFragment">
+        <fragment
+            android:id="@+id/tabsFragment"
+            android:name="com.motorro.navigation.ui.TabsFragment"
+            android:label="TabsFragment"
+            tools:layout="@layout/fragment_tabs">
+            <action
+                android:id="@+id/action_tabs_to_welcome"
+                app:destination="@id/welcomeFragment"
+                app:popUpTo="@id/navigation" />
+            <action
+                android:id="@+id/action_tabs_to_notificationDetails"
+                app:destination="@id/notificationDetailsFragment"
+                app:enterAnim="@anim/slide_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/slide_out"
+                app:popUpTo="@id/tabsFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/notificationDetailsFragment"
+            android:name="com.motorro.navigation.ui.notifications.NotificationDetailsFragment"
+            android:label="NotificationDetailsFragment"
+            tools:layout="@layout/fragment_notification_details">
+            <argument
+                android:name="notificationId"
+                app:argType="integer" />
+        </fragment>
+    </navigation>
 </navigation>
