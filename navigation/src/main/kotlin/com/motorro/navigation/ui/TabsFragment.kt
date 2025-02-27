@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.motorro.navigation.R
 import com.motorro.navigation.data.sessionManager
 import com.motorro.navigation.databinding.FragmentTabsBinding
@@ -35,9 +36,7 @@ class TabsFragment : Fragment() {
 
     private fun logout() {
         session.logout()
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container_view, WelcomeFragment())
-        }
+        findNavController().navigate(R.id.action_tabs_to_welcome)
     }
 
     override fun onCreateView(
