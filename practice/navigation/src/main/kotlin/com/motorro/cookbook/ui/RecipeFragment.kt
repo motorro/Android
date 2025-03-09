@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.motorro.cookbook.R
 import com.motorro.cookbook.data.Recipe
@@ -13,7 +15,10 @@ import com.motorro.cookbook.databinding.FragmentRecipeBinding
 
 class RecipeFragment : Fragment() {
 
-    private val recipeId: Int get() = TODO()
+    private val recipeId: Int get() = RecipeFragmentArgs.fromBundle(requireArguments()).recipeId
+    private val model by viewModels<RecipeFragmentViewModel> {
+        RecipeFragmentViewModel.Factory(requireContext(), recipeId)
+    }
 
     private val binding = FragmentBindingDelegate<FragmentRecipeBinding>(this)
 
@@ -30,6 +35,7 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupAppBar()
         setupAlertResult()
+        model.recipe.observe(viewLifecycleOwner, ::displayRecipe)
     }
 
     private fun setupAppBar() = binding.withBinding {
@@ -52,7 +58,7 @@ class RecipeFragment : Fragment() {
     }
 
     private fun close() {
-        TODO("Close fragment")
+        findNavController().popBackStack()
     }
 
     private fun displayRecipe(recipe: Recipe) = binding.withBinding {
