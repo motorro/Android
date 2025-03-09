@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -28,7 +29,7 @@ class CookbookFragment : Fragment() {
     }
     private val categoryAdapter = CategoryFilterAdapter {
         Log.d(TAG, "Category toggled: $it")
-        TODO("Implement category filter")
+        model.toggleCategory(it)
     }
 
     override fun onCreateView(
@@ -46,6 +47,15 @@ class CookbookFragment : Fragment() {
         setupFilter()
 
         model.recipes.observe(viewLifecycleOwner, ::onRecipeListUpdated)
+
+        model.query.observe(viewLifecycleOwner, ::onNameFilterListUpdated)
+        binding.withBinding {
+            search.doOnTextChanged { text, _, _, _ ->
+                model.setQuery(text.toString())
+            }
+        }
+
+        model.categories.observe(viewLifecycleOwner, ::onCategoryFilterListUpdated)
 
         binding.withBinding {
             plus.setOnClickListener {
