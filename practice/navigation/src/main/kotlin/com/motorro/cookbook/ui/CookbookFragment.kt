@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.motorro.cookbook.R
 import com.motorro.cookbook.data.RecipeCategory
@@ -17,6 +18,9 @@ class CookbookFragment : Fragment() {
 
     private val binding = FragmentBindingDelegate<FragmentCookbookBinding>(this)
     private lateinit var capturedBehavior: BottomSheetBehavior<ConstraintLayout>
+    private val model by viewModels<CookbookViewModel> {
+        CookbookViewModel.Factory(requireContext())
+    }
 
     private val recipeAdapter = RecipeAdapter { id ->
         Log.d(TAG, "Recipe clicked: $id")
@@ -40,6 +44,9 @@ class CookbookFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupFilter()
+
+        model.recipes.observe(viewLifecycleOwner, ::onRecipeListUpdated)
+
         binding.withBinding {
             plus.setOnClickListener {
                 TODO("Navigate to add recipe")
