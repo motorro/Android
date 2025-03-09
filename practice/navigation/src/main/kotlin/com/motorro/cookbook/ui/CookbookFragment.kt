@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.motorro.cookbook.R
 import com.motorro.cookbook.data.RecipeCategory
@@ -25,7 +26,7 @@ class CookbookFragment : Fragment() {
 
     private val recipeAdapter = RecipeAdapter { id ->
         Log.d(TAG, "Recipe clicked: $id")
-        TODO("Implement recipe click")
+        findNavController().navigate(CookbookFragmentDirections.cookbookToRecipe(id))
     }
     private val categoryAdapter = CategoryFilterAdapter {
         Log.d(TAG, "Category toggled: $it")
