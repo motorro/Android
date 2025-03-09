@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide
 import com.motorro.cookbook.R
 import com.motorro.cookbook.data.Recipe
 import com.motorro.cookbook.databinding.FragmentRecipeBinding
+import com.motorro.cookbook.subscribeToResult
+import com.motorro.cookbook.ui.DeleteConfirmationFragment.Companion.CONFIRMATION_RESULT
 
 class RecipeFragment : Fragment() {
 
@@ -53,8 +55,12 @@ class RecipeFragment : Fragment() {
         }
     }
 
-    private fun setupAlertResult() {
-        //TODO("Subscribe to alert result")
+    private fun setupAlertResult() = subscribeToResult(CONFIRMATION_RESULT) { result: Boolean ->
+        if (result) {
+            Log.d(TAG, "Deleting recipe $recipeId")
+            model.deleteRecipe()
+            close()
+        }
     }
 
     private fun close() {
@@ -74,7 +80,11 @@ class RecipeFragment : Fragment() {
 
     private fun deleteRecipe() {
         Log.d(TAG, "Deleting recipe $recipeId")
-        TODO("Navigate to delete confirmation")
+        findNavController().navigate(
+            RecipeFragmentDirections.recipeToDeleteConfirmation(
+                model.recipe.value?.title.orEmpty()
+            )
+        )
     }
 
     companion object {

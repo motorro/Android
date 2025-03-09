@@ -22,6 +22,18 @@
         <argument
             android:name="recipeId"
             app:argType="integer" />
+        <action
+            android:id="@+id/recipe_to_delete_confirmation"
+            app:destination="@id/deleteConfirmationFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/deleteConfirmationFragment"
+        android:name="com.motorro.cookbook.ui.DeleteConfirmationFragment"
+        android:label="fragment_confirmation"
+        tools:layout="@layout/fragment_confirmation" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
 
 </navigation>
