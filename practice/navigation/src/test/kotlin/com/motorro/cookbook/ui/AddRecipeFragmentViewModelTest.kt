@@ -3,6 +3,7 @@ package com.motorro.cookbook.ui
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import com.motorro.cookbook.data.RecipeRepository
 import com.motorro.cookbook.mockRecipes
 import io.mockk.Ordering
@@ -26,7 +27,7 @@ class AddRecipeFragmentViewModelTest {
         repository = mockk {
             every { categories } returns MutableLiveData(mockRecipes.map { it.category })
         }
-        model = AddRecipeFragmentViewModel(repository)
+        model = AddRecipeFragmentViewModel(repository, SavedStateHandle())
     }
 
     @Test

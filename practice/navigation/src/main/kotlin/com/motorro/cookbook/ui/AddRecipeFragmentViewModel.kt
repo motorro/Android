@@ -2,40 +2,75 @@ package com.motorro.cookbook.ui
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.motorro.cookbook.App
 import com.motorro.cookbook.data.Recipe
 import com.motorro.cookbook.data.RecipeCategory
 import com.motorro.cookbook.data.RecipeRepository
 
-class AddRecipeFragmentViewModel(private val repository: RecipeRepository) : ViewModel() {
+class AddRecipeFragmentViewModel(private val repository: RecipeRepository, private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
-    val title: LiveData<String> get() = TODO("Implement title live data")
-    val image: LiveData<String?> get() = TODO("Implement image live data")
-    val category: LiveData<String> get() = TODO("Implement category live data")
+    val title: LiveData<String> get() = savedStateHandle.getLiveData<String>(KEY_TITLE).distinctUntilChanged()
+    val image: LiveData<String?> get() = savedStateHandle.getLiveData<String>(KEY_IMAGE).distinctUntilChanged()
+    val category: LiveData<String> get() = savedStateHandle.getLiveData<String>(KEY_CATEGORY).distinctUntilChanged()
 
-    val categories: LiveData<List<String>> get() = TODO("Implement categories live data")
+    val categories: LiveData<List<String>> get() = MediatorLiveData<List<String>>().apply {
+        fun filterCategories(selectedCategory: String?, categories: List<RecipeCategory>?): List<String> {
+            val filtered = if (null != selectedCategory) {
+                categories.orEmpty().filter{ category -> category.name.startsWith(selectedCategory, ignoreCase = true) }
+            } else {
+                categories.orEmpty()
+            }
 
-    val steps: LiveData<String> get() = TODO("Implement steps live data")
+            return filtered.map { it.name }
+        }
 
-    val saveEnabled: LiveData<Boolean> get() = TODO("Implement save enabled live data")
+        addSource(category) { selectedCategory ->
+            value = filterCategories(selectedCategory, repository.categories.value)
+        }
+        addSource(repository.categories) { categories ->
+            value = filterCategories(category.value, categories)
+        }
+    }
+
+    val steps: LiveData<String> get() = savedStateHandle.getLiveData<String>(KEY_STEPS).distinctUntilChanged()
+
+    val saveEnabled: LiveData<Boolean> get() = MediatorLiveData(false).apply {
+        fun canSave(title: String?, category: String?, steps: String?): Boolean {
+            return (title.isNullOrEmpty() || category.isNullOrEmpty() || steps.isNullOrEmpty()).not()
+        }
+
+        addSource(title) { title ->
+            value = canSave(title, category.value, steps.value)
+        }
+        addSource(category) { category ->
+            value = canSave(title.value, category, steps.value)
+        }
+        addSource(steps) { steps ->
+            value = canSave(title.value, category.value, steps)
+        }
+    }
 
     fun setTitle(title: String) {
-        TODO("Implement setTitle")
+        savedStateHandle[KEY_TITLE] = title
     }
 
     fun setImage(image: String?) {
-        TODO("Implement setImage")
+        savedStateHandle[KEY_IMAGE] = image
     }
 
     fun setCategory(category: String) {
-        TODO("Implement setCategory")
+        savedStateHandle[KEY_CATEGORY] = category
     }
 
     fun setSteps(steps: String) {
-        TODO("Implement setSteps")
+        savedStateHandle[KEY_STEPS] = steps
     }
 
     fun save() {
@@ -53,13 +88,20 @@ class AddRecipeFragmentViewModel(private val repository: RecipeRepository) : Vie
         ))
     }
 
+    private companion object {
+        const val KEY_TITLE = "title"
+        const val KEY_IMAGE = "image"
+        const val KEY_CATEGORY = "category"
+        const val KEY_STEPS = "steps"
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(context: Context) : ViewModelProvider.Factory {
 
         private val app: App = context.applicationContext as App
 
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-            return AddRecipeFragmentViewModel(app.recipeRepository) as T
+            return AddRecipeFragmentViewModel(app.recipeRepository, extras.createSavedStateHandle()) as T
         }
     }
 }
