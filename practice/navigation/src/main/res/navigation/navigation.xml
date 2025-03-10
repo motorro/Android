@@ -13,6 +13,9 @@
         <action
             android:id="@+id/cookbook_to_recipe"
             app:destination="@id/recipeFragment" />
+        <action
+            android:id="@+id/cookbook_to_add"
+            app:destination="@id/addRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/recipeFragment"
@@ -35,5 +38,10 @@
             android:name="title"
             app:argType="string" />
     </dialog>
+    <fragment
+        android:id="@+id/addRecipeFragment"
+        android:name="com.motorro.cookbook.ui.AddRecipeFragment"
+        android:label="fragment_add_recipe"
+        tools:layout="@layout/fragment_add_recipe" />
 
 </navigation>

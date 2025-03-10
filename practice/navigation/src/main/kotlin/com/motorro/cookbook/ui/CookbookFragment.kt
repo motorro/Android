@@ -60,7 +60,7 @@ class CookbookFragment : Fragment() {
 
         binding.withBinding {
             plus.setOnClickListener {
-                TODO("Navigate to add recipe")
+                findNavController().navigate(CookbookFragmentDirections.cookbookToAdd())
             }
         }
     }
