@@ -10,6 +10,14 @@
         android:id="@+id/chooseSourceFragment"
         android:name="com.motorro.filestore.ChooseSourceFragment"
         android:label="@string/title_choose_source"
-        tools:layout="@layout/fragment_choose_source" />
+        tools:layout="@layout/fragment_choose_source">
+        <action
+            android:id="@+id/choose_to_take_preview"
+            app:destination="@id/takePicturePreviewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/takePicturePreviewFragment"
+        android:name="com.motorro.filestore.TakePicturePreviewFragment"
+        android:label="@string/title_take_picture_preview" />
 
 </navigation>
