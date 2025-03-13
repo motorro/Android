@@ -1,11 +1,14 @@
 <resources>
     <string name="app_name">File Store</string>
+    <string name="files_authority">com.motorro.filestore.files</string>
     <string name="title_choose_source">Choose source file</string>
     <string name="title_picture">EXIF info</string>
+    <string name="title_save">Save picture</string>
     <string name="title_take_picture_preview">Take picture preview</string>
     <string name="btn_take_picture_preview">Take picture preview</string>
     <string name="content_image">Image</string>
     <string name="hint_comment">Comment</string>
     <string name="btn_save">Save</string>
     <string name="btn_share">Share</string>
+    <string name="title_image_with_exif_comment">Image with EXIF comment</string>
 </resources>
