@@ -17,7 +17,10 @@ class TakePicturePreviewFragment : Fragment() {
             }
             else -> {
                 // Picture was taken
-
+                findNavController().navigate(TakePicturePreviewFragmentDirections.takePreviewToPicture(
+                    picUri = null,
+                    bitmap = bitmap
+                ))
             }
         }
     }

@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">File Store</string>
     <string name="title_choose_source">Choose source file</string>
+    <string name="title_picture">EXIF info</string>
     <string name="title_take_picture_preview">Take picture preview</string>
     <string name="btn_take_picture_preview">Take picture preview</string>
+    <string name="content_image">Image</string>
+    <string name="hint_comment">Comment</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_share">Share</string>
 </resources>

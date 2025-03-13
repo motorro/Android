@@ -2,4 +2,5 @@
 <resources>
     <dimen name="margin_horizontal">16dp</dimen>
     <dimen name="margin_vertical">16dp</dimen>
+    <dimen name="rounded_corners">16dp</dimen>
 </resources>
