@@ -46,8 +46,8 @@
     <fragment
         android:id="@+id/saveFragment"
         android:name="com.motorro.filestore.SaveFragment"
-        android:label="fragment_save"
-        tools:layout="@layout/fragment_save" >
+        android:label="@string/title_save"
+        tools:layout="@layout/fragment_save">
         <argument
             android:name="toSave"
             app:argType="com.motorro.filestore.ImageWithComment" />
