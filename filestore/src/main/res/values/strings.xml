@@ -5,7 +5,9 @@
     <string name="title_picture">EXIF info</string>
     <string name="title_save">Save picture</string>
     <string name="title_take_picture_preview">Take picture preview</string>
+    <string name="title_take_picture">Take picture</string>
     <string name="btn_take_picture_preview">Take picture preview</string>
+    <string name="btn_take_picture">Take picture</string>
     <string name="content_image">Image</string>
     <string name="hint_comment">Comment</string>
     <string name="btn_save">Save</string>
