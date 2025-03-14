@@ -29,6 +29,9 @@ class ChooseSourceFragment : Fragment(), WithViewBinding<FragmentChooseSourceBin
             btnFromMedia.setOnClickListener {
                 findNavController().navigate(ChooseSourceFragmentDirections.chooseToPickMedia())
             }
+            btnFromProvider.setOnClickListener {
+                findNavController().navigate(ChooseSourceFragmentDirections.chooseToProvide())
+            }
         }
     }
 }

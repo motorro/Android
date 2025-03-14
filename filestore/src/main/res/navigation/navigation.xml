@@ -20,6 +20,9 @@
         <action
             android:id="@+id/choose_to_pick_media"
             app:destination="@id/pickMediaFragment" />
+        <action
+            android:id="@+id/choose_to_provide"
+            app:destination="@id/providerFragment" />
     </fragment>
     <fragment
         android:id="@+id/takePicturePreviewFragment"
@@ -75,6 +78,15 @@
         <action
             android:id="@+id/pick_media_to_picture"
             app:destination="@id/pictureFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/providerFragment"
+        android:name="com.motorro.filestore.ProviderFragment"
+        android:label="@string/title_provide_media" >
+        <action
+            android:id="@+id/provide_media_to_picture"
+            app:destination="@id/pictureFragment"
+            app:popUpTo="@id/chooseSourceFragment" />
     </fragment>
 
 </navigation>
