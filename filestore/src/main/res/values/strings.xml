@@ -6,6 +6,7 @@
     <string name="title_save">Save picture</string>
     <string name="title_take_picture_preview">Take picture preview</string>
     <string name="title_take_picture">Take picture</string>
+    <string name="title_pick_media">Pick a picture</string>
     <string name="btn_take_picture_preview">Take picture preview</string>
     <string name="btn_take_picture">Take picture</string>
     <string name="content_image">Image</string>
@@ -15,4 +16,6 @@
     <string name="title_image_with_exif_comment">Image with EXIF comment</string>
     <string name="btn_save_to_media">Save to Media</string>
     <string name="snack_saved_to_media">Image %s saved to media</string>
+    <string name="lbl_no_images_found">No images found</string>
+    <string name="btn_pick_from_media">Pick from media</string>
 </resources>
