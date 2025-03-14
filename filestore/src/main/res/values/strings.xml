@@ -13,4 +13,6 @@
     <string name="btn_save">Save</string>
     <string name="btn_share">Share</string>
     <string name="title_image_with_exif_comment">Image with EXIF comment</string>
+    <string name="btn_save_to_media">Save to Media</string>
+    <string name="snack_saved_to_media">Image %s saved to media</string>
 </resources>
