@@ -14,6 +14,9 @@
         <action
             android:id="@+id/choose_to_take_preview"
             app:destination="@id/takePicturePreviewFragment" />
+        <action
+            android:id="@+id/choose_to_take_picture"
+            app:destination="@id/takePictureFragment" />
     </fragment>
     <fragment
         android:id="@+id/takePicturePreviewFragment"
@@ -51,6 +54,14 @@
         <argument
             android:name="toSave"
             app:argType="com.motorro.filestore.ImageWithComment" />
+    </fragment>
+    <fragment
+        android:id="@+id/takePictureFragment"
+        android:name="com.motorro.filestore.TakePictureFragment"
+        android:label="@string/title_take_picture">
+        <action
+            android:id="@+id/take_picture_to_picture"
+            app:destination="@id/pictureFragment" />
     </fragment>
 
 </navigation>

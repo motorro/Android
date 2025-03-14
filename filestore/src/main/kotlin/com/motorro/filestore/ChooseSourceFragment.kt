@@ -23,6 +23,9 @@ class ChooseSourceFragment : Fragment(), WithViewBinding<FragmentChooseSourceBin
             btnShootSmall.setOnClickListener {
                 findNavController().navigate(ChooseSourceFragmentDirections.chooseToTakePreview())
             }
+            btnShootFull.setOnClickListener {
+                findNavController().navigate(ChooseSourceFragmentDirections.chooseToTakePicture())
+            }
         }
     }
 }
