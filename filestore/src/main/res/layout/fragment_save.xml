@@ -27,10 +27,22 @@
         android:layout_marginTop="@dimen/margin_vertical"
         android:layout_marginEnd="@dimen/margin_horizontal"
         android:text="@string/btn_save_to_media"
+        app:layout_constraintBottom_toTopOf="@+id/btn_provider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_share" />
+
+    <Button
+        android:id="@+id/btn_provider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:text="@string/btn_save_to_provider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_share"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_media" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

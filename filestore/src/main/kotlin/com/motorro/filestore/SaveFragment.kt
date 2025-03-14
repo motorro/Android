@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
@@ -46,6 +48,9 @@ class SaveFragment : Fragment(), WithViewBinding<FragmentSaveBinding> by Binding
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
+            }
+            btnProvider.setOnClickListener {
+                saveToProvider()
             }
         }
     }
@@ -101,5 +106,24 @@ class SaveFragment : Fragment(), WithViewBinding<FragmentSaveBinding> by Binding
         imageDetails.clear()
         imageDetails.put(MediaStore.Audio.Media.IS_PENDING, 0)
         resolver.update(imageContentUri, imageDetails, null, null)
+    }
+
+    private val savePictureContract = registerForActivityResult(ActivityResultContracts.CreateDocument("image/*")) { uri ->
+        if (null != uri) {
+            // Output was selected
+            val resolver = requireContext().contentResolver
+            resolver.openOutputStream(uri).use { outputStream ->
+                image.file.toFile().inputStream().use { inputStream ->
+                    inputStream.copyTo(outputStream!!)
+                }
+            }
+        } else {
+            // Output was not selected
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun saveToProvider() {
+        savePictureContract.launch(image.file.toFile().name)
     }
 }
