@@ -15,4 +15,9 @@
         android:enabled="true"
         android:icon="@drawable/ic_proto"
         android:title="@string/title_proto_preferences"/>
+    <item
+        android:id="@+id/jsonPreferences"
+        android:enabled="true"
+        android:icon="@drawable/ic_json"
+        android:title="@string/title_json_preferences"/>
 </menu>
