@@ -3,6 +3,7 @@
     <string name="title_vanilla_preferences">Vanilla</string>
     <string name="title_preferences_preferences">Preferences</string>
     <string name="title_proto_preferences">Proto</string>
+    <string name="title_json_preferences">Json</string>
     <string name="title_credentials">Credentials</string>
     <string name="hint_user_name">User name</string>
     <string name="hint_password">Password</string>

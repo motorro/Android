@@ -1,10 +1,12 @@
 package com.motorro.datastore.data
 
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.Serializable
 
 /**
  * User preferences
  */
+@Serializable
 data class MyPreferences(
     val userName: String = "",
     val password: String = "",

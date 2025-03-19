@@ -36,7 +36,8 @@ class MainActivity : AppCompatActivity(), WithViewBinding<ActivityMainBinding> b
                 setOf(
                     R.id.vanillaPreferences,
                     R.id.preferencesPreferences,
-                    R.id.protoPreferences
+                    R.id.protoPreferences,
+                    R.id.jsonPreferences
                 )
             )
             topAppBar.setupWithNavController(navController, appBarConfiguration)
