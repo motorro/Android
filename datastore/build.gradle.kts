@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.protobuf)
 }
 
 android {
@@ -56,4 +57,28 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.datastore.ptoto)
+    implementation(libs.protobuf.java.lite)
+    implementation(libs.protobuf.kotlin.lite)
+}
+
+protobuf {
+    // Configures the Protobuf compilation and the protoc executable
+    protoc {
+        // Downloads from the repositories
+        artifact = libs.protobuf.protoc.get().toString()
+    }
+    plugins {
+        generateProtoTasks {
+            all().forEach {
+                it.builtins {
+                    create("java") {
+                        option("lite")
+                    }
+                    create("kotlin") {
+                        option("lite")
+                    }
+                }
+            }
+        }
+    }
 }

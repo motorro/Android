@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity(), WithViewBinding<ActivityMainBinding> b
             val appBarConfiguration = AppBarConfiguration(
                 setOf(
                     R.id.vanillaPreferences,
-                    R.id.preferencesPreferences
+                    R.id.preferencesPreferences,
+                    R.id.protoPreferences
                 )
             )
             topAppBar.setupWithNavController(navController, appBarConfiguration)
