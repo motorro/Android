@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.ktor) apply false
     alias(libs.plugins.google.ksp) apply false
     alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.protobuf) apply false
 }
 
 allprojects {

@@ -10,4 +10,9 @@
         android:enabled="true"
         android:icon="@drawable/ic_preferences"
         android:title="@string/title_preferences_preferences"/>
+    <item
+        android:id="@+id/protoPreferences"
+        android:enabled="true"
+        android:icon="@drawable/ic_proto"
+        android:title="@string/title_proto_preferences"/>
 </menu>

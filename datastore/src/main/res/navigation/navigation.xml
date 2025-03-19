@@ -13,4 +13,9 @@
         android:id="@+id/preferencesPreferences"
         android:name="com.motorro.datastore.preferences.PreferencesPreferencesFragment"
         android:label="@string/title_preferences_preferences" />
+
+    <fragment
+        android:id="@+id/protoPreferences"
+        android:name="com.motorro.datastore.proto.ProtoPreferencesFragment"
+        android:label="@string/title_proto_preferences" />
 </navigation>
