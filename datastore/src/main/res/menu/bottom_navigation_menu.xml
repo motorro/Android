@@ -5,4 +5,9 @@
         android:enabled="true"
         android:icon="@drawable/ic_vanilla"
         android:title="@string/title_vanilla_preferences"/>
+    <item
+        android:id="@+id/preferencesPreferences"
+        android:enabled="true"
+        android:icon="@drawable/ic_preferences"
+        android:title="@string/title_preferences_preferences"/>
 </menu>
