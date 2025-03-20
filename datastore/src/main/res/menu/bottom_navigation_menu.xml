@@ -20,4 +20,9 @@
         android:enabled="true"
         android:icon="@drawable/ic_json"
         android:title="@string/title_json_preferences"/>
+    <item
+        android:id="@+id/securePreferences"
+        android:enabled="true"
+        android:icon="@drawable/ic_secure"
+        android:title="@string/title_secure_preferences"/>
 </menu>

@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.datastore.ptoto)
+    implementation(libs.androidx.crypto)
     implementation(libs.protobuf.java.lite)
     implementation(libs.protobuf.kotlin.lite)
 }
