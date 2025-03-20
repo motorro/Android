@@ -23,4 +23,9 @@
         android:id="@+id/jsonPreferences"
         android:name="com.motorro.datastore.json.JsonPreferencesFragment"
         android:label="@string/title_json_preferences" />
+
+    <fragment
+        android:id="@+id/securePreferences"
+        android:name="com.motorro.datastore.secure.SecurePreferencesFragment"
+        android:label="@string/title_secure_preferences" />
 </navigation>
