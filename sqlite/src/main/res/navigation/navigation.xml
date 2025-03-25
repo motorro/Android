@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/imageList">
+
+    <fragment
+        android:id="@+id/addImageFragment"
+        android:name="com.motorro.sqlite.AddImageFragment"
+        android:label="@string/title_add_image" >
+        <argument
+            android:name="image"
+            app:argType="android.net.Uri" />
+    </fragment>
+    <navigation
+        android:id="@+id/imageList"
+        android:label="@string/title_images"
+        app:startDestination="@id/imageListFragment">
+        <fragment
+            android:id="@+id/imageListFragment"
+            android:name="com.motorro.sqlite.ImageListFragment"
+            android:label="@string/title_images">
+            <action
+                android:id="@+id/image_list_to_add"
+                app:destination="@id/addImageFragment" />
+        </fragment>
+    </navigation>
+</navigation>

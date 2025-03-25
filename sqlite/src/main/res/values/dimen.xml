@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_horizontal">16dp</dimen>
+    <dimen name="margin_horizontal_small">8dp</dimen>
+    <dimen name="margin_vertical">16dp</dimen>
+    <dimen name="margin_vertical_small">8dp</dimen>
+    <dimen name="margin_fab_horizontal">16dp</dimen>
+    <dimen name="margin_fab_vertical">32dp</dimen>
+    <dimen name="rounded_corners">16dp</dimen>
+    <dimen name="image_thm">96dp</dimen>
+    <dimen name="grid_margin">8dp</dimen>
+    <dimen name="bottom_sheet_collapsed">30dp</dimen>
+</resources>
