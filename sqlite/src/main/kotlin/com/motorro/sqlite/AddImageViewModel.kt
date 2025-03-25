@@ -3,12 +3,16 @@ package com.motorro.sqlite
 import android.app.Application
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.motorro.sqlite.data.Image
+import com.motorro.sqlite.db.PhotoDb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,12 +28,14 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
+import java.io.File
 import kotlin.time.Clock
 
 class AddImageViewModel(
     private val sourceImage: Uri,
     application: Application,
-    private val clock: Clock
+    private val clock: Clock,
+    private val db: PhotoDb
 ) : AndroidViewModel(application) {
 
     private val _image: MutableStateFlow<Uri> = MutableStateFlow(sourceImage)
@@ -49,11 +55,41 @@ class AddImageViewModel(
         .combine(dateTaken.map { it != null }) { title, date -> title && date }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
+    private val _complete = MutableStateFlow(false)
+    val complete: StateFlow<Boolean> get() = _complete.asStateFlow()
+
     init {
         viewModelScope.launch {
             _title.value = getFileName(sourceImage)
             _dateTaken.value = getImageTaken(sourceImage)
         }
+    }
+
+    fun save() = viewModelScope.launch(Dispatchers.IO) {
+
+        val image = saveImage(sourceImage)
+        val name = _title.value
+        val dateTaken = getImageTaken(sourceImage)
+
+        db.addImage(Image(image, name, dateTaken))
+
+        _complete.value = true
+    }
+
+    private suspend fun saveImage(image: Uri): Uri = withContext(Dispatchers.IO) {
+        val context: Context = getApplication()
+        val dir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: context.filesDir
+        val type = context.contentResolver.getType(image) ?: "image/jpeg"
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(type) ?: "jpg"
+        val file = File.createTempFile("img", ".$extension", dir)
+
+        context.contentResolver.openInputStream(image).use { input ->
+            file.outputStream().use { output ->
+                input?.copyTo(output)
+            }
+        }
+
+        return@withContext Uri.fromFile(file)
     }
 
     private suspend fun getFileName(image: Uri): String = withContext(Dispatchers.IO) {
@@ -99,7 +135,7 @@ class AddImageViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AddImageViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return AddImageViewModel(image, app, Clock.System) as T
+                return AddImageViewModel(image, app, Clock.System, app.db) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

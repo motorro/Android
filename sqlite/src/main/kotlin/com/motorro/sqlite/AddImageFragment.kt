@@ -41,6 +41,11 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (model.complete.value) {
+            findNavController().navigateUp()
+            return
+        }
+
         withBinding {
             viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -65,6 +70,13 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
                                 save.isEnabled = se
                             }
                         }
+                        launch {
+                            model.complete.collect { c ->
+                                if (c) {
+                                    findNavController().navigateUp()
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -73,6 +85,9 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
             }
             title.doAfterTextChanged {
                 model.setTitle(it.toString())
+            }
+            save.setOnClickListener {
+                model.save()
             }
         }
     }
