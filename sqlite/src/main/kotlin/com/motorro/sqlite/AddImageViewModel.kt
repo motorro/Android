@@ -1,0 +1,107 @@
+package com.motorro.sqlite
+
+import android.app.Application
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
+import androidx.exifinterface.media.ExifInterface
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.Padding
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+
+class AddImageViewModel(
+    private val sourceImage: Uri,
+    application: Application,
+    private val clock: Clock
+) : AndroidViewModel(application) {
+
+    private val _image: MutableStateFlow<Uri> = MutableStateFlow(sourceImage)
+    val image: StateFlow<Uri?> get() = _image.asStateFlow()
+
+    private val _title: MutableStateFlow<String> = MutableStateFlow("")
+    val title: StateFlow<String> get() = _title.asStateFlow()
+    fun setTitle(title: String) {
+        _title.value = title
+    }
+
+    private val _dateTaken: MutableStateFlow<LocalDateTime?> = MutableStateFlow(null)
+    val dateTaken: StateFlow<LocalDateTime?> get() = _dateTaken.asStateFlow()
+
+    val saveEnabled = title
+        .map { it.isNotBlank() }
+        .combine(dateTaken.map { it != null }) { title, date -> title && date }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+
+    init {
+        viewModelScope.launch {
+            _title.value = getFileName(sourceImage)
+            _dateTaken.value = getImageTaken(sourceImage)
+        }
+    }
+
+    private suspend fun getFileName(image: Uri): String = withContext(Dispatchers.IO) {
+        val context: Context = getApplication()
+        context.contentResolver.query(image, null, null, null, null)?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (cursor.moveToFirst()) {
+                return@withContext  cursor.getString(nameIndex)
+            }
+        }
+        return@withContext ""
+    }
+
+    private suspend fun getImageTaken(image: Uri): LocalDateTime = withContext(Dispatchers.IO) {
+        val context: Context = getApplication()
+        val exifDate = context.contentResolver.openInputStream(image).use {
+            it?.let {
+                ExifInterface(it).getAttribute(ExifInterface.TAG_DATETIME)?.let {
+                    exifDateTimeFormat.parse(it)
+                }
+            }
+        }
+        return@withContext exifDate ?: clock.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    }
+
+    private companion object {
+        val exifDateTimeFormat = LocalDateTime.Format {
+            year(Padding.ZERO)
+            char(':')
+            monthNumber(Padding.ZERO)
+            char(':')
+            day(Padding.ZERO)
+            char(' ')
+            hour(Padding.ZERO)
+            char(':')
+            minute(Padding.ZERO)
+            char(':')
+            second(Padding.ZERO)
+        }
+    }
+
+    class Factory(private val app: App, private val image: Uri): ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(AddImageViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return AddImageViewModel(image, app, Clock.System) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+}
