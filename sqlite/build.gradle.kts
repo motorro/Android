@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.navigation.safeargs.kotlin)
+    alias(libs.plugins.google.ksp)
 }
 
 android {
@@ -17,6 +18,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
 
     buildTypes {
@@ -39,9 +44,16 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.incremental", "true")
+    arg("room.generateKotlin", "true")
+}
+
 dependencies {
     implementation(project(":core"))
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -55,4 +67,7 @@ dependencies {
     implementation(libs.androidx.sqlight.ktx)
     implementation(libs.androidx.exif)
     implementation(libs.glide)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 }

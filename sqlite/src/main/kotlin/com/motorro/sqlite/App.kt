@@ -11,7 +11,7 @@ class App : Application() {
      * Database instance
      */
     val db: PhotoDb by lazy {
-        PhotoDbImpl(this)
+        PhotoDbImpl.create(this)
     }
 }
 

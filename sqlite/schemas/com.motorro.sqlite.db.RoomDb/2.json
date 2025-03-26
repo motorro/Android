@@ -1,0 +1,65 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "f05e52c1a34ea0c7ebfbac69aaba413c",
+    "entities": [
+      {
+        "tableName": "photo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`path` TEXT NOT NULL, `name` TEXT NOT NULL, `created` TEXT NOT NULL, PRIMARY KEY(`path`))",
+        "fields": [
+          {
+            "fieldPath": "path",
+            "columnName": "path",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTimeTaken",
+            "columnName": "created",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "path"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_photo_name",
+            "unique": false,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_photo_name` ON `${TABLE_NAME}` (`name`)"
+          },
+          {
+            "name": "index_photo_created",
+            "unique": false,
+            "columnNames": [
+              "created"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_photo_created` ON `${TABLE_NAME}` (`created`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f05e52c1a34ea0c7ebfbac69aaba413c')"
+    ]
+  }
+}
