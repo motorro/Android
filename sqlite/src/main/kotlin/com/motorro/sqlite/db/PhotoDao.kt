@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PhotoDao {
-    @Query("SELECT path, name, created FROM photo ORDER BY created DESC")
+    @Query("SELECT path, name, created, tagname FROM photo ORDER BY created DESC")
     fun getList(): Flow<List<ListImage>>
 
-    @Query("SELECT path, name, created FROM photo WHERE name LIKE :nameSearch ORDER BY created DESC")
+    @Query("SELECT path, name, created, tagname FROM photo WHERE name LIKE :nameSearch ORDER BY created DESC")
     fun getList(nameSearch: String): Flow<List<ListImage>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

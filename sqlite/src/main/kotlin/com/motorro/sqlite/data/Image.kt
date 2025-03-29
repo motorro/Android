@@ -2,6 +2,7 @@ package com.motorro.sqlite.data
 
 import android.net.Uri
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.datetime.LocalDateTime
@@ -20,12 +21,15 @@ data class Image(
     @ColumnInfo(name = COLUMN_NAME, index = true)
     val name: String,
     @ColumnInfo(name = COLUMN_CREATED, index = true)
-    val dateTimeTaken: LocalDateTime
+    val dateTimeTaken: LocalDateTime,
+    @Embedded(prefix = COLUMN_TAG)
+    val tag: Tag? = null
 ) {
     companion object {
         const val TABLE_NAME = "photo"
         const val COLUMN_PATH = "path"
         const val COLUMN_NAME = "name"
         const val COLUMN_CREATED = "created"
+        const val COLUMN_TAG = Tag.TABLE_NAME
     }
 }

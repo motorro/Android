@@ -62,7 +62,7 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
                         }
                         launch {
                             model.title.collect { t ->
-                                title.setTextKeepState(t.orEmpty())
+                                title.setTextKeepState(t)
                             }
                         }
                         launch {
@@ -77,6 +77,17 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
                                 }
                             }
                         }
+
+                        launch {
+                            model.tagName.collect { t ->
+                                tagName.setTextKeepState(t)
+                            }
+                        }
+                        launch {
+                            model.tagDescription.collect { t ->
+                                tagDescription.setTextKeepState(t)
+                            }
+                        }
                     }
                 }
             }
@@ -88,6 +99,13 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
             }
             save.setOnClickListener {
                 model.save()
+            }
+
+            tagName.doAfterTextChanged {
+                model.setTagName(it.toString())
+            }
+            tagDescription.doAfterTextChanged {
+                model.setTagDescription(it.toString())
             }
         }
     }

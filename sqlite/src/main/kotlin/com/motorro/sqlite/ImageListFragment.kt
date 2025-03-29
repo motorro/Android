@@ -1,7 +1,5 @@
 package com.motorro.sqlite
 
-import android.annotation.SuppressLint
-import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,11 +11,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +37,7 @@ import kotlinx.coroutines.supervisorScope
 
 class ImageListFragment : Fragment(), WithViewBinding<FragmentImageListBinding> by BindingHost() {
 
-    private lateinit var adapter: ImageCursorAdapter
+    private lateinit var adapter: ImageAdapter
     private lateinit var capturedBehavior: BottomSheetBehavior<ConstraintLayout>
     private val getPicture = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (null != uri) {
@@ -47,7 +45,7 @@ class ImageListFragment : Fragment(), WithViewBinding<FragmentImageListBinding> 
         }
     }
 
-    private val model: ImageListViewModel by navGraphViewModels(R.id.imageList) {
+    private val model: ImageListViewModel by viewModels {
         ImageListViewModel.Factory(requireApp())
     }
 
@@ -58,7 +56,7 @@ class ImageListFragment : Fragment(), WithViewBinding<FragmentImageListBinding> 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupFilter()
         withBinding {
-            adapter = ImageCursorAdapter(
+            adapter = ImageAdapter(
                 onSelect = { imagePath -> /* TODO: Navigate to image */ },
                 onDelete = { imagePath ->
                     model.deleteImage(imagePath)
@@ -121,18 +119,10 @@ class ImageListFragment : Fragment(), WithViewBinding<FragmentImageListBinding> 
     }
 }
 
-private class SpaceDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        val position = parent.getChildAdapterPosition(view)
-        outRect.top = if (position > 0) spacing else 0
-    }
-}
-
-@SuppressLint("NotifyDataSetChanged")
-private class ImageCursorAdapter(
+private class ImageAdapter(
     private val onSelect: (imagePath: Uri) -> Unit,
     private val onDelete: (imagePath: Uri) -> Unit
-) : ListAdapter<ListImage, ImageCursorAdapter.ViewHolder>(ListImageDiff) {
+) : ListAdapter<ListImage, ImageAdapter.ViewHolder>(ListImageDiff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = createBoundViewHolder(parent, VhImageBinding::inflate) {
         ViewHolder(it)
     }
@@ -173,6 +163,7 @@ private class ImageCursorAdapter(
 
             name.text = iName
             dateTimeTaken.text = dateFormat.format(i.dateTimeTaken)
+            tags.text = i.tag
 
             delete.contentDescription = itemView.context.getString(R.string.desc_delete_image, iName)
         }

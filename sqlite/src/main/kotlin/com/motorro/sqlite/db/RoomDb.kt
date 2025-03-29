@@ -2,6 +2,7 @@ package com.motorro.sqlite.db
 
 import android.content.Context
 import android.net.Uri
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -50,14 +51,16 @@ class PhotoDbImpl private constructor(private val db: RoomDb): PhotoDb {
  */
 @Database(
     entities = [Image::class],
-    version = 2,
-    exportSchema = true
+    version = 3,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 2, to = 3)
+    ]
 )
 @TypeConverters(Converters::class)
 internal abstract class RoomDb : RoomDatabase() {
 
     abstract fun imageDao(): PhotoDao
-
 }
 
 /**

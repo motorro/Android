@@ -43,6 +43,19 @@
         app:layout_constraintTop_toBottomOf="@+id/name"
         tools:text="2025-03-24 18:05" />
 
+    <TextView
+        android:id="@+id/tags"
+        style="?attr/textAppearanceLabelMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal_small"
+        android:layout_marginEnd="@dimen/margin_horizontal_small"
+        android:gravity="start"
+        app:layout_constraintEnd_toStartOf="@+id/delete"
+        app:layout_constraintStart_toEndOf="@id/image"
+        app:layout_constraintTop_toBottomOf="@+id/date_time_taken"
+        tools:text="river, forest, mushrooms" />
+
     <Button
         android:id="@+id/delete"
         android:layout_width="wrap_content"

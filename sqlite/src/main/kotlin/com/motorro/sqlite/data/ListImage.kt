@@ -16,5 +16,7 @@ data class ListImage(
     @ColumnInfo(name = Image.COLUMN_NAME)
     val name: String,
     @ColumnInfo(name = Image.COLUMN_CREATED)
-    val dateTimeTaken: LocalDateTime
+    val dateTimeTaken: LocalDateTime,
+    @ColumnInfo(name = "${Image.COLUMN_TAG}${Tag.COLUMN_NAME}")
+    val tag: String?
 )
