@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/topAppBarLayout" />
 
     <TextView
-        android:id="@+id/dateTaken"
+        android:id="@+id/date_taken"
         style="?attr/textAppearanceLabelSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,20 +49,56 @@
         app:layout_constraintTop_toBottomOf="@+id/image" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/title_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginEnd="@dimen/margin_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/dateTaken"
+        app:layout_constraintTop_toBottomOf="@id/date_taken"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="395dp">
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_title" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tag_name_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/title_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tag_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_tag_name" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tag_description_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tag_name_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tag_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_tag_description" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.motorro.sqlite.data.Image
+import com.motorro.sqlite.data.Tag
 import com.motorro.sqlite.db.PhotoDb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,6 +48,18 @@ class AddImageViewModel(
         _title.value = title
     }
 
+    private val _tagName: MutableStateFlow<String> = MutableStateFlow("")
+    val tagName: StateFlow<String> get() = _tagName.asStateFlow()
+    fun setTagName(title: String) {
+        _tagName.value = title
+    }
+
+    private val _tagDescription: MutableStateFlow<String> = MutableStateFlow("")
+    val tagDescription: StateFlow<String> get() = _tagDescription.asStateFlow()
+    fun setTagDescription(title: String) {
+        _tagDescription.value = title
+    }
+
     private val _dateTaken: MutableStateFlow<LocalDateTime?> = MutableStateFlow(null)
     val dateTaken: StateFlow<LocalDateTime?> get() = _dateTaken.asStateFlow()
 
@@ -71,7 +84,11 @@ class AddImageViewModel(
         val name = _title.value
         val dateTaken = getImageTaken(sourceImage)
 
-        db.addImage(Image(image, name, dateTaken))
+        val tag = _tagName.value.takeIf { it.isNotBlank() }?.let { tagName ->
+            Tag(tagName, _tagDescription.value)
+        }
+
+        db.addImage(Image(image, name, dateTaken, tag))
 
         _complete.value = true
     }
