@@ -3,7 +3,6 @@ package com.motorro.sqlite.data
 import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.datetime.LocalDateTime
@@ -16,15 +15,6 @@ import kotlinx.datetime.LocalDateTime
  */
 @Entity(
     tableName = Image.TABLE_NAME,
-    foreignKeys = [
-        ForeignKey(
-            entity = Tag::class,
-            parentColumns = [Tag.COLUMN_ID],
-            childColumns = [Image.COLUMN_TAG],
-            onDelete = ForeignKey.SET_NULL,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ],
     indices = [
         Index(value = [Image.COLUMN_CREATED], orders = [Index.Order.DESC]),
     ]
@@ -37,8 +27,6 @@ data class Image(
     val name: String,
     @ColumnInfo(name = COLUMN_CREATED)
     val dateTimeTaken: LocalDateTime,
-    @ColumnInfo(name = COLUMN_TAG, index = true)
-    val tag: Int? = null
 ) {
     companion object {
         const val TABLE_NAME = "photo"

@@ -20,7 +20,7 @@ interface PhotoDb {
      * Adds an image
      * @param image Image to add
      */
-    suspend fun addImage(image: Image)
+    suspend fun addImage(image: Image, tags: Set<Int>)
 
     /**
      * Deletes an image

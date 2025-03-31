@@ -16,6 +16,7 @@ import com.motorro.sqlite.data.ListImage
 import com.motorro.sqlite.data.ListTag
 import com.motorro.sqlite.data.PhotoFilter
 import com.motorro.sqlite.data.Tag
+import com.motorro.sqlite.data.toListImages
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -26,13 +27,13 @@ import kotlinx.coroutines.flow.Flow
 class PhotoDbImpl private constructor(private val db: RoomDb): PhotoDb {
     override fun getList(filter: PhotoFilter): Flow<List<ListImage>> = when {
         filter.name.isNullOrBlank() && filter.tags.isEmpty() -> db.imageDao().getList()
-        filter.name.isNullOrBlank() -> db.imageDao().getList(filter.tags)
+        filter.name.isNullOrBlank() -> db.imageDao().getList(filter.tags).toListImages()
         filter.tags.isEmpty() -> db.imageDao().getList("${filter.name}%")
-        else -> db.imageDao().getList("${filter.name}%", filter.tags)
+        else -> db.imageDao().getList("${filter.name}%", filter.tags).toListImages()
     }
 
-    override suspend fun addImage(image: Image) {
-        db.imageDao().insert(image)
+    override suspend fun addImage(image: Image, tags: Set<Int>) {
+        db.imageDao().insert(image, tags.map { PicToTag(image.path.toString(), it) })
     }
 
     override suspend fun deleteImage(imagePath: Uri) {
@@ -62,7 +63,8 @@ class PhotoDbImpl private constructor(private val db: RoomDb): PhotoDb {
                 .databaseBuilder(context, RoomDb::class.java, DATABASE_NAME)
                 .addMigrations(
                     MIGRATION_1_2,
-                    MIGRATION_3_4
+                    MIGRATION_3_4,
+                    MIGRATION_4_5
                 )
                 .build()
         )
@@ -75,9 +77,10 @@ class PhotoDbImpl private constructor(private val db: RoomDb): PhotoDb {
 @Database(
     entities = [
         Image::class,
-        Tag::class
+        Tag::class,
+        PicToTag::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 2, to = 3)
@@ -143,6 +146,34 @@ val MIGRATION_3_4 = object : Migration(3, 4) {
             db.execSQL("CREATE INDEX IF NOT EXISTS `index_photo_name` ON `photo` (`name`)")
             db.execSQL("CREATE INDEX IF NOT EXISTS `index_photo_created` ON `photo` (`created` DESC)")
             db.execSQL("CREATE INDEX IF NOT EXISTS `index_photo_tag` ON `photo` (`tag`)")
+        }
+    }
+}
+
+/**
+ * Migration from version 4 (Single tag) to 5 (Multiple tags)
+ */
+val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // Create image-tag cross-reference table
+        db.execSQL("CREATE TABLE IF NOT EXISTS `pic_to_tag` (`image_path` TEXT NOT NULL, `tag_id` INTEGER NOT NULL, PRIMARY KEY(`image_path`, `tag_id`), FOREIGN KEY(`image_path`) REFERENCES `photo`(`path`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`tag_id`) REFERENCES `tag`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )")
+        db.transaction {
+            db.execSQL("""
+                INSERT INTO `pic_to_tag` (`image_path`, `tag_id`)
+                    SELECT `path`, `tag` 
+                    FROM `photo` 
+                    WHERE `tag` IS NOT NULL
+            """.trimIndent())
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_pic_to_tag_image_path` ON `pic_to_tag` (`image_path`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_pic_to_tag_tag_id` ON `pic_to_tag` (`tag_id`)")
+
+            // Remove tag column from photo
+            db.execSQL("ALTER TABLE `photo` RENAME TO `photo_old`")
+            db.execSQL("CREATE TABLE IF NOT EXISTS `photo` (`path` TEXT NOT NULL, `name` TEXT NOT NULL, `created` TEXT NOT NULL, PRIMARY KEY(`path`))")
+            db.execSQL("INSERT INTO `photo` (`path`, `name`, `created`) SELECT `path`, `name`, `created` FROM `photo_old`")
+            db.execSQL("DROP TABLE `photo_old`")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_photo_name` ON `photo` (`name`)")
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_photo_created` ON `photo` (`created` DESC)")
         }
     }
 }
