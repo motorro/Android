@@ -1,7 +1,8 @@
 package com.motorro.sqlite.data
 
 import android.net.Uri
-import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Relation
 import kotlinx.datetime.LocalDateTime
 
 /**
@@ -11,12 +12,13 @@ import kotlinx.datetime.LocalDateTime
  * @param dateTimeTaken Date and time image was taken
  */
 data class ListImage(
-    @ColumnInfo(name = Image.COLUMN_PATH)
-    val path: Uri,
-    @ColumnInfo(name = Image.COLUMN_NAME)
-    val name: String,
-    @ColumnInfo(name = Image.COLUMN_CREATED)
-    val dateTimeTaken: LocalDateTime,
-    @ColumnInfo(name = "${Image.COLUMN_TAG}${Tag.COLUMN_NAME}")
-    val tag: String?
-)
+    @Embedded
+    private val imageData: Image,
+    @Relation(parentColumn = Image.COLUMN_TAG, entityColumn = Tag.COLUMN_ID)
+    private val tagData: Tag?
+) {
+    val path: Uri get() = imageData.path
+    val name: String get() = imageData.name
+    val dateTimeTaken: LocalDateTime get() = imageData.dateTimeTaken
+    val tags: List<String> get() = listOfNotNull(tagData?.name)
+}

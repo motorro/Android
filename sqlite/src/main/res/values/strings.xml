@@ -2,12 +2,19 @@
     <string name="app_name">SQLite</string>
     <string name="title_images">Images</string>
     <string name="title_add_image">Add Image</string>
+    <string name="title_tags">Tags</string>
+    <string name="title_tag">Edit tag</string>
     <string name="lbl_no_images_found">No images found</string>
     <string name="desc_delete_image">Delete %s</string>
     <string name="desc_add_image">Add image</string>
+    <string name="desc_add_tag">Add tag</string>
+    <string name="desc_edit_tag">Edit tag %s</string>
+    <string name="desc_delete_tag">Delete tag %s</string>
     <string name="hint_title_search">Title</string>
     <string name="hint_title">Title</string>
     <string name="hint_tag_name">Tag name</string>
     <string name="hint_tag_description">Tag description</string>
     <string name="btn_save">Save</string>
+    <string name="btn_add">Add</string>
+    <string name="error_tag_exists">Tag already exists</string>
 </resources>
