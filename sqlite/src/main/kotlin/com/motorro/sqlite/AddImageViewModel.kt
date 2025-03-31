@@ -97,7 +97,7 @@ class AddImageViewModel(
             .map { it.id }
             .toSet()
 
-        db.addImage(Image(image, name, dateTaken, tags.firstOrNull()))
+        db.addImage(Image(image, name, dateTaken), tags)
 
         _complete.value = true
     }
