@@ -27,4 +27,9 @@ interface PhotoDb {
      * @param imagePath Image path
      */
     suspend fun deleteImage(imagePath: Uri)
+
+    /**
+     * Tags database
+     */
+    val tagsDb: TagsDb
 }

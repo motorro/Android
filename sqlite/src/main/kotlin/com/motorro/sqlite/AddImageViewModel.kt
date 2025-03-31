@@ -12,14 +12,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.motorro.sqlite.data.Image
-import com.motorro.sqlite.data.Tag
+import com.motorro.sqlite.data.ListTag
 import com.motorro.sqlite.db.PhotoDb
+import com.motorro.sqlite.db.TagsDb
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -32,11 +37,13 @@ import kotlinx.datetime.toLocalDateTime
 import java.io.File
 import kotlin.time.Clock
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AddImageViewModel(
     private val sourceImage: Uri,
     application: Application,
     private val clock: Clock,
-    private val db: PhotoDb
+    private val db: PhotoDb,
+    private val tagsDb: TagsDb
 ) : AndroidViewModel(application) {
 
     private val _image: MutableStateFlow<Uri> = MutableStateFlow(sourceImage)
@@ -44,20 +51,21 @@ class AddImageViewModel(
 
     private val _title: MutableStateFlow<String> = MutableStateFlow("")
     val title: StateFlow<String> get() = _title.asStateFlow()
+
     fun setTitle(title: String) {
         _title.value = title
     }
 
-    private val _tagName: MutableStateFlow<String> = MutableStateFlow("")
-    val tagName: StateFlow<String> get() = _tagName.asStateFlow()
-    fun setTagName(title: String) {
-        _tagName.value = title
-    }
+    private val _tags: MutableStateFlow<Set<Int>> = MutableStateFlow(emptySet())
+    val tags: StateFlow<List<ListTag>> = _tags
+        .flatMapLatest { if (it.isEmpty()) flowOf(emptyList()) else tagsDb.getList(it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-    private val _tagDescription: MutableStateFlow<String> = MutableStateFlow("")
-    val tagDescription: StateFlow<String> get() = _tagDescription.asStateFlow()
-    fun setTagDescription(title: String) {
-        _tagDescription.value = title
+    fun addTag(tagId: Int) {
+        _tags.value += tagId
+    }
+    fun removeTag(tagId: Int) {
+        _tags.value -= tagId
     }
 
     private val _dateTaken: MutableStateFlow<LocalDateTime?> = MutableStateFlow(null)
@@ -81,14 +89,15 @@ class AddImageViewModel(
     fun save() = viewModelScope.launch(Dispatchers.IO) {
 
         val image = saveImage(sourceImage)
-        val name = _title.value
+        val name = title.value
         val dateTaken = getImageTaken(sourceImage)
 
-        val tag = _tagName.value.takeIf { it.isNotBlank() }?.let { tagName ->
-            Tag(tagName, _tagDescription.value)
-        }
+        val tags = tagsDb.getList(_tags.value)
+            .first()
+            .map { it.id }
+            .toSet()
 
-        db.addImage(Image(image, name, dateTaken, tag))
+        db.addImage(Image(image, name, dateTaken, tags.firstOrNull()))
 
         _complete.value = true
     }
@@ -152,7 +161,7 @@ class AddImageViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AddImageViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return AddImageViewModel(image, app, Clock.System, app.db) as T
+                return AddImageViewModel(image, app, Clock.System, app.db, app.db.tagsDb) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

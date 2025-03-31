@@ -30,14 +30,17 @@ import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
 import com.motorro.sqlite.data.ListImage
+import com.motorro.sqlite.data.ListTag
 import com.motorro.sqlite.databinding.FragmentImageListBinding
 import com.motorro.sqlite.databinding.VhImageBinding
+import com.motorro.sqlite.databinding.VhTagFilterBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
 class ImageListFragment : Fragment(), WithViewBinding<FragmentImageListBinding> by BindingHost() {
 
     private lateinit var adapter: ImageAdapter
+    private lateinit var tagFilterAdapter: TagFilterAdapter
     private lateinit var capturedBehavior: BottomSheetBehavior<ConstraintLayout>
     private val getPicture = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (null != uri) {
@@ -62,7 +65,13 @@ class ImageListFragment : Fragment(), WithViewBinding<FragmentImageListBinding> 
                     model.deleteImage(imagePath)
                 }
             )
+            tagFilterAdapter = TagFilterAdapter { tagId ->
+                model.toggleTag(tagId)
+            }
+
             pictures.adapter = adapter
+            pictures.addItemDecoration(SpaceDecoration(resources.getDimensionPixelSize(R.dimen.margin_vertical_small)))
+            tags.adapter = tagFilterAdapter
             pictures.addItemDecoration(SpaceDecoration(resources.getDimensionPixelSize(R.dimen.margin_vertical_small)))
 
             viewLifecycleOwner.lifecycleScope.launch {
@@ -78,6 +87,11 @@ class ImageListFragment : Fragment(), WithViewBinding<FragmentImageListBinding> 
                                     noImages.isVisible = false
                                     pictures.isVisible = true
                                 }
+                            }
+                        }
+                        launch {
+                            model.tags.collect {
+                                tagFilterAdapter.submitList(it)
                             }
                         }
                         launch {
@@ -163,7 +177,7 @@ private class ImageAdapter(
 
             name.text = iName
             dateTimeTaken.text = dateFormat.format(i.dateTimeTaken)
-            tags.text = i.tag
+            tags.text = i.tags.joinToString()
 
             delete.contentDescription = itemView.context.getString(R.string.desc_delete_image, iName)
         }
@@ -172,5 +186,40 @@ private class ImageAdapter(
     private object ListImageDiff : DiffUtil.ItemCallback<ListImage>() {
         override fun areItemsTheSame(oldItem: ListImage, newItem: ListImage): Boolean = oldItem.path == newItem.path
         override fun areContentsTheSame(oldItem: ListImage, newItem: ListImage): Boolean = oldItem == newItem
+    }
+}
+
+private class TagFilterAdapter(
+    private val onClick: (tagId: Int) -> Unit
+) : ListAdapter<Pair<ListTag, Boolean>, TagFilterAdapter.ViewHolder>(TagFilterDiff) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = createBoundViewHolder(parent, VhTagFilterBinding::inflate) {
+        ViewHolder(it)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    inner class ViewHolder(override var binding: VhTagFilterBinding?) : RecyclerView.ViewHolder(binding!!.root), WithViewBinding<VhTagFilterBinding> {
+        private var tag: ListTag? = null
+
+        init {
+            withBinding {
+                name.setOnClickListener {
+                    this@ViewHolder.tag?.id?.let(onClick)
+                }
+            }
+        }
+
+        fun bind(t: Pair<ListTag, Boolean>) = withBinding {
+            this@ViewHolder.tag = t.first
+            name.text = t.first.name
+            name.isChecked = t.second
+        }
+    }
+
+    private object TagFilterDiff : DiffUtil.ItemCallback<Pair<ListTag, Boolean>>() {
+        override fun areItemsTheSame(oldItem: Pair<ListTag, Boolean>, newItem: Pair<ListTag, Boolean>): Boolean = oldItem.first.id == newItem.first.id
+        override fun areContentsTheSame(oldItem: Pair<ListTag, Boolean>, newItem: Pair<ListTag, Boolean>): Boolean = oldItem == newItem
     }
 }

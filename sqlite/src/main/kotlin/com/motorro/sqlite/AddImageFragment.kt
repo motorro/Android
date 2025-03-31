@@ -15,10 +15,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.chip.Chip
 import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
+import com.motorro.sqlite.data.ListTag
 import com.motorro.sqlite.databinding.FragmentAddBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -44,6 +46,11 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
         if (model.complete.value) {
             findNavController().navigateUp()
             return
+        }
+        subscribeToResult(TagsFragment.RESULT) { result: Int ->
+            if (result > 0) {
+                model.addTag(result)
+            }
         }
 
         withBinding {
@@ -77,15 +84,12 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
                                 }
                             }
                         }
-
                         launch {
-                            model.tagName.collect { t ->
-                                tagName.setTextKeepState(t)
-                            }
-                        }
-                        launch {
-                            model.tagDescription.collect { t ->
-                                tagDescription.setTextKeepState(t)
+                            model.tags.collect {
+                                tags.removeAllViews()
+                                it.forEach { tag ->
+                                    tags.addView(createChip(tag))
+                                }
                             }
                         }
                     }
@@ -97,16 +101,25 @@ class AddImageFragment : Fragment(), WithViewBinding<FragmentAddBinding> by Bind
             title.doAfterTextChanged {
                 model.setTitle(it.toString())
             }
+            plusTag.setOnClickListener {
+                findNavController().navigate(AddImageFragmentDirections.addImageToTags())
+            }
             save.setOnClickListener {
                 model.save()
             }
-
-            tagName.doAfterTextChanged {
-                model.setTagName(it.toString())
-            }
-            tagDescription.doAfterTextChanged {
-                model.setTagDescription(it.toString())
-            }
         }
+    }
+
+    private fun createChip(tag: ListTag): Chip {
+        val chip = Chip(requireContext()).apply {
+            text = tag.name
+            isCloseIconVisible = true
+        }
+
+        chip.setOnCloseIconClickListener {
+            model.removeTag(tag.id)
+        }
+
+        return chip
     }
 }
