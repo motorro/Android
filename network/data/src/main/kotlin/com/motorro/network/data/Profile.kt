@@ -13,5 +13,6 @@ data class Profile(
     val phone: Phone,
     val registered: Instant,
     val userpic: URIString,
-    val interests: Set<String> = emptySet()
+    val interests: Set<String> = emptySet(),
+    val traits: List<Trait> = emptyList()
 )
