@@ -10,9 +10,9 @@ class TraitTest {
     private val badge = Trait.Badge("Some badge")
     private val achievement = Trait.Achievement("Some achievement", 100)
 
-    private val serializedPowerUser = """{"type":"com.motorro.network.data.Trait.PowerUser"}"""
-    private val serializedBadge = """{"type":"com.motorro.network.data.Trait.Badge","name":"Some badge"}"""
-    private val serializedAchievement = """{"type":"com.motorro.network.data.Trait.Achievement","name":"Some achievement","score":100}"""
+    private val serializedPowerUser = """{"type":"powerUser"}"""
+    private val serializedBadge = """{"type":"badge","name":"Some badge"}"""
+    private val serializedAchievement = """{"type":"achievement","name":"Some achievement","score":100}"""
 
     @Test
     fun serializesPowerUser() {

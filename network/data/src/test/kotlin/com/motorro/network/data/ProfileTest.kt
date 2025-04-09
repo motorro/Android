@@ -41,14 +41,14 @@ class ProfileTest {
         ],
         "traits": [
             {
-                "type": "com.motorro.network.data.Trait.PowerUser"
+                "type": "powerUser"
             },
             {
-                "type": "com.motorro.network.data.Trait.Badge",
+                "type": "badge",
                 "name": "Fisherman"
             },
             {
-                "type": "com.motorro.network.data.Trait.Achievement",
+                "type": "achievement",
                 "name": "GoalKeeper",
                 "score": 10
             }
