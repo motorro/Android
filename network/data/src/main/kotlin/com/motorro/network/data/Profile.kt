@@ -9,5 +9,6 @@ data class Profile(
     val userId: Int,
     val name: String,
     val age: Int,
+    val phone: Phone,
     val interests: Set<String> = emptySet()
 )
