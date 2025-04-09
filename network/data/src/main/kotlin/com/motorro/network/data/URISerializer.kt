@@ -1,10 +1,19 @@
 package com.motorro.network.data
 
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import java.net.URI
 
+/**
+ * Serializable URI
+ */
+typealias URIString = @Serializable(URISerializer::class) URI
+
+/**
+ * URI serializer
+ */
 object URISerializer: KSerializer<URI> {
     override val descriptor = PrimitiveSerialDescriptor("URI", PrimitiveKind.STRING)
 
