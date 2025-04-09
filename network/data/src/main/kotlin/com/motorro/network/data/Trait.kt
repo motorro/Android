@@ -1,12 +1,17 @@
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.motorro.network.data
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 /**
  * User traits
  */
 @Serializable
+@JsonClassDiscriminator("kind")
 sealed class Trait {
     /**
      * Trait name

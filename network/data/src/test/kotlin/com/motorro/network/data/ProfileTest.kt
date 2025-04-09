@@ -41,14 +41,14 @@ class ProfileTest {
         ],
         "traits": [
             {
-                "type": "powerUser"
+                "kind": "powerUser"
             },
             {
-                "type": "badge",
+                "kind": "badge",
                 "name": "Fisherman"
             },
             {
-                "type": "achievement",
+                "kind": "achievement",
                 "name": "GoalKeeper",
                 "score": 10
             }
