@@ -10,6 +10,7 @@ class ProfileTest {
         userId = 1,
         name = "Vasya",
         age = 25,
+        phone = Phone(7, "1234567890"),
         interests = setOf("fishing", "coroutines", "soccer")
     )
 
@@ -18,6 +19,10 @@ class ProfileTest {
         "id": 1,
         "name": "Vasya",
         "age": 25,
+        "phone": {
+            "countryCode": 7,
+            "number": "1234567890"
+        },
         "interests": [
             "fishing",
             "coroutines",
