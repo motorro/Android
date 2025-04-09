@@ -15,7 +15,12 @@ class ProfileTest {
         phone = Phone(7, "1234567890"),
         registered = Instant.parse("2023-11-17T11:43:22.306Z"),
         userpic = URI("https://example.com/picture.jpg"),
-        interests = setOf("fishing", "coroutines", "soccer")
+        interests = setOf("fishing", "coroutines", "soccer"),
+        traits = listOf(
+            Trait.PowerUser,
+            Trait.Badge("Fisherman"),
+            Trait.Achievement("GoalKeeper", 10)
+        )
     )
 
     private val jsonProfile = """
@@ -33,6 +38,20 @@ class ProfileTest {
             "fishing",
             "coroutines",
             "soccer"
+        ],
+        "traits": [
+            {
+                "type": "com.motorro.network.data.Trait.PowerUser"
+            },
+            {
+                "type": "com.motorro.network.data.Trait.Badge",
+                "name": "Fisherman"
+            },
+            {
+                "type": "com.motorro.network.data.Trait.Achievement",
+                "name": "GoalKeeper",
+                "score": 10
+            }
         ]
     }
     """.trimIndent()
