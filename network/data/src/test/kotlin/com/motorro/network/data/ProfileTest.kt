@@ -15,7 +15,7 @@ class ProfileTest {
 
     private val jsonProfile = """
     {
-        "userId": 1,
+        "id": 1,
         "name": "Vasya",
         "age": 25,
         "interests": [
