@@ -1,5 +1,6 @@
 package com.motorro.network.data
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -16,6 +17,7 @@ sealed class Trait {
      * Power user trait
      */
     @Serializable
+    @SerialName("powerUser")
     data object PowerUser : Trait() {
         override val name: String = "Power User"
     }
@@ -24,11 +26,13 @@ sealed class Trait {
      * Some badge
      */
     @Serializable
+    @SerialName("badge")
     data class Badge(override val name: String) : Trait()
 
     /**
      * Some achievement
      */
     @Serializable
+    @SerialName("achievement")
     data class Achievement(override val name: String, val score: Int) : Trait()
 }
