@@ -1,9 +1,6 @@
-@file:UseSerializers(URISerializer::class)
-
 package com.motorro.network.data
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.json.Json
 import org.junit.Test
 import java.net.URI
@@ -16,8 +13,8 @@ class URISerializerTest {
 
     @Serializable
     data class UriContainer(
-        val uri1: URI,
-        val uri2: URI
+        val uri1: URIString,
+        val uri2: URIString
     )
 
     private val serializedContainer = """{"uri1":"https://example.com","uri2":"https://motorro.com"}"""
