@@ -2,6 +2,7 @@ package com.motorro.network.data
 
 import kotlinx.serialization.json.Json
 import org.junit.Test
+import java.net.URI
 import kotlin.test.assertEquals
 import kotlin.time.Instant
 
@@ -13,6 +14,7 @@ class ProfileTest {
         age = 25,
         phone = Phone(7, "1234567890"),
         registered = Instant.parse("2023-11-17T11:43:22.306Z"),
+        userpic = URI("https://example.com/picture.jpg"),
         interests = setOf("fishing", "coroutines", "soccer")
     )
 
@@ -26,6 +28,7 @@ class ProfileTest {
             "number": "1234567890"
         },
         "registered": "2023-11-17T11:43:22.306Z",
+        "userpic": "https://example.com/picture.jpg",
         "interests": [
             "fishing",
             "coroutines",
