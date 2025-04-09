@@ -3,6 +3,7 @@ package com.motorro.network.data
 import kotlinx.serialization.json.Json
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 
 class ProfileTest {
 
@@ -11,6 +12,7 @@ class ProfileTest {
         name = "Vasya",
         age = 25,
         phone = Phone(7, "1234567890"),
+        registered = Instant.parse("2023-11-17T11:43:22.306Z"),
         interests = setOf("fishing", "coroutines", "soccer")
     )
 
@@ -23,6 +25,7 @@ class ProfileTest {
             "countryCode": 7,
             "number": "1234567890"
         },
+        "registered": "2023-11-17T11:43:22.306Z",
         "interests": [
             "fishing",
             "coroutines",
