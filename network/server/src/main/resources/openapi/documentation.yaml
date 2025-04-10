@@ -1,0 +1,221 @@
+openapi: 3.0.4
+info:
+  title: Users API
+  description: Sample server for Network webinar.
+  version: 1.0.0
+
+servers:
+  - url: 0.0.0.0:8080
+    description: Local server
+
+paths:
+  /users:
+    get:
+      operationId: getUsers
+      summary: Returns a list of users.
+      description: List of users in the system.
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListUser'
+
+  /profiles/{id}:
+    get:
+      operationId: getProfile
+      summary: User profile.
+      description: Returns full user profile.
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier for the user
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: A user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        404:
+          description: User not found
+
+components:
+  schemas:
+
+    ListUser:
+      type: object
+      description: User object for user list
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the user
+          example: 123
+        name:
+          type: string
+          description: Name of the user
+          example: Vasya
+
+    Profile:
+      type: object
+      description: Profile data of a user
+      required:
+        - userId
+        - name
+        - age
+        - phone
+        - registered
+      properties:
+        userId:
+          type: integer
+          description: Unique identifier for the user
+          example: 123
+        name:
+          type: string
+          description: Name of the user
+          example: Vasya
+        age:
+          type: integer
+          description: Age of the user
+          example: 25
+        phone:
+          $ref: '#/components/schemas/Phone'
+        registered:
+          type: string
+          format: date-time
+          description: Registration timestamp
+        userpic:
+          type: string
+          format: uri
+          description: URI string for the user's profile picture
+          example: https://example.com/picture.jpg
+        interests:
+          type: array
+          items:
+            type: string
+          description: Set of user interests
+          example:
+            - fishing
+            - coroutines
+            - soccer
+        traits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trait'
+          description: List of user traits
+
+    Phone:
+      type: object
+      description: Phone number details
+      required:
+        - countryCode
+        - number
+      properties:
+        countryCode:
+          type: string
+          description: Country code of the phone number
+        number:
+          type: string
+          description: Local phone number
+      example:
+        countryCode: 7
+        number: 1234567890
+
+    Trait:
+      type: object
+      description: Base schema for a trait
+      required:
+        - kind
+      properties:
+        kind:
+          type: string
+          enum:
+            - powerUser
+            - badge
+            - achievement
+          description: Discriminator field to identify the type of trait
+      oneOf:
+        - $ref: '#/components/schemas/PowerUser'
+        - $ref: '#/components/schemas/Badge'
+        - $ref: '#/components/schemas/Achievement'
+      discriminator:
+        propertyName: kind
+        mapping:
+          powerUser: '#/components/schemas/PowerUser'
+          badge: '#/components/schemas/Badge'
+          achievement: 'sysObject.json#/Achievement'
+
+    PowerUser:
+      type: object
+      description: Power user trait
+      allOf:
+        - $ref: '#/components/schemas/Trait'
+        - type: object
+          properties:
+            kind:
+              type: string
+              enum:
+                - powerUser
+      example:
+        kind: powerUser
+
+    Badge:
+      type: object
+      description: Badge trait
+      allOf:
+        - $ref: '#/components/schemas/Trait'
+        - type: object
+          required:
+            - name
+          properties:
+            kind:
+              type: string
+              enum:
+                - badge
+            name:
+              type: string
+              description: Name of the badge
+              enum:
+                - badge
+      example:
+        kind: badge
+        name: Fisherman
+
+    Achievement:
+      type: object
+      description: Achievement trait
+      allOf:
+        - $ref: '#/components/schemas/Trait'
+        - type: object
+          required:
+            - name
+            - score
+          properties:
+            kind:
+              type: string
+              enum:
+                - achievement
+            name:
+              type: string
+              description: Name of the achievement
+              enum:
+                - badge
+            score:
+              type: integer
+              format: int64
+              description: Score of the achievement
+      example:
+        kind: achievement
+        name: GoalKeeper
+        score: 10

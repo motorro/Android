@@ -27,4 +27,4 @@ rootProject.name = "Android"
 include(":core")
 include(":composecore")
 include(":network:data")
-
+include(":network:server")
