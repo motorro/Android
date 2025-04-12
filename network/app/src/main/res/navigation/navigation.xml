@@ -13,6 +13,9 @@
         <action
             android:id="@+id/user_list_to_profile"
             app:destination="@id/viewProfileFragment" />
+        <action
+            android:id="@+id/user_list_to_create"
+            app:destination="@id/createUserFragment" />
     </fragment>
     <fragment
         android:id="@+id/viewProfileFragment"
@@ -23,4 +26,9 @@
             android:name="userId"
             app:argType="integer" />
     </fragment>
+    <dialog
+        android:id="@+id/createUserFragment"
+        android:name="com.motorro.network.CreateUserFragment"
+        android:label="@string/title_create"
+        tools:layout="@layout/fragment_create" />
 </navigation>

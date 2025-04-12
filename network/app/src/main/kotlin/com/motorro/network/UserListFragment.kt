@@ -23,6 +23,8 @@ import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
+import com.motorro.network.CreateUserFragment.Companion.CREATE_RESULT
+import com.motorro.network.data.CreateUserData
 import com.motorro.network.data.UserListItem
 import com.motorro.network.databinding.FragmentUserListBinding
 import com.motorro.network.databinding.VhUserBinding
@@ -53,11 +55,28 @@ class UserListFragment : Fragment(), WithViewBinding<FragmentUserListBinding> by
         withBinding {
             userList.adapter = adapter
             userList.addItemDecoration(SpaceDecoration(resources.getDimensionPixelSize(R.dimen.margin_vertical_small)))
+            add.setOnClickListener {
+                findNavController().navigate(UserListFragmentDirections.userListToCreate())
+            }
         }
         viewLifecycleOwner.lifecycle.coroutineScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                model.users.onEach { adapter.submitList(it) }.launchIn(this)
+                launch {
+                    model.users.onEach { adapter.submitList(it) }.launchIn(this)
+                }
+                launch {
+                    model.addEnabled.onEach { withBinding { add.isEnabled = it } }.launchIn(this)
+                }
             }
+        }
+
+        viewLifecycleOwner.lifecycle.coroutineScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                model.addEnabled.onEach { withBinding { add.isEnabled = it } }.launchIn(this)
+            }
+        }
+        subscribeToResult(CREATE_RESULT) { result: CreateUserData ->
+            model.createUser(result)
         }
     }
 }

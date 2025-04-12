@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.google.ksp) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.navigation.safeargs.kotlin) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
 }
 
 allprojects {
