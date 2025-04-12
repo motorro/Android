@@ -41,6 +41,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListUser'
+  /users/{id}:
+    delete:
+      operationId: deleteUser
+      summary: Delete user
+      description: Deletes a user from the system.
+      responses:
+        204:
+          description: User deleted
+        404:
+          description: User not found
 
   /profiles/{id}:
     get:

@@ -9,6 +9,7 @@ interface Users {
     fun getUsers(): List<User>
     fun getProfile(userId: Int): Profile
     fun addUser(profile: Profile): User
+    fun deleteUser(userId: Int)
 }
 
 class UsersImpl(private var profiles: List<Profile>) : Users{
@@ -34,5 +35,10 @@ class UsersImpl(private var profiles: List<Profile>) : Users{
             name = newProfile.name,
             userpic = newProfile.userpic
         )
+    }
+
+    override fun deleteUser(userId: Int) {
+        val profile = profiles.indexOfFirst { it.userId == userId }.takeIf { it >= 0 } ?: throw NotFoundException("User with id $userId not found")
+        profiles = profiles.filterIndexed { index, _ -> index != profile }
     }
 }

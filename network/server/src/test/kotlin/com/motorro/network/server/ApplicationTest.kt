@@ -6,6 +6,7 @@ import com.motorro.network.data.User
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.accept
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -65,6 +66,14 @@ class ApplicationTest {
                 userpic = newProfile.userpic
             )
         }
+        every { deleteUser(any()) } answers {
+            val userId = firstArg<Int>()
+            if (userId == profile.userId) {
+                Unit
+            } else {
+                throw NotFoundException("User with id $userId not found")
+            }
+        }
     }
 
     private fun ApplicationTestBuilder.prepareClient(): HttpClient {
@@ -108,7 +117,7 @@ class ApplicationTest {
     }
 
     @Test
-    fun failsOnProfileNotFoune() = testApplication {
+    fun failsOnProfileNotFound() = testApplication {
         application {
             module(users)
         }
@@ -136,5 +145,30 @@ class ApplicationTest {
             user.copy(userId = newProfileId),
             json.decodeFromString(response.bodyAsText())
         )
+    }
+
+    @Test
+    fun deletesUser() = testApplication {
+        application {
+            module(users)
+        }
+        val response = prepareClient().delete("/users/${profile.userId}") {
+            accept(ContentType.Application.Json)
+        }
+
+        assertEquals(HttpStatusCode.NoContent, response.status)
+        verify { users.deleteUser(profile.userId) }
+    }
+
+    @Test
+    fun failsToDeleteOnUserNotFound() = testApplication {
+        application {
+            module(users)
+        }
+        val response = prepareClient().delete("/users/100500") {
+            accept(ContentType.Application.Json)
+        }
+
+        assertEquals(HttpStatusCode.NotFound, response.status)
     }
 }
