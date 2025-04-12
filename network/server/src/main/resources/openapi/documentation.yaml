@@ -23,6 +23,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ListUser'
+    post:
+      operationId: addUser
+      summary: Adds new user
+      description: Adds a new user to the system.
+      requestBody:
+          description: Profile to add
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUser'
 
   /profiles/{id}:
     get:
@@ -56,6 +74,7 @@ components:
       required:
         - id
         - name
+        - userpic
       properties:
         id:
           type: integer
@@ -66,6 +85,11 @@ components:
           type: string
           description: Name of the user
           example: Vasya
+        userpic:
+          type: string
+          format: uri
+          description: URI string for the user's profile picture
+          example: https://example.com/picture.jpg
 
     Profile:
       type: object
