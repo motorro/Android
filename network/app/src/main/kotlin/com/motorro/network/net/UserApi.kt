@@ -3,6 +3,7 @@ package com.motorro.network.net
 import com.motorro.network.data.Profile
 import com.motorro.network.data.User
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -28,4 +29,10 @@ interface UserApi {
      */
     @POST("users")
     suspend fun createUser(@Body profile: Profile): Result<User>
+
+    /**
+     * Returns a user profile
+     */
+    @DELETE("users/{id}")
+    suspend fun deleteUser(@Path("id") userId: Int)
 }
