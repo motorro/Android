@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Network</string>
+    <string name="title_user_list">Users</string>
+    <string name="desc_delete_user">Delete user %s</string>
+</resources>
