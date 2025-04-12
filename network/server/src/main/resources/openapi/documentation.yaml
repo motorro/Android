@@ -27,13 +27,15 @@ paths:
       operationId: addUser
       summary: Adds new user
       description: Adds a new user to the system.
+      security:
+        - adminArea: [ ]
       requestBody:
-          description: Profile to add
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
+        description: Profile to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
       responses:
         200:
           description: Created
@@ -41,16 +43,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListUser'
+        401:
+          description: Unauthorized
+
   /users/{id}:
     delete:
       operationId: deleteUser
       summary: Delete user
       description: Deletes a user from the system.
+      security:
+        - adminArea: [ ]
+      parameters:
+        - in: path
+          name: id
+          description: Unique identifier for the user
+          schema:
+            type: integer
+            format: int64
+          required: true
       responses:
         204:
           description: User deleted
         404:
           description: User not found
+        401:
+          description: Unauthorized
 
   /profiles/{id}:
     get:
@@ -253,3 +270,8 @@ components:
         kind: achievement
         name: GoalKeeper
         score: 10
+
+  securitySchemes:
+    adminArea:
+      type: http
+      scheme: bearer
