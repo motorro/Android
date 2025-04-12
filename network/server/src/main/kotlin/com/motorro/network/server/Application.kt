@@ -13,6 +13,7 @@ import io.ktor.server.plugins.openapi.openAPI
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
+import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
@@ -66,6 +67,11 @@ fun Application.module(users: Users) {
 
         post("/users") {
             call.respond(users.addUser(call.receive<Profile>()))
+        }
+
+        delete("users/{id}") {
+            users.deleteUser(call.parameters["id"]?.toIntOrNull() ?: throw IllegalArgumentException("Invalid user id"))
+            call.respond(HttpStatusCode.NoContent)
         }
 
         get("/profiles/{id}") {
