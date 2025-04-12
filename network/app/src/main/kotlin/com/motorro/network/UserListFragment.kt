@@ -3,8 +3,13 @@ package com.motorro.network
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -44,6 +49,26 @@ class UserListFragment : Fragment(), WithViewBinding<FragmentUserListBinding> by
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.list_menu, menu)
+                }
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        R.id.action_auth -> {
+                            findNavController().navigate(UserListFragmentDirections.userListToAuth())
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.STARTED
+        )
+
         adapter = UserAdapter(
             onSelect = {
                 findNavController().navigate(
@@ -65,7 +90,7 @@ class UserListFragment : Fragment(), WithViewBinding<FragmentUserListBinding> by
                     model.users.onEach { adapter.submitList(it) }.launchIn(this)
                 }
                 launch {
-                    model.addEnabled.onEach { withBinding { add.isEnabled = it } }.launchIn(this)
+                    model.addEnabled.onEach { withBinding { add.isVisible = it } }.launchIn(this)
                 }
             }
         }

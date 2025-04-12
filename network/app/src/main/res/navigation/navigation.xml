@@ -16,6 +16,9 @@
         <action
             android:id="@+id/user_list_to_create"
             app:destination="@id/createUserFragment" />
+        <action
+            android:id="@+id/user_list_to_auth"
+            app:destination="@id/authFragment" />
     </fragment>
     <fragment
         android:id="@+id/viewProfileFragment"
@@ -31,4 +34,9 @@
         android:name="com.motorro.network.CreateUserFragment"
         android:label="@string/title_create"
         tools:layout="@layout/fragment_create" />
+    <dialog
+        android:id="@+id/authFragment"
+        android:name="com.motorro.network.AuthFragment"
+        android:label="@string/title_auth"
+        tools:layout="@layout/fragment_auth" />
 </navigation>

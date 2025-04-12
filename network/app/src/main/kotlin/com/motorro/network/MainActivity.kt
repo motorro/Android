@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), WithViewBinding<ActivityMainBinding> b
             setOf(R.id.userListFragment)
         )
         withBinding {
+            setSupportActionBar(topAppBar)
             topAppBar.setupWithNavController(navController, appBarConfiguration)
         }
         onBackPressedDispatcher.addCallback(this) {

@@ -1,6 +1,7 @@
 package com.motorro.network.net.usecase
 
 import com.motorro.network.net.UserApi
+import com.motorro.network.session.SessionManager
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 
@@ -15,10 +16,10 @@ interface DeleteUser {
      */
     suspend operator fun invoke(userId: Int): Result<Unit>
 
-    class Impl(private val userApi: UserApi) : DeleteUser {
+    class Impl(private val userApi: UserApi, private val sessionManager: SessionManager) : DeleteUser {
         override suspend fun invoke(userId: Int): Result<Unit> {
             return try {
-                Result.success(userApi.deleteUser(userId))
+                Result.success(userApi.deleteUser(userId, "Bearer ${sessionManager.token.value}"))
             } catch (e: Exception) {
                 currentCoroutineContext().ensureActive()
                 Result.failure(e)

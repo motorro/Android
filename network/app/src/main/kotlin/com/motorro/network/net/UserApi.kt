@@ -5,6 +5,7 @@ import com.motorro.network.data.User
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -28,11 +29,11 @@ interface UserApi {
      * Creates a user
      */
     @POST("users")
-    suspend fun createUser(@Body profile: Profile): Result<User>
+    suspend fun createUser(@Body profile: Profile, @Header("Authorization") token: String?): Result<User>
 
     /**
      * Returns a user profile
      */
     @DELETE("users/{id}")
-    suspend fun deleteUser(@Path("id") userId: Int)
+    suspend fun deleteUser(@Path("id") userId: Int, @Header("Authorization") token: String?)
 }
