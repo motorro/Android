@@ -5,6 +5,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.authenticate
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.NotFoundException
@@ -30,6 +32,8 @@ fun main() {
         }
     ).start(wait = true)
 }
+
+private const val ADMIN_AREA = "admin-area"
 
 fun Application.module(users: Users) {
 
@@ -58,6 +62,9 @@ fun Application.module(users: Users) {
             call.respond(HttpStatusCode.NotFound, "Not found")
         }
     }
+    install(Authentication) {
+        stubBearer(ADMIN_AREA)
+    }
     routing {
         openAPI(path="openapi", swaggerFile = "openapi/documentation.yaml")
 
@@ -65,13 +72,15 @@ fun Application.module(users: Users) {
             call.respond(users.getUsers())
         }
 
-        post("/users") {
-            call.respond(users.addUser(call.receive<Profile>()))
-        }
+        authenticate(ADMIN_AREA) {
+            post("/users") {
+                call.respond(users.addUser(call.receive<Profile>()))
+            }
 
-        delete("users/{id}") {
-            users.deleteUser(call.parameters["id"]?.toIntOrNull() ?: throw IllegalArgumentException("Invalid user id"))
-            call.respond(HttpStatusCode.NoContent)
+            delete("users/{id}") {
+                users.deleteUser(call.parameters["id"]?.toIntOrNull() ?: throw IllegalArgumentException("Invalid user id"))
+                call.respond(HttpStatusCode.NoContent)
+            }
         }
 
         get("/profiles/{id}") {

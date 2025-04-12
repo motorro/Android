@@ -6,6 +6,7 @@ import com.motorro.network.data.User
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.accept
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -134,6 +135,7 @@ class ApplicationTest {
             module(users)
         }
         val response = prepareClient().post("/users") {
+            bearerAuth(TOKEN)
             contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
             setBody(profile)
@@ -148,11 +150,27 @@ class ApplicationTest {
     }
 
     @Test
+    fun failsToAddIfNotAuthenticated() = testApplication {
+        application {
+            module(users)
+        }
+        val response = prepareClient().post("/users") {
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Application.Json)
+            setBody(profile)
+        }
+
+        assertEquals(HttpStatusCode.Unauthorized, response.status)
+        verify(exactly = 0) { users.addUser(any()) }
+    }
+
+    @Test
     fun deletesUser() = testApplication {
         application {
             module(users)
         }
         val response = prepareClient().delete("/users/${profile.userId}") {
+            bearerAuth(TOKEN)
             accept(ContentType.Application.Json)
         }
 
@@ -166,9 +184,23 @@ class ApplicationTest {
             module(users)
         }
         val response = prepareClient().delete("/users/100500") {
+            bearerAuth(TOKEN)
             accept(ContentType.Application.Json)
         }
 
         assertEquals(HttpStatusCode.NotFound, response.status)
+    }
+
+    @Test
+    fun failsToDeleteOnNotAuthenticated() = testApplication {
+        application {
+            module(users)
+        }
+        val response = prepareClient().delete("/users/100500") {
+            accept(ContentType.Application.Json)
+        }
+
+        assertEquals(HttpStatusCode.Unauthorized, response.status)
+        verify(exactly = 0) { users.deleteUser(profile.userId) }
     }
 }

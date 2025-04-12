@@ -9,6 +9,8 @@ import kotlin.time.Instant
 
 const val SERVER_HOST = "0.0.0.0"
 const val SERVER_PORT = 8080
+internal const val TOKEN = "token123"
+internal const val ADMIN = "admin"
 
 val profiles = listOf(
     Profile(
