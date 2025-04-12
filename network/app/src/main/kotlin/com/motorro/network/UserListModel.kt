@@ -10,6 +10,7 @@ import com.motorro.network.data.Phone
 import com.motorro.network.data.Profile
 import com.motorro.network.data.UserListItem
 import com.motorro.network.net.usecase.CreateUser
+import com.motorro.network.net.usecase.DeleteUser
 import com.motorro.network.net.usecase.GetUserList
 import com.motorro.network.session.SessionManager
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,7 +28,8 @@ import kotlin.time.Instant
 class UserListModel(
     private val sessionManager: SessionManager,
     private val getUserList: GetUserList,
-    private val createUser: CreateUser
+    private val createUser: CreateUser,
+    private val delete: DeleteUser
 ): ViewModel() {
 
     private val refresh = MutableSharedFlow<Unit>()
@@ -73,8 +75,15 @@ class UserListModel(
             }
     }
 
-    fun deleteUser(userId: Int) {
+    fun deleteUser(userId: Int) = viewModelScope.launch {
+        Log.d(TAG, "Deleting user: $userId")
 
+        delete(userId)
+            .onFailure { Log.e(TAG, "Failed to delete user: $it") }
+            .onSuccess {
+                Log.d(TAG, "User deleted: $it")
+                refresh.emit(Unit)
+            }
     }
 
     private suspend fun loadUserList(): List<UserListItem> {
@@ -94,7 +103,8 @@ class UserListModel(
                 return UserListModel(
                     app.sessionManager,
                     app.getUserList,
-                    app.createUser
+                    app.createUser,
+                    app.deleteUser
                 ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")

@@ -6,6 +6,7 @@ import com.motorro.network.net.UserApi
 import com.motorro.network.net.createAppHttpClient
 import com.motorro.network.net.createAppRetrofit
 import com.motorro.network.net.usecase.CreateUser
+import com.motorro.network.net.usecase.DeleteUser
 import com.motorro.network.net.usecase.GetProfile
 import com.motorro.network.net.usecase.GetUserList
 import com.motorro.network.session.SessionManager
@@ -31,8 +32,12 @@ class App : Application() {
         retrofit.create(UserApi::class.java)
     }
 
+    val sessionManager: SessionManager by lazy {
+        SessionManager.Impl()
+    }
+
     val getUserList: GetUserList by lazy {
-        GetUserList.Impl(userApi)
+        GetUserList.Impl(userApi, sessionManager)
     }
 
     val getProfile: GetProfile by lazy {
@@ -43,8 +48,8 @@ class App : Application() {
         CreateUser.Impl(userApi)
     }
 
-    val sessionManager: SessionManager by lazy {
-        SessionManager.Impl()
+    val deleteUser: DeleteUser by lazy {
+        DeleteUser.Impl(userApi)
     }
 }
 
