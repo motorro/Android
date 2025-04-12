@@ -45,11 +45,11 @@ class App : Application() {
     }
 
     val createUser: CreateUser by lazy {
-        CreateUser.Impl(userApi)
+        CreateUser.Impl(userApi, sessionManager)
     }
 
     val deleteUser: DeleteUser by lazy {
-        DeleteUser.Impl(userApi)
+        DeleteUser.Impl(userApi, sessionManager)
     }
 }
 
