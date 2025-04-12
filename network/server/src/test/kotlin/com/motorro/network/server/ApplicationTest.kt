@@ -7,15 +7,19 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.accept
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.plugins.NotFoundException
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.serialization.json.Json
 import java.net.URI
 import kotlin.test.Test
@@ -35,6 +39,8 @@ class ApplicationTest {
         userpic = URI("https://example.com/userpic.jpg")
     )
 
+    private val newProfileId = 100500
+
     private val user = User(
         userId = profile.userId,
         name = profile.name,
@@ -50,6 +56,14 @@ class ApplicationTest {
             } else {
                 throw NotFoundException("User with id $userId not found")
             }
+        }
+        every { addUser(any()) } answers {
+            val newProfile = firstArg<Profile>()
+            user.copy(
+                userId = newProfileId,
+                name = newProfile.name,
+                userpic = newProfile.userpic
+            )
         }
     }
 
@@ -103,5 +117,24 @@ class ApplicationTest {
         }
 
         assertEquals(HttpStatusCode.NotFound, response.status)
+    }
+
+    @Test
+    fun addsUser() = testApplication {
+        application {
+            module(users)
+        }
+        val response = prepareClient().post("/users") {
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Application.Json)
+            setBody(profile)
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        verify { users.addUser(profile) }
+        assertEquals(
+            user.copy(userId = newProfileId),
+            json.decodeFromString(response.bodyAsText())
+        )
     }
 }
