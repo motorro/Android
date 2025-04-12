@@ -1,7 +1,6 @@
 package com.motorro.network.net
 
 import com.motorro.network.data.User
-import retrofit2.Response
 import retrofit2.http.GET
 
 /**
@@ -12,5 +11,5 @@ interface UserApi {
      * Returns a list of users
      */
     @GET("users")
-    suspend fun getUserList(): Response<List<User>>
+    suspend fun getUserList(): Result<List<User>>
 }
