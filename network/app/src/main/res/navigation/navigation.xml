@@ -9,5 +9,18 @@
         android:id="@+id/userListFragment"
         android:name="com.motorro.network.UserListFragment"
         android:label="@string/title_user_list"
-        tools:layout="@layout/fragment_user_list" />
+        tools:layout="@layout/fragment_user_list" >
+        <action
+            android:id="@+id/user_list_to_profile"
+            app:destination="@id/viewProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewProfileFragment"
+        android:name="com.motorro.network.ViewProfileFragment"
+        android:label="@string/title_view_profile"
+        tools:layout="@layout/fragment_view_profile" >
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +43,11 @@ class UserListFragment : Fragment(), WithViewBinding<FragmentUserListBinding> by
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = UserAdapter(
-            onSelect = { /* TODO */ },
+            onSelect = {
+                findNavController().navigate(
+                    UserListFragmentDirections.userListToProfile(it)
+                )
+            },
             onDelete = { model.deleteUser(it) }
         )
         withBinding {

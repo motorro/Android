@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Network</string>
     <string name="title_user_list">Users</string>
+    <string name="title_view_profile">Profile</string>
     <string name="desc_delete_user">Delete user %s</string>
+    <string name="desc_userpic">Userpic</string>
+    <string name="text_loading">Loading...</string>
 </resources>
