@@ -14,5 +14,6 @@ fun createAppRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
         .baseUrl(Config.getBaseUrl())
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .addCallAdapterFactory(ResultAdapterFactory())
         .build()
 }
