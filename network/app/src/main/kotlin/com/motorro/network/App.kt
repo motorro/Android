@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import com.motorro.network.net.UserApi
 import com.motorro.network.net.createAppHttpClient
 import com.motorro.network.net.createAppRetrofit
+import com.motorro.network.net.usecase.CreateUser
 import com.motorro.network.net.usecase.GetProfile
 import com.motorro.network.net.usecase.GetUserList
+import com.motorro.network.session.SessionManager
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 
@@ -35,6 +37,14 @@ class App : Application() {
 
     val getProfile: GetProfile by lazy {
         GetProfile.Impl(userApi)
+    }
+
+    val createUser: CreateUser by lazy {
+        CreateUser.Impl(userApi)
+    }
+
+    val sessionManager: SessionManager by lazy {
+        SessionManager.Impl()
     }
 }
 
