@@ -14,8 +14,12 @@ import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 
 class App : Application() {
+    val sessionManager: SessionManager by lazy {
+        SessionManager.Impl()
+    }
+
     val okHttp: OkHttpClient by lazy {
-        createAppHttpClient()
+        createAppHttpClient(sessionManager)
     }
 
     val json = Json {
@@ -30,10 +34,6 @@ class App : Application() {
 
     val userApi: UserApi by lazy {
         retrofit.create(UserApi::class.java)
-    }
-
-    val sessionManager: SessionManager by lazy {
-        SessionManager.Impl()
     }
 
     val getUserList: GetUserList by lazy {
