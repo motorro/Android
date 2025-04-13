@@ -9,5 +9,6 @@ import java.util.concurrent.TimeUnit
 fun createAppHttpClient(): OkHttpClient {
     return OkHttpClient.Builder()
         .callTimeout(10, TimeUnit.SECONDS)
+        .addInterceptor(LoggingInterceptor())
         .build()
 }
