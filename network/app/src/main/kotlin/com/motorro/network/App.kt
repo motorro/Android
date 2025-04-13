@@ -2,9 +2,11 @@ package com.motorro.network
 
 import android.app.Application
 import androidx.fragment.app.Fragment
+import com.motorro.network.net.KtorUserApi
 import com.motorro.network.net.UserApi
 import com.motorro.network.net.createAppHttpClient
 import com.motorro.network.net.createAppRetrofit
+import com.motorro.network.net.ktorAppHttpClient
 import com.motorro.network.net.usecase.CreateUser
 import com.motorro.network.net.usecase.DeleteUser
 import com.motorro.network.net.usecase.GetProfile
@@ -32,8 +34,16 @@ class App : Application() {
         createAppRetrofit(okHttp, json)
     }
 
+    val ktorClient by lazy {
+        ktorAppHttpClient(sessionManager, json)
+    }
+
     val userApi: UserApi by lazy {
-        retrofit.create(UserApi::class.java)
+        // Retrofit
+        // retrofit.create(UserApi::class.java)
+
+        // Ktor
+        KtorUserApi(ktorClient)
     }
 
     val getUserList: GetUserList by lazy {
