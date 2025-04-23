@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_grid">8dp</dimen>
+    <dimen name="margin_horizontal">16dp</dimen>
+    <dimen name="margin_horizontal_small">8dp</dimen>
+    <dimen name="margin_vertical">16dp</dimen>
+    <dimen name="margin_vertical_small">8dp</dimen>
+    <dimen name="rounded_corners">16dp</dimen>
+    <dimen name="image_thm_w">180dp</dimen>
+    <dimen name="image_thm_h">270dp</dimen>
+    <dimen name="image_notification">96dp</dimen>
+</resources>
