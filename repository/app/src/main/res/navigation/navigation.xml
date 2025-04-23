@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/bookListFragment">
+
+    <fragment
+        android:id="@+id/bookListFragment"
+        android:name="com.motorro.repository.BookListFragment"
+        android:label="@string/title_book_list"
+        tools:layout="@layout/fragment_book_list" >
+        <action
+            android:id="@+id/book_list_to_book"
+            app:destination="@id/bookFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookFragment"
+        android:name="com.motorro.repository.BookFragment"
+        android:label="@string/title_book"
+        tools:layout="@layout/fragment_book" >
+        <argument
+            android:name="bookId"
+            app:argType="string" />
+    </fragment>
+</navigation>
