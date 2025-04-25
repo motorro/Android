@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+boundary View
+control Repository
+database Room
+boundary Network
+
+View -> Repository: bookList
+Repository ->  Room: getBooks()
+Repository <--  Room: fromDb
+View <- Repository: Content(fromDb)
+alt list is empty
+    View <- Repository: Loading(fromDb)
+    Repository -> Network: getBooks()
+    Repository <-- Network: fromNetwork
+    Repository -> Room: insertBooks(fromNetwork)
+    Repository <--  Room: fromDb
+    note left
+        Room flow update
+    end note
+    View <- Repository: Content(fromDb)
+end
+
+@enduml
