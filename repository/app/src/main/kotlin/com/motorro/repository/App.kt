@@ -9,6 +9,7 @@ import com.motorro.repository.net.KtorBooksApi
 import com.motorro.repository.net.createAppHttpClient
 import com.motorro.repository.net.ktorAppHttpClient
 import com.motorro.repository.repository.BookListRepository
+import com.motorro.repository.repository.BookRepository
 import com.motorro.repository.usecase.GetBook
 import com.motorro.repository.usecase.GetBookList
 import kotlinx.serialization.json.Json
@@ -44,12 +45,16 @@ class App : Application() {
         BookListRepository.Impl(booksDao, booksApi)
     }
 
+    val bookRepository: BookRepository by lazy {
+        BookRepository.Impl(booksDao, booksApi)
+    }
+
     val getBookList: GetBookList by lazy {
         GetBookList.Impl(bookListRepository)
     }
 
     val getBook: GetBook by lazy {
-        GetBook.Impl(booksApi)
+        GetBook.Impl(bookRepository)
     }
 }
 
