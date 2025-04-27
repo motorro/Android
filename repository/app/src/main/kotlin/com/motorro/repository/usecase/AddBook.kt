@@ -1,10 +1,7 @@
 package com.motorro.repository.usecase
 
-import com.motorro.repository.data.Book
 import com.motorro.repository.data.NewBook
-import com.motorro.repository.net.BooksApi
-import kotlin.time.Clock
-import kotlin.uuid.Uuid
+import com.motorro.repository.repository.BookRepository
 
 /**
  * Use case to add a book.
@@ -17,16 +14,9 @@ interface AddBook {
      */
     suspend operator fun invoke(book: NewBook)
 
-    class Impl(private val booksApi: BooksApi) : AddBook {
+    class Impl(private val bookRepository: BookRepository) : AddBook {
         override suspend fun invoke(book: NewBook) {
-            booksApi.addBook(Book(
-                id = Uuid.random(),
-                title = book.title,
-                authors = book.authors,
-                summary = book.summary,
-                cover = book.cover,
-                datePublished = Clock.System.now()
-            )).getOrThrow()
+            bookRepository.addBook(book)
         }
     }
 }

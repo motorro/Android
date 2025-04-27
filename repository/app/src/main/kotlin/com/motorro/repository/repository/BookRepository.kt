@@ -3,11 +3,13 @@ package com.motorro.repository.repository
 import com.motorro.core.lce.LceState
 import com.motorro.repository.data.Book
 import com.motorro.repository.data.BookLceState
+import com.motorro.repository.data.NewBook
 import com.motorro.repository.db.dao.BooksDao
 import com.motorro.repository.db.entity.hasBookInfo
 import com.motorro.repository.db.entity.toDomain
 import com.motorro.repository.db.entity.toEntity
 import com.motorro.repository.net.BooksApi
+import com.motorro.repository.usecase.AddBookWorker
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -32,9 +34,18 @@ interface BookRepository {
      */
     suspend fun synchronize()
 
+    /**
+     * Adds a new book
+     * @param book New book to be added
+     */
+    suspend fun addBook(book: NewBook)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    class Impl(private val booksDao: BooksDao, private val booksApi: BooksApi) : BookRepository {
+    class Impl(
+        private val booksDao: BooksDao,
+        private val booksApi: BooksApi,
+        private val addBookWorker: AddBookWorker
+    ) : BookRepository {
 
         // Manual refresh flow
         private val refresh = MutableSharedFlow<Unit>()
@@ -78,6 +89,13 @@ interface BookRepository {
                     soFar
                 ))
             }
+        }
+
+        override suspend fun addBook(book: NewBook) {
+            // 1. Add book to local DB
+            val bookId = booksDao.insertBook(book)
+            // 2. Schedule adding to API
+            addBookWorker.schedule(bookId)
         }
 
         override suspend fun synchronize() {
