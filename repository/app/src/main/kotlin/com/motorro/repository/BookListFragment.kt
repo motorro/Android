@@ -87,6 +87,11 @@ class BookListFragment : Fragment(), WithViewBinding<FragmentBookListBinding> by
             btnRefresh.setOnClickListener {
                 model.refresh()
             }
+            btnAddBook.setOnClickListener {
+                findNavController().navigate(
+                    BookListFragmentDirections.bookListToAddBook()
+                )
+            }
         }
         viewLifecycleOwner.lifecycle.coroutineScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
