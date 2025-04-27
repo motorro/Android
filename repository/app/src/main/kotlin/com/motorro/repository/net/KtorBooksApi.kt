@@ -5,7 +5,11 @@ import com.motorro.repository.data.ListBook
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.appendPathSegments
+import io.ktor.http.contentType
 import kotlin.uuid.Uuid
 
 /**
@@ -31,6 +35,19 @@ class KtorBooksApi(private val httpClient: HttpClient) : BooksApi {
             url {
                 appendPathSegments("books", bookId.toString())
             }
+        }.body()
+    }
+
+    /**
+     * Adds a new book
+     */
+    override suspend fun addBook(book: Book): Result<Book> = coRunCatching{
+        httpClient.post(Config.getBaseUrl().toUrl()) {
+            url {
+                appendPathSegments("books")
+            }
+            contentType(ContentType.Application.Json)
+            setBody(book)
         }.body()
     }
 }

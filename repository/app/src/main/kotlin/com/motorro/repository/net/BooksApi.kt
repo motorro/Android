@@ -17,4 +17,9 @@ interface BooksApi {
      * Returns a full book data
      */
     suspend fun getBook(bookId: Uuid): Result<Book>
+
+    /**
+     * Adds a new book
+     */
+    suspend fun addBook(book: Book): Result<Book>
 }

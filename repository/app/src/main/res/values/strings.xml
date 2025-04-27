@@ -2,6 +2,7 @@
     <string name="app_name">Repository</string>
     <string name="title_book_list">Books</string>
     <string name="title_book">Book</string>
+    <string name="title_add_book">Add Book</string>
     <string name="title_create">Create</string>
     <string name="desc_cover">Book cover: %s</string>
     <string name="desc_add">Add book</string>
@@ -9,5 +10,11 @@
     <string name="btn_save">Save</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_refresh">Refresh</string>
+    <string name="btn_next">Next picture</string>
+    <string name="btn_prev">Previous picture</string>
     <string name="error_loading_data">Error loading data</string>
+    <string name="hint_title">Book title</string>
+    <string name="hint_authors">Authors</string>
+    <string name="hint_summary">Summary</string>
+    <string name="btn_retry">Retry</string>
 </resources>
