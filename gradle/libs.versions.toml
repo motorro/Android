@@ -49,8 +49,10 @@ protobuf = "4.30.1"
 protobufPlugin = "0.9.4"
 crypto = "1.0.0"
 sqlite = "2.4.0"
+sqlite-jdbc = "3.44.1.0"
 okhttp = "5.0.0-alpha.14"
 retrofit = "2.11.0"
+exposed = "0.60.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -138,6 +140,11 @@ okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor",
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlinSerialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -152,4 +159,12 @@ google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+
+[bundles]
+exposed = [
+    "exposed-core",
+    "exposed-jdbc",
+    "exposed-dao",
+    "exposed-kotlin-datetime"
+]
 
