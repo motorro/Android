@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/class-diagram
+hide empty members
+
+interface RecipeRepository {
+    +recipes : Flow<RecipeListLce>
+    +categories : Flow<List<RecipeCategory>>
+    +getRecipe(id: Uuid) : Flow<RecipeLce>
+    +synchronizeList() : void
+    +synchronizeRecipe(id: Uuid) : void
+    +addRecipe(recipe: NewRecipe) : void
+    +deleteRecipe(id: Uuid) : void
+}
+
+class CookbookViewModel
+CookbookViewModel -right-> RecipeRepository
+
+class RecipeViewModel
+RecipeViewModel -left-> RecipeRepository
+
+interface RecipeListUsecase
+interface RecipeUsecase
+
+RecipeRepository --> RecipeListUsecase
+RecipeRepository --> RecipeUsecase
+
+interface CookbookApi
+note left of CookbookApi
+    Network interface
+end note
+
+RecipeListUsecase --> CookbookApi
+RecipeUsecase --> CookbookApi
+
+interface CookbookDao
+note right of CookbookDao
+    Local database
+end note
+
+RecipeListUsecase --> CookbookDao
+RecipeUsecase --> CookbookDao
+
+
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User
+boundary Screen
+control SessionManager
+database SessionStorage
+
+User -> Screen: open
+Screen -> SessionManager: get session
+SessionManager -> SessionStorage: get session
+SessionManager <-- SessionStorage: get session
+Screen <-- SessionManager: get session
+alt active session
+    Screen -> User: show content
+else
+    Screen -> User: show login
+end
+
+@enduml

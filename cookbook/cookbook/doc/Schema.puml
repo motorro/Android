@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+entity "recipes" as ListRecipeEntity {
+    *userId : UserId
+    *recipeId : Uuid
+    title : String
+    categoryName : String
+    imageUrl : String?
+    dateTimeCreated : Instant
+    deleted : Boolean
+    --
+    PRIMARY KEY (userId, recipeId)
+}
+
+entity "recipe_details" as RecipeDataEntity {
+    *userId : UserId
+    *recipeId : Uuid
+    description : String
+    --
+    PRIMARY KEY (userId, recipeId)
+}
+
+ListRecipeEntity "1" -> "0..1" RecipeDataEntity : "userId, recipeId"
+@enduml

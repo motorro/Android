@@ -1,0 +1,23 @@
+@startuml
+hide empty members
+
+interface SessionManager {
+    +session: StateFlow<Session>
+    +login(username: String, password: String): Result<Profile>
+    +logout()
+}
+
+interface SessionStorage {
+    +session: Flow<Session>
+    +update(session: Session)
+}
+
+SessionManager -> SessionStorage: Stores session
+
+interface UserApi {
+    +getProfile(username: String, password: String): Profile
+}
+
+SessionManager --> UserApi: Uses to call the server
+
+@enduml
