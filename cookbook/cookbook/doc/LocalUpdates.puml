@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User
+boundary Screen
+control Repository
+database Room
+boundary Network
+
+== Creating recipe ==
+User -> Screen: create
+Screen -> Repository: create
+Repository -> Room: create
+Repository <-- Room: data
+Screen <-- Repository: data
+User <-- Screen: data
+
+== Sync to server ==
+Repository -> Network: create
+Repository <-- Network: data
+Repository -> Room: save data
+Repository <-- Room: data
+
+@enduml

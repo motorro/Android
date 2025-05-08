@@ -1,6 +1,6 @@
 openapi: 3.0.4
 info:
-  title: Users API
+  title: Cookbook API
   description: Sample server for IO practice.
   version: 1.0.0
 

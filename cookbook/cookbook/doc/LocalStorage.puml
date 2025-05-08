@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User
+boundary Screen
+control Repository
+database Room
+boundary Network
+
+== Subscription ==
+User -> Screen: open
+Screen -> Repository: subscribe
+Repository -> Room: subscribe
+Repository <-- Room: data
+Screen <-- Repository: data
+User <-- Screen: data
+
+== Update ==
+Repository -> Network: get data
+Repository <-- Network: data
+Repository -> Room: save data
+Repository <-- Room: data
+note right
+    Reactive update
+end note
+Screen <-- Repository: data
+User <-- Screen: data
+
+
+@enduml
