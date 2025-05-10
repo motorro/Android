@@ -7,7 +7,7 @@ import com.motorro.cookbook.app.net.okhttp
 import com.motorro.cookbook.app.net.retrofit
 import com.motorro.cookbook.app.repository.MockRepository
 import com.motorro.cookbook.app.repository.RecipeRepository
-import com.motorro.cookbook.app.session.MemorySessionStorage
+import com.motorro.cookbook.app.session.DatastoreSessionStorage
 import com.motorro.cookbook.app.session.RetrofitUserApiImpl
 import com.motorro.cookbook.app.session.RetrofitUserService
 import com.motorro.cookbook.app.session.SessionManager
@@ -50,7 +50,7 @@ class App : Application() {
      * Session manager
      */
     val sessionManager: SessionManager by lazy {
-        SessionManager.Impl(MemorySessionStorage(), userApi(), GlobalScope)
+        SessionManager.Impl(DatastoreSessionStorage(this), userApi(), GlobalScope)
     }
 
     /**

@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlinSerialization)
 
+    // Datastore
+    implementation(libs.androidx.datastore.ptoto)
 
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)
