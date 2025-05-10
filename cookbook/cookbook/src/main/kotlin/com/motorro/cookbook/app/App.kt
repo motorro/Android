@@ -2,16 +2,22 @@ package com.motorro.cookbook.app
 
 import android.app.Application
 import com.motorro.cookbook.app.net.Config
+import com.motorro.cookbook.app.net.ktorHttp
 import com.motorro.cookbook.app.net.lenientJson
 import com.motorro.cookbook.app.net.okhttp
 import com.motorro.cookbook.app.net.retrofit
-import com.motorro.cookbook.app.repository.MockRepository
+import com.motorro.cookbook.app.repository.CookbookApi
+import com.motorro.cookbook.app.repository.KtorCookbookApi
 import com.motorro.cookbook.app.repository.RecipeRepository
+import com.motorro.cookbook.app.repository.RecipeRepositoryImpl
+import com.motorro.cookbook.app.repository.usecase.RecipeListUsecase
+import com.motorro.cookbook.app.repository.usecase.RecipeListUsecaseImpl
 import com.motorro.cookbook.app.session.DatastoreSessionStorage
 import com.motorro.cookbook.app.session.RetrofitUserApiImpl
 import com.motorro.cookbook.app.session.RetrofitUserService
 import com.motorro.cookbook.app.session.SessionManager
 import com.motorro.cookbook.app.session.UserApi
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.serialization.json.Json
@@ -24,6 +30,8 @@ import retrofit2.Retrofit
 @OptIn(DelicateCoroutinesApi::class)
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 class App : Application() {
+
+
 
     /**
      * Json instance
@@ -42,6 +50,9 @@ class App : Application() {
         retrofit(okHttpClient(), json(), Config.getBaseUrl())
     }
 
+    /**
+     * User API
+     */
     fun userApi(): UserApi = RetrofitUserApiImpl(
         authRetrofit.create(RetrofitUserService::class.java)
     )
@@ -54,9 +65,26 @@ class App : Application() {
     }
 
     /**
+     * Ktor HTTP client
+     */
+    fun httpClient(): HttpClient = ktorHttp(okHttpClient(), json(), sessionManager)
+
+    /**
+     * Cookbook network API
+     */
+    fun cookbookApi(): CookbookApi = KtorCookbookApi(httpClient(), Config.getBaseUrl().toUrl())
+
+    /**
+     * Recipe-list use-case
+     */
+    val recipeListUsecase: RecipeListUsecase by lazy {
+        RecipeListUsecaseImpl(sessionManager, cookbookApi(), GlobalScope)
+    }
+
+    /**
      * The recipe repository.
      */
     val recipeRepository: RecipeRepository by lazy {
-        MockRepository(sessionManager)
+        RecipeRepositoryImpl(recipeListUsecase)
     }
 }

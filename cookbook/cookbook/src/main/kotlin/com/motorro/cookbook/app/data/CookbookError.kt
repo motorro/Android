@@ -16,3 +16,12 @@ sealed class CookbookError : Throwable() {
         override val message: String = cause.message ?: "Unknown error"
     }
 }
+
+/**
+ * Checks we have some meaningful error or something that we don't know
+ * how to handle
+ */
+fun Throwable.toCookbookError(): CookbookError = when(this) {
+    is CookbookError -> this
+    else -> CookbookError.Unknown(this)
+}
