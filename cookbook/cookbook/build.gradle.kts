@@ -62,6 +62,14 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.glide)
 
+    // OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinSerialization)
+
+
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
