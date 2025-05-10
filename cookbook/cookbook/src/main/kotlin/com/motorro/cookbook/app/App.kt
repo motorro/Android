@@ -8,8 +8,10 @@ import com.motorro.cookbook.app.net.retrofit
 import com.motorro.cookbook.app.repository.MockRepository
 import com.motorro.cookbook.app.repository.RecipeRepository
 import com.motorro.cookbook.app.session.MemorySessionStorage
-import com.motorro.cookbook.app.session.MockUserApi
+import com.motorro.cookbook.app.session.RetrofitUserApiImpl
+import com.motorro.cookbook.app.session.RetrofitUserService
 import com.motorro.cookbook.app.session.SessionManager
+import com.motorro.cookbook.app.session.UserApi
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.serialization.json.Json
@@ -40,11 +42,15 @@ class App : Application() {
         retrofit(okHttpClient(), json(), Config.getBaseUrl())
     }
 
+    fun userApi(): UserApi = RetrofitUserApiImpl(
+        authRetrofit.create(RetrofitUserService::class.java)
+    )
+
     /**
      * Session manager
      */
     val sessionManager: SessionManager by lazy {
-        SessionManager.Impl(MemorySessionStorage(), MockUserApi(), GlobalScope)
+        SessionManager.Impl(MemorySessionStorage(), userApi(), GlobalScope)
     }
 
     /**
