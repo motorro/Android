@@ -26,3 +26,5 @@ plugins {
 rootProject.name = "Android"
 include(":core")
 include(":composecore")
+include(":cookbook:data")
+include(":cookbook:server")

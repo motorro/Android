@@ -1,0 +1,214 @@
+openapi: 3.0.4
+info:
+  title: Users API
+  description: Sample server for IO practice.
+  version: 1.0.0
+
+servers:
+  - url: 0.0.0.0:8080
+    description: Local server
+
+security:
+  - userArea: [ ]
+
+paths:
+  /profile:
+    get:
+      operationId: getProfile
+      summary: Returns user profile.
+      description: Returns the profile of the user.
+      responses:
+        200:
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        401:
+          description: Unauthorized
+
+  /recipes:
+    get:
+      operationId: getRecipes
+      summary: Returns a list of recipes.
+      description: Lists all recipes in the database.
+      responses:
+        200:
+          description: A list of recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListRecipe'
+    post:
+      operationId: addRecipe
+      summary: Adds new recipe
+      description: Adds a new recipe to the database.
+      requestBody:
+        description: Recipe to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+      responses:
+        200:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        401:
+          description: Unauthorized
+
+  /recipes/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      operationId: getRecipe
+      summary: Complete recipe.
+      description: Returns full recipe.
+      responses:
+        200:
+          description: A complete recipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        401:
+          description: Unauthorized
+        404:
+          description: Recipe not found
+
+    delete:
+      operationId: deleteRecipe
+      summary: Delete recipe
+      description: Deletes a recipe from the system.
+      responses:
+        204:
+          description: Recipe deleted
+        404:
+          description: Recipe not found
+        401:
+          description: Unauthorized
+
+  /recipes/{id}/image:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    put:
+      operationId: uploadRecipeImage
+      summary: Upload image
+      description: Uploads an image for the recipe.
+      requestBody:
+        content:
+          image/png:
+            schema:
+              type: string
+              format: binary
+      responses:
+        200:
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imageUrl:
+                    type: string
+                    format: uri
+                    description: URI string for the uploaded image
+                    example: https://example.com/picture.jpg
+        404:
+          description: Recipe not found
+        401:
+          description: Unauthorized
+
+components:
+  schemas:
+
+    Profile:
+      type: object
+      description: User profile
+      required:
+        - id
+        - name
+      properties:
+        id:
+          description: Unique identifier for the user
+          type: number
+          format: int64
+          minimum: 1
+          example: 1
+        name:
+          description: User name
+          type: string
+          example: Ivan Ivanov
+
+    RecipeId:
+      type: string
+      format: uuid
+      description: Unique identifier for the recipe
+      example: 2ea32889-53a1-4d32-8f6b-25c5098d9816
+
+    ListRecipe:
+      type: object
+      description: Recipe object for the list
+      required:
+        - id
+        - title
+        - category
+        - dateTimeCreated
+        - deleted
+      properties:
+        id:
+          $ref: '#/components/schemas/RecipeId'
+        title:
+          type: string
+          description: Recipe title
+          example: Spaghetti Bolognese
+        category:
+          type: string
+          description: Recipe category
+          example: Pasta
+        imageUrl:
+          type: string
+          format: uri
+          description: URI string for the recipe image
+          example: https://example.com/picture.jpg
+        dateTimeCreated:
+          type: string
+          format: date-time
+          description: Recipe description
+          example: 2023-10-01T12:00:00Z
+        deleted:
+          type: boolean
+          description: Indicates if the recipe is deleted
+          example: false
+
+    Recipe:
+      allOf:
+        - $ref: '#/components/schemas/ListRecipe'
+        - type: object
+          description: Complete recipe object
+          required:
+            - description
+          properties:
+            description:
+              type: string
+              description: Recipe description
+              example: Take a large pot of salted water and bring to a boil. Add the pasta and cook according to package instructions. Drain and set aside.
+
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Unique identifier for the recipe
+      required: true
+      schema:
+        $ref: '#/components/schemas/RecipeId'
+
+  securitySchemes:
+    userArea:
+      type: http
+      scheme: basic
