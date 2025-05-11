@@ -4,7 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.motorro.cookbook.app.db.entity.ListRecipeEntity
+import com.motorro.cookbook.app.db.entity.RecipeData
+import com.motorro.cookbook.app.db.entity.RecipeDataEntity
 import com.motorro.cookbook.data.RecipeCategory
 import kotlinx.coroutines.flow.Flow
 
@@ -18,6 +21,15 @@ interface CookbookDao {
     suspend fun insertList(list: List<ListRecipeEntity>)
 
     /**
+     * Inserts recipe
+     * @param recipe Main recipe data
+     * @param details Recipe details
+     */
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(recipe: ListRecipeEntity, details: RecipeDataEntity)
+
+    /**
      * Returns a list of non-deleted recipes for the user
      * @param userId User ID
      */
@@ -28,6 +40,19 @@ interface CookbookDao {
         ORDER BY dateTimeCreated DESC
     """)
     fun list(userId: Int): Flow<List<ListRecipeEntity>>
+
+    /**
+     * Fetches recipe data
+     * @param userId User ID
+     * @param recipeId Recipe ID
+     */
+    @Query("""
+        SELECT *, recipe_details.description AS description FROM recipes
+        LEFT JOIN recipe_details USING (userId, recipeId)
+        WHERE userId = :userId
+        AND recipeId = :recipeId
+    """)
+    fun recipe(userId: Int, recipeId: String): Flow<List<RecipeData>>
 
     /**
      * Deletes recipe in user's cookbook by marking it deleted
