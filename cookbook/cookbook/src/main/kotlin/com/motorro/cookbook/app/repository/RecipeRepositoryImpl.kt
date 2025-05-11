@@ -6,6 +6,7 @@ import com.motorro.cookbook.app.data.RecipeListLce
 import com.motorro.cookbook.app.getWeakOrPut
 import com.motorro.cookbook.app.repository.usecase.AddRecipeUsecase
 import com.motorro.cookbook.app.repository.usecase.CategoriesUsecase
+import com.motorro.cookbook.app.repository.usecase.DeleteRecipeUsecase
 import com.motorro.cookbook.app.repository.usecase.RecipeListUsecase
 import com.motorro.cookbook.app.repository.usecase.RecipeUsecase
 import com.motorro.cookbook.data.RecipeCategory
@@ -20,7 +21,8 @@ class RecipeRepositoryImpl(
     private val recipeListUsecase: RecipeListUsecase,
     private val createRecipeUsecase: RecipeUsecase.Factory,
     private val categoriesUsecase: CategoriesUsecase,
-    private val addRecipeUsecase: AddRecipeUsecase
+    private val addRecipeUsecase: AddRecipeUsecase,
+    private val deleteRecipeUsecase: DeleteRecipeUsecase
 ) : RecipeRepository {
 
     override val recipes: Flow<RecipeListLce> get() = recipeListUsecase.recipes
@@ -49,7 +51,5 @@ class RecipeRepositoryImpl(
 
     override fun addRecipe(recipe: NewRecipe) = addRecipeUsecase(recipe)
 
-    override fun deleteRecipe(id: Uuid) {
-        TODO("Not yet implemented")
-    }
+    override fun deleteRecipe(id: Uuid) = deleteRecipeUsecase(id)
 }
