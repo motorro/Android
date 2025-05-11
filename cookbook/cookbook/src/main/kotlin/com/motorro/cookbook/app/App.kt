@@ -119,7 +119,10 @@ class App : Application() {
     /**
      * Categories use-case
      */
-    fun categoriesUsecase(): CategoriesUsecase = CategoriesUsecaseImpl()
+    fun categoriesUsecase(): CategoriesUsecase = CategoriesUsecaseImpl(
+        sessionManager,
+        recipesDao()
+    )
 
     /**
      * Add recipe use-case
