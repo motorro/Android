@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.motorro.cookbook.app.db.entity.ListRecipeEntity
+import com.motorro.cookbook.data.RecipeCategory
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,4 +28,16 @@ interface CookbookDao {
         ORDER BY dateTimeCreated DESC
     """)
     fun list(userId: Int): Flow<List<ListRecipeEntity>>
+
+    /**
+     * Returns a list of distinct categories found in recipes for the user
+     * @param userId User ID
+     */
+    @Query("""
+        SELECT DISTINCT categoryName FROM recipes
+        WHERE userId = :userId
+        AND deleted = 0
+        ORDER BY categoryName
+    """)
+    fun categories(userId: Int): Flow<List<RecipeCategory>>
 }
