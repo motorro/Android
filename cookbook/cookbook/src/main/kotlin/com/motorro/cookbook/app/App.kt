@@ -12,6 +12,8 @@ import com.motorro.cookbook.app.repository.RecipeRepository
 import com.motorro.cookbook.app.repository.RecipeRepositoryImpl
 import com.motorro.cookbook.app.repository.usecase.RecipeListUsecase
 import com.motorro.cookbook.app.repository.usecase.RecipeListUsecaseImpl
+import com.motorro.cookbook.app.repository.usecase.RecipeUsecase
+import com.motorro.cookbook.app.repository.usecase.RecipeUsecaseImpl
 import com.motorro.cookbook.app.session.DatastoreSessionStorage
 import com.motorro.cookbook.app.session.RetrofitUserApiImpl
 import com.motorro.cookbook.app.session.RetrofitUserService
@@ -23,6 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import kotlin.uuid.Uuid
 
 /**
  * The application. Provides access to dependencies.
@@ -81,10 +84,22 @@ class App : Application() {
         RecipeListUsecaseImpl(sessionManager, cookbookApi(), GlobalScope)
     }
 
+    fun recipeUsecaseFactory(): RecipeUsecase.Factory = object : RecipeUsecase.Factory {
+        override fun invoke(recipeId: Uuid): RecipeUsecase = RecipeUsecaseImpl(
+            recipeId,
+            sessionManager,
+            cookbookApi(),
+            GlobalScope
+        )
+    }
+
     /**
      * The recipe repository.
      */
     val recipeRepository: RecipeRepository by lazy {
-        RecipeRepositoryImpl(recipeListUsecase)
+        RecipeRepositoryImpl(
+            recipeListUsecase,
+            recipeUsecaseFactory()
+        )
     }
 }
