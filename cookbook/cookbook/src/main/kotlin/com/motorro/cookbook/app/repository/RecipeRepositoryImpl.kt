@@ -4,6 +4,8 @@ import com.motorro.cookbook.app.data.NewRecipe
 import com.motorro.cookbook.app.data.RecipeLce
 import com.motorro.cookbook.app.data.RecipeListLce
 import com.motorro.cookbook.app.getWeakOrPut
+import com.motorro.cookbook.app.repository.usecase.AddRecipeUsecase
+import com.motorro.cookbook.app.repository.usecase.CategoriesUsecase
 import com.motorro.cookbook.app.repository.usecase.RecipeListUsecase
 import com.motorro.cookbook.app.repository.usecase.RecipeUsecase
 import com.motorro.cookbook.data.RecipeCategory
@@ -16,7 +18,9 @@ import kotlin.uuid.Uuid
  */
 class RecipeRepositoryImpl(
     private val recipeListUsecase: RecipeListUsecase,
-    private val createRecipeUsecase: RecipeUsecase.Factory
+    private val createRecipeUsecase: RecipeUsecase.Factory,
+    private val categoriesUsecase: CategoriesUsecase,
+    private val addRecipeUsecase: AddRecipeUsecase
 ) : RecipeRepository {
 
     override val recipes: Flow<RecipeListLce> get() = recipeListUsecase.recipes
@@ -41,13 +45,9 @@ class RecipeRepositoryImpl(
             .synchronize()
     }
 
-    override val categories: Flow<List<RecipeCategory>>
-        get() = TODO("Not yet implemented")
+    override val categories: Flow<List<RecipeCategory>> get() = categoriesUsecase.categories
 
-
-    override fun addRecipe(recipe: NewRecipe) {
-        TODO("Not yet implemented")
-    }
+    override fun addRecipe(recipe: NewRecipe) = addRecipeUsecase(recipe)
 
     override fun deleteRecipe(id: Uuid) {
         TODO("Not yet implemented")

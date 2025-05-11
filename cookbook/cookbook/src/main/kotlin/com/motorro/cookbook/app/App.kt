@@ -10,6 +10,10 @@ import com.motorro.cookbook.app.repository.CookbookApi
 import com.motorro.cookbook.app.repository.KtorCookbookApi
 import com.motorro.cookbook.app.repository.RecipeRepository
 import com.motorro.cookbook.app.repository.RecipeRepositoryImpl
+import com.motorro.cookbook.app.repository.usecase.AddRecipeUsecase
+import com.motorro.cookbook.app.repository.usecase.AddRecipeUsecaseImpl
+import com.motorro.cookbook.app.repository.usecase.CategoriesUsecase
+import com.motorro.cookbook.app.repository.usecase.CategoriesUsecaseImpl
 import com.motorro.cookbook.app.repository.usecase.RecipeListUsecase
 import com.motorro.cookbook.app.repository.usecase.RecipeListUsecaseImpl
 import com.motorro.cookbook.app.repository.usecase.RecipeUsecase
@@ -25,6 +29,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import kotlin.time.Clock
 import kotlin.uuid.Uuid
 
 /**
@@ -75,7 +80,11 @@ class App : Application() {
     /**
      * Cookbook network API
      */
-    fun cookbookApi(): CookbookApi = KtorCookbookApi(httpClient(), Config.getBaseUrl().toUrl())
+    fun cookbookApi(): CookbookApi = KtorCookbookApi(
+        context = this,
+        httpClient = httpClient(),
+        baseUrl = Config.getBaseUrl().toUrl()
+    )
 
     /**
      * Recipe-list use-case
@@ -94,12 +103,29 @@ class App : Application() {
     }
 
     /**
+     * Categories use-case
+     */
+    fun categoriesUsecase(): CategoriesUsecase = CategoriesUsecaseImpl()
+
+    /**
+     * Add recipe use-case
+     */
+    fun addRecipeUsecase(): AddRecipeUsecase = AddRecipeUsecaseImpl(
+        sessionManager,
+        cookbookApi(),
+        GlobalScope,
+        Clock.System
+    )
+
+    /**
      * The recipe repository.
      */
     val recipeRepository: RecipeRepository by lazy {
         RecipeRepositoryImpl(
             recipeListUsecase,
-            recipeUsecaseFactory()
+            recipeUsecaseFactory(),
+            categoriesUsecase(),
+            addRecipeUsecase()
         )
     }
 }
