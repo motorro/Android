@@ -14,6 +14,8 @@ import com.motorro.cookbook.app.repository.usecase.AddRecipeUsecase
 import com.motorro.cookbook.app.repository.usecase.AddRecipeUsecaseImpl
 import com.motorro.cookbook.app.repository.usecase.CategoriesUsecase
 import com.motorro.cookbook.app.repository.usecase.CategoriesUsecaseImpl
+import com.motorro.cookbook.app.repository.usecase.DeleteRecipeUsecase
+import com.motorro.cookbook.app.repository.usecase.DeleteRecipeUsecaseImpl
 import com.motorro.cookbook.app.repository.usecase.RecipeListUsecase
 import com.motorro.cookbook.app.repository.usecase.RecipeListUsecaseImpl
 import com.motorro.cookbook.app.repository.usecase.RecipeUsecase
@@ -118,6 +120,15 @@ class App : Application() {
     )
 
     /**
+     * Delete recipe use-case
+     */
+    fun deleteRecipeUsecase(): DeleteRecipeUsecase = DeleteRecipeUsecaseImpl(
+        sessionManager,
+        cookbookApi(),
+        GlobalScope
+    )
+
+    /**
      * The recipe repository.
      */
     val recipeRepository: RecipeRepository by lazy {
@@ -125,7 +136,8 @@ class App : Application() {
             recipeListUsecase,
             recipeUsecaseFactory(),
             categoriesUsecase(),
-            addRecipeUsecase()
+            addRecipeUsecase(),
+            deleteRecipeUsecase()
         )
     }
 }

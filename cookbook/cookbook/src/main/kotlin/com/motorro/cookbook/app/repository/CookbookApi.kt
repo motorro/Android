@@ -3,11 +3,13 @@ package com.motorro.cookbook.app.repository
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
+import com.motorro.cookbook.app.data.toCookbookError
 import com.motorro.cookbook.app.net.request
 import com.motorro.cookbook.data.ImageUpload
 import com.motorro.cookbook.data.ListRecipe
 import com.motorro.cookbook.data.Recipe
 import io.ktor.client.HttpClient
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.FormBuilder
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
@@ -21,6 +23,8 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.appendEncodedPathSegments
 import io.ktor.http.contentType
 import io.ktor.utils.io.streams.asInput
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import java.net.URL
 import kotlin.uuid.Uuid
 
@@ -51,6 +55,12 @@ interface CookbookApi {
      * @param imageUri Image URI
      */
     suspend fun uploadRecipeImage(recipeId: Uuid, imageUri: Uri): Result<ImageUpload>
+
+    /**
+     * Deletes recipe
+     * @param recipeId Recipe ID
+     */
+    suspend fun deleteRecipe(recipeId: Uuid): Result<Unit>
 }
 
 /**
@@ -93,6 +103,16 @@ class KtorCookbookApi(
                 )
             )
         }
+    }
+
+    override suspend fun deleteRecipe(recipeId: Uuid): Result<Unit> = try {
+        httpClient.delete(baseUrl) {
+            url { appendEncodedPathSegments("recipes", recipeId.toString()) }
+        }
+        Result.success(Unit)
+    } catch (e: Throwable) {
+        currentCoroutineContext().ensureActive()
+        throw e.toCookbookError()
     }
 
     /**
