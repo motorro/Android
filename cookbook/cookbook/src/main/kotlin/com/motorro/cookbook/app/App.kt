@@ -139,6 +139,7 @@ class App : Application() {
      */
     fun deleteRecipeUsecase(): DeleteRecipeUsecase = DeleteRecipeUsecaseImpl(
         sessionManager,
+        recipesDao(),
         cookbookApi(),
         GlobalScope
     )
