@@ -111,6 +111,7 @@ class App : Application() {
         override fun invoke(recipeId: Uuid): RecipeUsecase = RecipeUsecaseImpl(
             recipeId,
             sessionManager,
+            recipesDao(),
             cookbookApi(),
             GlobalScope
         )
