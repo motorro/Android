@@ -1,6 +1,7 @@
 package com.motorro.cookbook.app.repository.usecase
 
 import android.util.Log
+import com.motorro.cookbook.app.db.CookbookDao
 import com.motorro.cookbook.app.repository.CookbookApi
 import com.motorro.cookbook.app.session.SessionManager
 import com.motorro.cookbook.app.session.requireUserId
@@ -22,13 +23,14 @@ interface DeleteRecipeUsecase {
 }
 
 /**
- * Delete recipe implementation
+ * Delete recipe implementation. Deletes locally, then synchs to server
  * @param sessionManager Session manager
  * @param cookbookApi Cookbook network API
  * @param scope Coroutine scope to run synchronisation
  */
 class DeleteRecipeUsecaseImpl(
     private val sessionManager: SessionManager,
+    private val cookbookDao: CookbookDao,
     private val cookbookApi: CookbookApi,
     private val scope: CoroutineScope
 ) : DeleteRecipeUsecase {
@@ -48,7 +50,7 @@ class DeleteRecipeUsecaseImpl(
      * Runs creation usecase
      */
     private suspend fun doInvoke(recipeId: Uuid) {
-        sessionManager.requireUserId()
+        cookbookDao.delete(sessionManager.requireUserId().id, recipeId.toString())
         deleteOnServer(recipeId)
         Log.i(TAG, "Deleted recipe: $recipeId")
     }

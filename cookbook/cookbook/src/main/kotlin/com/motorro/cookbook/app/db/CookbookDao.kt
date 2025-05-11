@@ -30,6 +30,19 @@ interface CookbookDao {
     fun list(userId: Int): Flow<List<ListRecipeEntity>>
 
     /**
+     * Deletes recipe in user's cookbook by marking it deleted
+     * @param userId User ID
+     * @param recipeId Recipe ID
+     */
+    @Query("""
+        UPDATE recipes
+        SET deleted = 1
+        WHERE userId = :userId
+        AND recipeId = :recipeId
+    """)
+    suspend fun delete(userId: Int, recipeId: String)
+
+    /**
      * Returns a list of distinct categories found in recipes for the user
      * @param userId User ID
      */
