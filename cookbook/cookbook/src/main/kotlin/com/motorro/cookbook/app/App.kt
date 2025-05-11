@@ -1,6 +1,8 @@
 package com.motorro.cookbook.app
 
 import android.app.Application
+import com.motorro.cookbook.app.db.CookbookDao
+import com.motorro.cookbook.app.db.CookbookDb
 import com.motorro.cookbook.app.net.Config
 import com.motorro.cookbook.app.net.ktorHttp
 import com.motorro.cookbook.app.net.lenientJson
@@ -89,10 +91,20 @@ class App : Application() {
     )
 
     /**
+     * Database instance
+     */
+    val db: CookbookDb by lazy { CookbookDb.create(this) }
+
+    /**
+     * Recipes DAO
+     */
+    fun recipesDao(): CookbookDao = db.recipesDao()
+
+    /**
      * Recipe-list use-case
      */
     val recipeListUsecase: RecipeListUsecase by lazy {
-        RecipeListUsecaseImpl(sessionManager, cookbookApi(), GlobalScope)
+        RecipeListUsecaseImpl(sessionManager, recipesDao(), cookbookApi(), GlobalScope)
     }
 
     fun recipeUsecaseFactory(): RecipeUsecase.Factory = object : RecipeUsecase.Factory {
