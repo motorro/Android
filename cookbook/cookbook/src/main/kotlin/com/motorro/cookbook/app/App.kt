@@ -130,6 +130,7 @@ class App : Application() {
      */
     fun addRecipeUsecase(): AddRecipeUsecase = AddRecipeUsecaseImpl(
         sessionManager,
+        recipesDao(),
         cookbookApi(),
         GlobalScope,
         Clock.System
