@@ -3,9 +3,12 @@ package com.motorro.cookbook.app.repository.usecase
 import android.net.Uri
 import android.util.Log
 import com.motorro.cookbook.app.data.NewRecipe
+import com.motorro.cookbook.app.db.CookbookDao
+import com.motorro.cookbook.app.db.entity.toEntity
 import com.motorro.cookbook.app.repository.CookbookApi
 import com.motorro.cookbook.app.session.SessionManager
 import com.motorro.cookbook.app.session.requireUserId
+import com.motorro.cookbook.data.Image
 import com.motorro.cookbook.data.ImageUpload
 import com.motorro.cookbook.data.Recipe
 import kotlinx.coroutines.CoroutineScope
@@ -27,12 +30,14 @@ interface AddRecipeUsecase {
 /**
  * Add recipe implementation
  * @param sessionManager Session manager
+ * @param cookbookDao Cookbook DAO
  * @param cookbookApi Cookbook network API
  * @param scope Coroutine scope to run synchronisation
  * @param clock Clock instance
  */
 class AddRecipeUsecaseImpl(
     private val sessionManager: SessionManager,
+    private val cookbookDao: CookbookDao,
     private val cookbookApi: CookbookApi,
     private val scope: CoroutineScope,
     private val clock: Clock
@@ -51,7 +56,7 @@ class AddRecipeUsecaseImpl(
      * Runs creation usecase
      */
     private suspend fun doInvoke(newRecipe: NewRecipe) {
-        sessionManager.requireUserId()
+        val userId = sessionManager.requireUserId()
         val recipeId = Uuid.random()
 
         // Common recipe data
@@ -66,9 +71,22 @@ class AddRecipeUsecaseImpl(
             )
         }
 
-        recipe = createRecipe(recipe).copy(
-            image = newRecipe.image?.let { uploadImage(recipeId, it)?.image }
+        val image = newRecipe.image?.let { Image(it.toString()) }
+
+        // 1. Insert to DB to be ready fast with local image
+        recipe.copy(image = image).toEntity(userId).let { (list, data) ->
+            cookbookDao.insert(list, data)
+        }
+
+        // 2. Update server and get back the finalized data
+        recipe = uploadRecipe(recipe).copy(
+            image = image?.let { uploadImage(recipeId, Uri.parse(it.url))?.image }
         )
+
+        // 3. Reset local copy to final data
+        recipe.toEntity(userId).let { (list, data) ->
+            cookbookDao.insert(list, data)
+        }
 
         Log.i(TAG, "Created recipe: $recipe")
     }
@@ -76,7 +94,7 @@ class AddRecipeUsecaseImpl(
     /**
      * Adds recipe record
      */
-    private suspend fun createRecipe(recipe: Recipe): Recipe = cookbookApi.addRecipe(recipe)
+    private suspend fun uploadRecipe(recipe: Recipe): Recipe = cookbookApi.addRecipe(recipe)
         .onFailure {
             Log.w(TAG, "Failed to create recipe", it)
         }
