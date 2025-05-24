@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+actor User
+actor SessionManager
+actor ProfileRepository
+
+usecase CreateUser
+
+package Register {
+    usecase Name
+    usecase Country
+}
+
+User -> CreateUser
+Name -> Country
+
+CreateUser -> SessionManager
+SessionManager -> Name
+Register -> ProfileRepository
+
+@enduml

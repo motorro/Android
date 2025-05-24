@@ -1,0 +1,121 @@
+openapi: 3.0.4
+info:
+  title: Server API
+  description: Sample server for Architecture webinar.
+  version: 1.0.0
+
+servers:
+  - url: 0.0.0.0:8080
+    description: Local server
+
+security:
+  - auth: []
+
+paths:
+  /profiles/{userId}:
+    parameters:
+      - $ref: "#/components/parameters/userId"
+    get:
+      operationId: getProfile
+      summary: User profile.
+      description: Returns a user profile if registered.
+      responses:
+        200:
+          description: A user profile
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+        404:
+          description: Not found
+        401:
+          description: Not authenticated
+        403:
+          description: Not authorized
+    put:
+      operationId: setProfile
+      summary: Updates profile
+      description: Updates user profile
+      requestBody:
+        description: Profile to set
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProfile'
+      responses:
+        200:
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        404:
+          description: Not found
+        401:
+          description: Not authenticated
+        403:
+          description: Not authorized
+
+components:
+  schemas:
+
+    UserId:
+      description: User ID
+      type: string
+      format: uuid
+      example: 76b5e729-2f00-480a-8964-4a515af8962d
+
+    CountryCode:
+      description: ISO 3166-1 alpha-3 country code
+      type: string
+      minLength: 3
+      maxLength: 3
+      pattern: '^\w{3}$'
+
+    UserProfile:
+      type: object
+      description: Profile data of a user
+      required:
+        - userId
+        - displayName
+        - countryCode
+      properties:
+        userId:
+          $ref: '#/components/schemas/UserId'
+        displayName:
+          type: string
+          description: Name of the user
+          example: Vasya
+        countryCode:
+          $ref: '#/components/schemas/UserId'
+
+    NewProfile:
+      type: object
+      description: Profile data to set
+      required:
+        - displayName
+        - countryCode
+      properties:
+        displayName:
+          type: string
+          description: Name of the user
+          example: Vasya
+        countryCode:
+          $ref: '#/components/schemas/UserId'
+
+  parameters:
+    userId:
+      in: path
+      name: userId
+      description: Unique identifier for the user
+      schema:
+        $ref: '#/components/schemas/UserId'
+      required: true
+
+  securitySchemes:
+    auth:
+      type: http
+      scheme: bearer
