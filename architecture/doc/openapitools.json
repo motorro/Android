@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.13.0",
+    "generators": {
+      "server": {
+        "generatorName": "kotlin-server",
+        "glob": "api.yaml",
+        "output": "generated/server",
+        "additional-properties": {
+          "library": "ktor",
+          "dateLibrary": "kotlinx-datetime",
+          "collectionType": "list",
+          "enumPropertyNaming": "UPPERCASE",
+          "generateRoomModels": false,
+          "groupId": "com.motorro.architecture",
+          "artifactId": "server",
+          "packageName": "com.motorro.architecture.server",
+          "useCoroutines": true
+        }
+      },
+      "client": {
+        "generatorName": "kotlin",
+        "glob": "api.yaml",
+        "output": "generated/client",
+        "additional-properties": {
+          "library": "jvm-okhttp4",
+          "dateLibrary": "kotlinx-datetime",
+          "collectionType": "list",
+          "enumPropertyNaming": "UPPERCASE",
+          "generateRoomModels": true,
+          "groupId": "com.motorro.architecture",
+          "artifactId": "client",
+          "packageName": "com.motorro.architecture.client",
+          "serializationLibrary": "kotlinx_serialization",
+          "useCoroutines": true
+        }
+      }
+    }
+  }
+}

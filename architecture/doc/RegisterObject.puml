@@ -1,0 +1,66 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+hide empty members
+
+package CreateAccountFragment {
+    object CreateAccountView
+    object CreateAccountModel
+    object CreateAccountUsecase
+
+    CreateAccountView --> CreateAccountModel
+    CreateAccountModel --> CreateAccountUsecase
+}
+
+package Register {
+
+    package NameFragment {
+        object NameView
+        object NameModel
+
+        NameView --> NameModel
+    }
+
+    package CountryFragment {
+        object CountryView
+        object CountryModel
+        object FindCountryUsecase
+        object CountryApi
+
+        CountryView --> CountryModel
+        CountryModel --> FindCountryUsecase
+        FindCountryUsecase --> CountryApi
+    }
+
+    map RegistrationData {
+        credentials => Credentials
+        name => String
+        country => CountryCode
+    }
+
+    NameModel --> RegistrationData
+    CountryModel --> RegistrationData
+
+    package RegistrationFragment {
+        object RegistrationView
+        object RegistrationModel
+        object RegistrationUsecase
+        object RegistrationApi
+
+        RegistrationView --> RegistrationModel
+        RegistrationModel --> RegistrationUsecase
+    }
+
+    RegistrationModel -left-> RegistrationData
+}
+
+object SessionManager
+object ProfileRepository
+
+CreateAccountUsecase --> SessionManager: session
+RegistrationUsecase --> ProfileRepository: profile
+
+SessionManager -> Register
+
+
+@enduml
