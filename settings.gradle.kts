@@ -27,3 +27,8 @@ rootProject.name = "Android"
 include(":core")
 include(":composecore")
 include(":architecture:car")
+include(":architecture:app")
+include(":architecture:domain")
+include(":architecture:model")
+include(":architecture:core")
+include(":architecture:domaintest")
