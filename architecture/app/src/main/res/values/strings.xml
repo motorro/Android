@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Architecture</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_create_profile">Create profile</string>
+    <string name="btn_login_by_email">Login by email</string>
+    <string name="txt_create_account">Please create account to continue</string>
+    <string name="title_auth">Authentication</string>
+    <string name="desc_error">Error</string>
+    <string name="btn_retry">Retry</string>
+    <string name="btn_close">Close</string>
+</resources>
