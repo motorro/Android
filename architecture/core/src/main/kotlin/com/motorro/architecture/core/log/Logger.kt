@@ -48,18 +48,18 @@ object Logger : Log {
  */
 interface Logging {
 
-    val tag: String get() = javaClass.simpleName
+    val loggingTag: String get() = javaClass.simpleName
 
     fun d(throwable: Throwable? = null, message: () -> String) {
-        Logger.log(tag, LogLevel.DEBUG, throwable, message)
+        Logger.log(loggingTag, LogLevel.DEBUG, throwable, message)
     }
     fun i(throwable: Throwable? = null, message: () -> String) {
-        Logger.log(tag, LogLevel.INFO, throwable, message)
+        Logger.log(loggingTag, LogLevel.INFO, throwable, message)
     }
     fun w(throwable: Throwable? = null, message: () -> String) {
-        Logger.log(tag, LogLevel.WARN, throwable, message)
+        Logger.log(loggingTag, LogLevel.WARN, throwable, message)
     }
     fun e(throwable: Throwable? = null, message: () -> String) {
-        Logger.log(tag, LogLevel.ERROR, throwable, message)
+        Logger.log(loggingTag, LogLevel.ERROR, throwable, message)
     }
 }
