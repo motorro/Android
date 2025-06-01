@@ -6,35 +6,36 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.motorro.architecture.appcore.di.ProvidesFragmentContainer
+import com.motorro.architecture.appcore.di.containerModel
 import com.motorro.architecture.appcore.viewbinding.BindingHost
 import com.motorro.architecture.appcore.viewbinding.WithViewBinding
 import com.motorro.architecture.appcore.viewbinding.bindView
 import com.motorro.architecture.appcore.viewbinding.withBinding
 import com.motorro.architecture.content.di.ContentFragmentContainer
+import com.motorro.architecture.content.di.buildContentFragmentContainer
 import com.motorro.architecture.core.error.CoreException
 import com.motorro.architecture.core.lce.LceState
 import com.motorro.architecture.core.log.Logging
 import com.motorro.architecture.databinding.FragmentContentBinding
-import com.motorro.architecture.main.di.ProvidesMainActivityContainer
 import com.motorro.architecture.model.user.UserProfile
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ContentFragment : Fragment(), WithViewBinding<FragmentContentBinding> by BindingHost(), Logging {
+class ContentFragment : Fragment(), ProvidesFragmentContainer, WithViewBinding<FragmentContentBinding> by BindingHost(), Logging {
 
-    private lateinit var fragmentComponent: ContentFragmentContainer
+    override lateinit var fragmentContainer: ContentFragmentContainer
 
-    override val defaultViewModelProviderFactory: ViewModelProvider.Factory get() = fragmentComponent.contentFragmentModelFactory
-
-    private val viewModel: ContentViewModel by viewModels()
+    /**
+     * Model created by component
+     */
+    private val viewModel: ContentViewModel by containerModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fragmentComponent = ContentFragmentContainer((requireActivity() as ProvidesMainActivityContainer).activityContainer)
+        fragmentContainer = buildContentFragmentContainer()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -100,6 +101,6 @@ class ContentFragment : Fragment(), WithViewBinding<FragmentContentBinding> by B
 
     private fun setContent(data: UserProfile) = withBinding {
         textUsername.text = data.displayName
-        textCountry.text = fragmentComponent.countryRegistry.getCountry(data.countryCode)
+        textCountry.text = fragmentContainer.countryRegistry.getCountry(data.countryCode)
     }
 }

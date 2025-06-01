@@ -1,9 +1,10 @@
 package com.motorro.architecture
 
 import android.app.Application
+import com.motorro.architecture.appcore.di.ApplicationContainer
+import com.motorro.architecture.appcore.di.ProvidesApplicationContainer
 import com.motorro.architecture.core.log.Logger
-import com.motorro.architecture.di.ApplicationContainer
-import com.motorro.architecture.di.ProvidesApplicationContainer
+import com.motorro.architecture.di.buildApplicationContainer
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 
@@ -16,7 +17,7 @@ class App : Application(), ProvidesApplicationContainer {
     override fun onCreate() {
         super.onCreate()
         initializeLogger()
-        applicationContainer = ApplicationContainer.build(this)
+        applicationContainer = buildApplicationContainer(this)
     }
 
     private fun initializeLogger() {

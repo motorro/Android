@@ -1,39 +1,35 @@
 package com.motorro.architecture.main.di
 
-import com.motorro.architecture.di.ApplicationContainer
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.motorro.architecture.appcore.di.ActivityContainer
+import com.motorro.architecture.appcore.di.ApplicationContainer
+import com.motorro.architecture.appcore.di.ProvidesApplicationContainer
 import com.motorro.architecture.domain.di.DomainModule
 import com.motorro.architecture.main.MainViewModel
 
-interface MainActivityContainer : ApplicationContainer{
-    /**
-     * View-model factory (on-demand creation)
-     */
-    val mainViewModelFactory: MainViewModel.Factory
-
-    companion object {
-        fun build(applicationContainer: ApplicationContainer): MainActivityContainer = MainActivityContainerImpl(applicationContainer)
-    }
-}
-
 /**
- * Provides main activity component
+ * Container builder
  */
-interface ProvidesMainActivityContainer {
-    /**
-     * Application container
-     */
-    val activityContainer: MainActivityContainer
-}
+fun AppCompatActivity.buildMainActivityContainer(): ActivityContainer = MainActivityContainerImpl(
+    activity = this,
+    applicationContainer = (application as ProvidesApplicationContainer).applicationContainer
+)
 
 /**
  * Provides main activity dependencies
+ * @param activity Activity
  * @param applicationContainer Common application dependency provider
  */
-private class MainActivityContainerImpl(private val applicationContainer: ApplicationContainer) : MainActivityContainer, ApplicationContainer by applicationContainer {
+private class MainActivityContainerImpl(
+    override val activity: AppCompatActivity,
+    private val applicationContainer: ApplicationContainer
+) : ActivityContainer, ApplicationContainer by applicationContainer {
+
     /**
-     * View-model factory (on-demand creation)
+     * Provides view-model
      */
-    override val mainViewModelFactory: MainViewModel.Factory get() = MainViewModel.Factory(
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory get() = MainViewModel.Factory(
         DomainModule.provideGetCurrentUserProfileUsecase(
             applicationContainer.sessionManager,
             applicationContainer.profileRepository
