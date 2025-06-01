@@ -60,4 +60,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment)
     implementation(libs.napier)
+
+    testImplementation(libs.androidx.test.rules)
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.mockk)
 }

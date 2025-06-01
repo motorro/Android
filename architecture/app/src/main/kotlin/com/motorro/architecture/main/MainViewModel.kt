@@ -5,27 +5,39 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.motorro.architecture.core.error.CoreException
 import com.motorro.architecture.core.lce.LceState
+import com.motorro.architecture.domain.profile.error.NotRegisteredException
 import com.motorro.architecture.domain.profile.usecase.GetCurrentUserProfileUsecase
-import com.motorro.architecture.model.user.UserProfile
+import com.motorro.architecture.domain.session.error.UnauthorizedException
+import com.motorro.architecture.main.data.MainScreenState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
  * Main fragment view-model
  */
-class MainViewModel(getProfile: GetCurrentUserProfileUsecase): ViewModel() {
-    private val collector = MutableStateFlow<LceState<UserProfile, CoreException>>(LceState.Loading())
+class MainViewModel(registration: Flow<LceState<Any, CoreException>>): ViewModel() {
+    private val collector = MutableStateFlow<MainScreenState>(MainScreenState.Content)
 
     /**
      * View state
      */
-    val state: StateFlow<LceState<UserProfile, CoreException>> = collector.asStateFlow()
+    val state: StateFlow<MainScreenState> = collector.asStateFlow()
 
     init {
         viewModelScope.launch {
-            getProfile().collect(collector)
+            registration
+                .map { state ->
+                    when {
+                        state is LceState.Error && state.error is UnauthorizedException -> MainScreenState.Authenticating
+                        state is LceState.Error && state.error is NotRegisteredException -> MainScreenState.Registering
+                        else -> MainScreenState.Content
+                    }
+                }
+                .collect(collector)
         }
     }
 
@@ -36,7 +48,7 @@ class MainViewModel(getProfile: GetCurrentUserProfileUsecase): ViewModel() {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-                return MainViewModel(getProfile) as T
+                return MainViewModel(getProfile()) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
