@@ -1,6 +1,7 @@
 package com.motorro.architecture.di
 
 import android.content.Context
+import com.motorro.architecture.appcore.di.ApplicationContainer
 import com.motorro.architecture.domain.di.DomainModule
 import com.motorro.architecture.domain.profile.ProfileRepository
 import com.motorro.architecture.domain.session.SessionManager
@@ -8,36 +9,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 
-interface ApplicationContainer {
-    /**
-     * Application coroutine scope (singleton)
-     */
-    val globalScope: CoroutineScope
-
-    /**
-     * Session manager (lazy singleton)
-     */
-    val sessionManager: SessionManager
-
-    /**
-     * Profile repository (lazy singleton)
-     */
-    val profileRepository: ProfileRepository
-
-    companion object {
-        fun build(context: Context): ApplicationContainer = ApplicationContainerImpl(context)
-    }
-}
-
 /**
- * Provides application container
+ * Builds application container
  */
-interface ProvidesApplicationContainer {
-    /**
-     * Application container
-     */
-    val applicationContainer: ApplicationContainer
-}
+fun buildApplicationContainer(context: Context): ApplicationContainer = ApplicationContainerImpl(context)
 
 /**
  * Provides global application dependencies

@@ -39,9 +39,11 @@ android {
 dependencies {
     implementation(project(":architecture:core"))
     implementation(project(":architecture:model"))
+    implementation(project(":architecture:domain"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.fragment)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
 }
