@@ -1,6 +1,7 @@
 package com.motorro.architecture.di
 
 import android.content.Context
+import com.motorro.architecture.core.error.CoreException
 import com.motorro.architecture.domain.profile.PROFILE
 import com.motorro.architecture.domain.profile.ProfileRepository
 import com.motorro.architecture.domain.session.SESSION_DATA
@@ -17,6 +18,7 @@ object DomainDataModule {
     private const val DELAY = 500L
     private const val HAS_LOGIN = true
     private const val HAS_PROFILE = true
+    private val PROFILE_ERROR: CoreException? = null
 
     /**
      * Session storage factory
@@ -33,8 +35,8 @@ object DomainDataModule {
      */
     @Suppress("UNUSED_PARAMETER")
     fun provideProfileRepository(context: Context): ProfileRepository = if (HAS_PROFILE) {
-        MemoryProfileRepository(DELAY, mapOf(USER_ID to PROFILE))
+        MemoryProfileRepository(DELAY, mapOf(USER_ID to PROFILE), PROFILE_ERROR)
     } else {
-        MemoryProfileRepository(DELAY)
+        MemoryProfileRepository(DELAY, error = PROFILE_ERROR)
     }
 }

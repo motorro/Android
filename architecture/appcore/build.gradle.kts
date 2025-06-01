@@ -41,5 +41,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.fragment)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
 }

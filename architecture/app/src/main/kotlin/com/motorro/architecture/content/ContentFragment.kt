@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.motorro.architecture.R
 import com.motorro.architecture.appcore.viewbinding.BindingHost
 import com.motorro.architecture.appcore.viewbinding.WithViewBinding
 import com.motorro.architecture.appcore.viewbinding.bindView
@@ -45,6 +44,18 @@ class ContentFragment : Fragment(), WithViewBinding<FragmentContentBinding> by B
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        withBinding {
+            error.setOnDismissListener { _, error ->
+                if (error.isFatal) {
+                    i { "Dismissing fatal error. Closing app..." }
+                    requireActivity().finish()
+                } else {
+                    i { "Dismissing non-fatal error. Retrying..." }
+                    viewModel.retry()
+                }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.onEach(::processState).launchIn(this)
         }
@@ -70,21 +81,7 @@ class ContentFragment : Fragment(), WithViewBinding<FragmentContentBinding> by B
                 } else {
                     content.isVisible = false
                     error.isVisible = true
-                    textError.text = state.error.message
-                    btnDismiss.text = if (state.error.isFatal) {
-                        getString(R.string.btn_close)
-                    } else {
-                        getString(R.string.btn_retry)
-                    }
-                    btnDismiss.setOnClickListener {
-                        if (state.error.isFatal) {
-                            i { "Dismissing fatal error. Closing app..." }
-                            requireActivity().finish()
-                        } else {
-                            i { "Dismissing non-fatal error. Retrying..." }
-                            viewModel.retry()
-                        }
-                    }
+                    error.error = state.error
                 }
             }
             is LceState.Loading -> {
