@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/nameFragment">
+
+    <fragment
+        android:id="@+id/nameFragment"
+        android:name="com.motorro.architecture.registration.name.NameFragment"
+        android:label="@string/title_name"
+        tools:layout="@layout/fragment_name" >
+        <action
+            android:id="@+id/name_to_next_fragment"
+            app:destination="@id/countryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/countryFragment"
+        android:name="com.motorro.architecture.registration.country.CountryFragment"
+        android:label="@string/title_country"
+        tools:layout="@layout/fragment_country" />
+</navigation>
