@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_name">Your name</string>
+    <string name="title_country">Your country</string>
+    <string name="hint_name">Name</string>
+    <string name="btn_next">Next</string>
+</resources>
