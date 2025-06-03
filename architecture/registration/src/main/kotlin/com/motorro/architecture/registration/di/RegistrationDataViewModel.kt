@@ -28,12 +28,12 @@ class RegistrationDataViewModel(private val savedStateHandle: SavedStateHandle) 
     }
 
     override val country: Storage<CountryCode> = object : Storage<CountryCode> {
-        override val value: StateFlow<CountryCode> = savedStateHandle.getStateFlow(StateKeys.COUNTRY_KEY, "").map(::CountryCode).stateIn(
+        override val value: StateFlow<CountryCode> = savedStateHandle.getStateFlow(StateKeys.COUNTRY_KEY, null).map(::CountryCode).stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
             CountryCode(savedStateHandle.get<String>(StateKeys.COUNTRY_KEY).orEmpty())
         )
-        override fun update(value: CountryCode) { savedStateHandle[StateKeys.COUNTRY_KEY] = value }
+        override fun update(value: CountryCode) { savedStateHandle[StateKeys.COUNTRY_KEY] = value.code }
     }
 
     companion object {

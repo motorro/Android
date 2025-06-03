@@ -18,5 +18,14 @@
         android:id="@+id/countryFragment"
         android:name="com.motorro.architecture.registration.country.CountryFragment"
         android:label="@string/title_country"
-        tools:layout="@layout/fragment_country" />
+        tools:layout="@layout/fragment_country" >
+        <action
+            android:id="@+id/country_to_next_fragment"
+            app:destination="@id/registeringFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registeringFragment"
+        android:name="com.motorro.architecture.registration.registering.RegisteringFragment"
+        android:label="@string/title_registering"
+        tools:layout="@layout/fragment_registering" />
 </navigation>
