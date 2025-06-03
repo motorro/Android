@@ -2,6 +2,8 @@
 <resources>
     <string name="title_name">Your name</string>
     <string name="title_country">Your country</string>
+    <string name="title_registering">Registration</string>
     <string name="hint_name">Name</string>
+    <string name="hint_country">Country</string>
     <string name="btn_next">Next</string>
 </resources>
