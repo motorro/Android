@@ -45,9 +45,12 @@ dependencies {
     implementation(project(":architecture:model"))
     implementation(project(":architecture:appcore"))
     implementation(project(":architecture:domain"))
-    implementation(project(":architecture:domainmockdata"))
 
     // Domain data implementation
+    implementation(project(":architecture:domainmockdata"))
+
+    // Registration implementation
+    implementation(project(":architecture:registration"))
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
