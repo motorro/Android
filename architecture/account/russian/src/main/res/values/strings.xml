@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_russian_network">Russian network</string>
+    <string name="desc_russian_network">Russian network</string>
+    <string name="txt_login_with_russian_network">Login with Russian Network</string>
+    <string name="btn_create_account">Create account</string>
+    <string name="txt_welcome">Welcome!</string>
+</resources>

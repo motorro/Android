@@ -16,7 +16,7 @@ import com.motorro.architecture.session.MemorySessionStorage
 object DomainDataModule {
 
     private const val DELAY = 500L
-    private const val HAS_LOGIN = true
+    private const val HAS_LOGIN = false
     private const val HAS_PROFILE = false
     private val PROFILE_ERROR: CoreException? = null
 

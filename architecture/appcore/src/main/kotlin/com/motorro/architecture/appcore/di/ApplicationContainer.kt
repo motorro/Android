@@ -1,5 +1,6 @@
 package com.motorro.architecture.appcore.di
 
+import android.content.Context
 import com.motorro.architecture.domain.profile.ProfileRepository
 import com.motorro.architecture.domain.session.SessionManager
 import kotlinx.coroutines.CoroutineScope
@@ -8,6 +9,11 @@ import kotlinx.coroutines.CoroutineScope
  * Application container
  */
 interface ApplicationContainer {
+    /**
+     * Application context
+     */
+    val context: Context
+
     /**
      * Application coroutine scope (singleton)
      */
