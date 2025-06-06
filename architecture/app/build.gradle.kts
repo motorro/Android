@@ -32,6 +32,11 @@ android {
             applicationIdSuffix = ".eu"
             versionNameSuffix = "-eu"
         }
+        create("global") {
+            dimension = "area"
+            applicationIdSuffix = ".global"
+            versionNameSuffix = "-global"
+        }
     }
 
     buildTypes {
@@ -69,6 +74,9 @@ dependencies {
     // Account creation (variants)
     "russiaImplementation"(project(":architecture:account:russian"))
     "euImplementation"(project(":architecture:account:eu"))
+
+    "globalImplementation"(project(":architecture:account:russian"))
+    "globalImplementation"(project(":architecture:account:eu"))
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
