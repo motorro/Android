@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), ProvidesActivityContainer, WithViewBin
             model.state.collect {
                 when(it) {
                     MainScreenState.Authenticating -> navController.navigate(
-                        R.id.createAccountFragment,
+                        R.id.account,
                         null,
                         navOptions {
                             launchSingleTop = true

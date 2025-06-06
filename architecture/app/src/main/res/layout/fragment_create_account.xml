@@ -31,29 +31,32 @@
 
         <TextView
             android:id="@+id/text_register_prompt"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/txt_create_account"
-            app:layout_constraintBottom_toTopOf="@+id/btn_login"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_padding"
             android:layout_marginTop="@dimen/vertical_padding"
+            android:text="@string/txt_create_account"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/providers"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+            tools:listitem="@layout/vh_account_provider"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/horizontal_padding"
+            android:layout_marginTop="@dimen/vertical_padding"
+            android:layout_marginBottom="@dimen/vertical_padding"
             android:layout_marginEnd="@dimen/horizontal_padding"
-            android:text="@string/btn_login_by_email"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_register_prompt" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

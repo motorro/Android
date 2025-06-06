@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/contentFragment">
+
+    <include app:graph="@navigation/account" />
+
     <fragment
         android:id="@+id/contentFragment"
         android:name="com.motorro.architecture.content.ContentFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_content" />
+
     <fragment
         android:id="@+id/createProfileFragment"
         android:name="com.motorro.architecture.profile.CreateProfileFragment"
         android:label="@string/title_create_profile"
         tools:layout="@layout/fragment_create_profile" />
-    <fragment
-        android:id="@+id/createAccountFragment"
-        android:name="com.motorro.architecture.account.CreateAccountFragment"
-        android:label="@string/title_create_profile"
-        tools:layout="@layout/fragment_create_account" />
+
 </navigation>

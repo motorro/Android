@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.motorro.architecture.appcore"
+    namespace = "com.motorro.architecture.account.russian"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -38,14 +38,19 @@ android {
 
 dependencies {
     implementation(project(":architecture:core"))
+    implementation(project(":architecture:appcore"))
     implementation(project(":architecture:model"))
     implementation(project(":architecture:domain"))
+    implementation(project(":architecture:domaintest"))
+
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.fragment)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
 }

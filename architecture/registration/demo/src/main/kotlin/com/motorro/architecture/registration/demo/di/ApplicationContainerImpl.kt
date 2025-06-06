@@ -19,7 +19,7 @@ fun buildApplicationContainer(context: Context): ApplicationContainer = Applicat
  * Provides global application dependencies
  * @param context application context
  */
-private class ApplicationContainerImpl(private val context: Context) : ApplicationContainer {
+private class ApplicationContainerImpl(override val context: Context) : ApplicationContainer {
     /**
      * Application coroutine scope (singleton)
      */
