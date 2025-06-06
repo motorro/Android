@@ -5,7 +5,7 @@
     android:id="@+id/account"
     app:startDestination="@id/createAccountFragment">
 
-    <include app:graph="@navigation/account_russian_navigation" />
+    <include app:graph="@navigation/account_eu_navigation" />
 
     <fragment
         android:id="@+id/createAccountFragment"

@@ -1,23 +1,19 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.navigation.safeargs.kotlin)
 }
 
 android {
-    namespace = "com.motorro.architecture"
+    namespace = "com.motorro.architecture.account.eu"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.motorro.architecture"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -42,38 +38,19 @@ android {
 
 dependencies {
     implementation(project(":architecture:core"))
-    implementation(project(":architecture:model"))
     implementation(project(":architecture:appcore"))
+    implementation(project(":architecture:model"))
     implementation(project(":architecture:domain"))
+    implementation(project(":architecture:domaintest"))
 
-    // Domain data implementation
-    implementation(project(":architecture:domainmockdata"))
-
-    // Registration implementation
-    implementation(project(":architecture:registration"))
-
-    // Account creation
-    implementation(project(":architecture:account:russian"))
-    implementation(project(":architecture:account:eu"))
-
-    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment)
-    implementation(libs.napier)
-
-    testImplementation(libs.androidx.test.rules)
-    testImplementation(libs.androidx.core.testing)
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlin.test)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.mockk.mockk)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
 }
