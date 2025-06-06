@@ -3,7 +3,7 @@ package com.motorro.architecture.account.di
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.motorro.architecture.account.AuthenticationProviderAdapter
-import com.motorro.architecture.account.russian.RussianProvider
+import com.motorro.architecture.account.eu.EUProvider
 import com.motorro.architecture.appcore.account.AuthenticationProvider
 import com.motorro.architecture.appcore.di.ActivityContainer
 
@@ -25,7 +25,7 @@ class CreateAccountFragmentContainerImpl(
     override val adapterFactory: ((AuthenticationProvider) -> Unit) -> AuthenticationProviderAdapter = { onClick ->
         AuthenticationProviderAdapter(
             providers = listOf(
-                RussianProvider
+                EUProvider
             ),
             onClick = onClick
         )
