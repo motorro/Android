@@ -20,6 +20,20 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions += "area"
+    productFlavors {
+        create("russia") {
+            dimension = "area"
+            applicationIdSuffix = ".russia"
+            versionNameSuffix = "-russia"
+        }
+        create("eu") {
+            dimension = "area"
+            applicationIdSuffix = ".eu"
+            versionNameSuffix = "-eu"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -52,9 +66,9 @@ dependencies {
     // Registration implementation
     implementation(project(":architecture:registration"))
 
-    // Account creation
-    implementation(project(":architecture:account:russian"))
-    implementation(project(":architecture:account:eu"))
+    // Account creation (variants)
+    "russiaImplementation"(project(":architecture:account:russian"))
+    "euImplementation"(project(":architecture:account:eu"))
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
