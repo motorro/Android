@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+package Domain {
+    [SessionManager] -- SessionStorage
+    [Profile Usecases] -- ProfileRepository
+}
+
+package DomainMockData {
+    SessionStorage -- [MemorySessionStorage]
+    ProfileRepository -- [MemoryProfileRepository]
+}
+
+package Registration {
+    [NameFragment]
+    [CountryFragment]
+    [Profile Usecases] -up- [RegistrationFragment]
+}
+
+package Account {
+    [Russian] - [SessionManager]
+    [EU] - [SessionManager]
+}
+
+[App]
+App -- Registration
+App - Account
+App - Domain
+App - DomainMockData
+
+@enduml
