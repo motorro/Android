@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/account"
+    app:startDestination="@id/createAccountFragment">
+
+    <include app:graph="@navigation/account_russian_navigation" />
+    <include app:graph="@navigation/account_eu_navigation" />
+
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="com.motorro.architecture.account.CreateAccountFragment"
+        android:label="@string/title_auth"
+        tools:layout="@layout/fragment_create_account"/>
+
+</navigation>
