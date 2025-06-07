@@ -1,15 +1,16 @@
 package com.motorro.architecture.car
 
 fun main() {
-    val car = Car(90)
-    car.startUp()
-    car.shutDown()
+    val pCar = Car(PetrolEngine(100))
+    pCar.startUp()
+    pCar.shutDown()
+
+    val eCar = Car(ElectricEngine(100))
+    eCar.startUp()
+    eCar.shutDown()
 }
 
-class Car(power: Int) {
-    // Engine
-    private val engine = Engine(power)
-
+class Car(private val engine: Engine) {
     /**
      * Start the car
      */
