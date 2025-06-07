@@ -1,11 +1,11 @@
 package com.motorro.architecture.car
 
-class Engine {
+class Engine(private val power: Int) {
     /**
      * Start the car
      */
     fun startUp() {
-        println("Dr-dr-dr...")
+        println("Dr-dr-dr: $power kW")
     }
 
     /**
@@ -15,3 +15,4 @@ class Engine {
         println("Psh-sh..")
     }
 }
+
