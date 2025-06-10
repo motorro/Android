@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User
+control Usecase
+boundary SessionManager
+database Repository
+
+User -> Usecase: invoke()
+Usecase -> SessionManager: transformUserId
+alt no active user
+    Usecase -> User: Error(Unauthorized)
+else
+    Usecase <-- SessionManager: userId
+    Usecase -> Repository: getProfile(userId)
+    Usecase <-- Repository: UserProfile?
+    alt no profile
+        Usecase -> User: Error(NotRegistered)
+    else
+        Usecase -> User: Content(UserProfile)
+    end alt
+end alt
+
+
+@enduml
