@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.navigation.safeargs.kotlin)
+    alias(libs.plugins.google.ksp)
 }
 
 android {
@@ -70,6 +71,10 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
+
+    // Dagger
+    ksp(libs.dagger.compiler)
+    implementation(libs.dagger)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines)
