@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
 import com.motorro.di.databinding.FragmentMainBinding
+import com.motorro.di.di.ProvidesApplicationComponent
 import com.motorro.di.timer.Timer
-import com.motorro.di.timer.TimerImplementation
 
 class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost() {
 
@@ -20,11 +19,7 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        timer = TimerImplementation(
-            title = "Fragment time",
-            scope = lifecycleScope,
-            delayMillis = 100
-        )
+        timer = (requireActivity().application as ProvidesApplicationComponent).applicationComponent.timer()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
