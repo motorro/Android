@@ -12,19 +12,14 @@ import dagger.Component
 ])
 interface ApplicationComponent {
     /**
-     * Explicit component builder
+     * Explicit component factory
      */
-    @Component.Builder
+    @Component.Factory
     interface Builder {
         /**
-         * Provides application module
+         * Provides application module and builds component
          */
-        fun am(module: ApplicationModule): Builder
-
-        /**
-         * Builds component
-         */
-        fun build(): ApplicationComponent
+        fun build(module: ApplicationModule): ApplicationComponent
     }
 
 
