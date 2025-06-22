@@ -12,12 +12,12 @@ import kotlinx.coroutines.CoroutineScope
  * Provides dependencies to container
  */
 @Module
-class ApplicationModule(private val context: Context) {
+class ApplicationModule {
     /**
      * Instructions on how to create timer
      */
     @Provides
-    fun timer(scope: CoroutineScope): Timer = TimerImplementation(
+    fun timer(context: Context, scope: CoroutineScope): Timer = TimerImplementation(
         title = context.getString(R.string.application_time),
         scope = scope,
         delayMillis = 100

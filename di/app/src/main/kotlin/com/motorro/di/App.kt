@@ -2,7 +2,6 @@ package com.motorro.di
 
 import android.app.Application
 import com.motorro.di.di.ApplicationComponent
-import com.motorro.di.di.ApplicationModule
 import com.motorro.di.di.DaggerApplicationComponent
 import com.motorro.di.di.ProvidesApplicationComponent
 
@@ -13,6 +12,6 @@ class App : Application(), ProvidesApplicationComponent {
 
     override fun onCreate() {
         super.onCreate()
-        applicationComponent = DaggerApplicationComponent.factory().build(ApplicationModule(this))
+        applicationComponent = DaggerApplicationComponent.factory().build(this)
     }
 }
