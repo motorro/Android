@@ -11,6 +11,22 @@ import dagger.Component
     ApplicationModule::class
 ])
 interface ApplicationComponent {
+    /**
+     * Explicit component builder
+     */
+    @Component.Builder
+    interface Builder {
+        /**
+         * Provides application module
+         */
+        fun am(module: ApplicationModule): Builder
+
+        /**
+         * Builds component
+         */
+        fun build(): ApplicationComponent
+    }
+
 
     /**
      * Timer
