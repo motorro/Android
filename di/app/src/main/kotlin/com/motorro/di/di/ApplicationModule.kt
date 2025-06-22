@@ -5,19 +5,12 @@ import com.motorro.di.timer.TimerImplementation
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 
 /**
  * Provides dependencies to container
  */
 @Module
 class ApplicationModule {
-
-    @Provides
-    @OptIn(DelicateCoroutinesApi::class)
-    fun scope(): CoroutineScope = GlobalScope
-
     /**
      * Instructions on how to create timer
      */
@@ -27,5 +20,4 @@ class ApplicationModule {
         scope = scope,
         delayMillis = 100
     )
-
 }

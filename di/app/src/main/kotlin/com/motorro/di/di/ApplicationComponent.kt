@@ -6,7 +6,10 @@ import dagger.Component
 /**
  * DI container
  */
-@Component(modules = [ApplicationModule::class])
+@Component(modules = [
+    GlobalScopeModule::class,
+    ApplicationModule::class
+])
 interface ApplicationComponent {
 
     /**
