@@ -13,6 +13,7 @@ import com.motorro.core.viewbinding.withBinding
 import com.motorro.di.databinding.FragmentMainBinding
 import com.motorro.di.di.ProvidesApplicationComponent
 import com.motorro.di.timer.Timer
+import com.motorro.di.timer.TimerImplementation
 import javax.inject.Inject
 
 class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost() {
@@ -20,7 +21,7 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
     private lateinit var timer: Timer
 
     @Inject
-    fun setTimer(timer: Timer) {
+    fun setTimer(timer: TimerImplementation) {
         Log.i(TAG, "Injecting timer...")
         this.timer = timer
     }
