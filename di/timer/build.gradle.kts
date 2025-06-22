@@ -12,4 +12,5 @@ kotlin {
 dependencies {
     api(libs.kotlinx.coroutines)
     api(libs.kotlinx.datetime)
+    api(libs.javax.inject.annotations)
 }

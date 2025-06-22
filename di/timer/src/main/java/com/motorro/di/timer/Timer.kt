@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -54,7 +55,7 @@ interface Timer {
  * @param scope Coroutine scope to run
  * @param delayMillis Timer delay in milliseconds
  */
-class TimerImplementation(
+class TimerImplementation @Inject constructor(
     override val title: String,
     private val scope: CoroutineScope,
     private val delayMillis: Long
