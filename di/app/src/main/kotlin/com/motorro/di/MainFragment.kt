@@ -12,14 +12,16 @@ import com.motorro.core.viewbinding.withBinding
 import com.motorro.di.databinding.FragmentMainBinding
 import com.motorro.di.di.ProvidesApplicationComponent
 import com.motorro.di.timer.Timer
+import javax.inject.Inject
 
 class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost() {
 
-    private lateinit var timer: Timer
+    @set:Inject
+    lateinit var timer: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        timer = (requireActivity().application as ProvidesApplicationComponent).applicationComponent.timer()
+        (requireActivity().application as ProvidesApplicationComponent).applicationComponent.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
