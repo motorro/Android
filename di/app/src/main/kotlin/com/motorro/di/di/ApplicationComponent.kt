@@ -1,7 +1,7 @@
 package com.motorro.di.di
 
 import android.content.Context
-import com.motorro.di.timer.Timer
+import com.motorro.di.MainFragment
 import dagger.BindsInstance
 import dagger.Component
 
@@ -25,9 +25,8 @@ interface ApplicationComponent {
         fun build(@BindsInstance context: Context): ApplicationComponent
     }
 
-
     /**
-     * Timer
+     * Provides dependencies to Main Fragment
      */
-    fun timer(): Timer
+    fun inject(fragment: MainFragment)
 }
