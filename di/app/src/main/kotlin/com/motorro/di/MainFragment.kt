@@ -1,6 +1,7 @@
 package com.motorro.di
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +17,17 @@ import javax.inject.Inject
 
 class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost() {
 
-    @set:Inject
-    lateinit var timer: Timer
+    private lateinit var timer: Timer
+
+    @Inject
+    fun setTimer(timer: Timer) {
+        Log.i(TAG, "Injecting timer...")
+        this.timer = timer
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i(TAG, "About to inject fragment...")
         (requireActivity().application as ProvidesApplicationComponent).applicationComponent.inject(this)
     }
 
@@ -33,5 +40,9 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
         withBinding {
             fragmentTimer.setTimer(timer)
         }
+    }
+
+    companion object {
+        private val TAG: String = "MainFragment"
     }
 }
