@@ -1,6 +1,8 @@
 package com.motorro.di.di
 
+import android.content.Context
 import com.motorro.di.timer.Timer
+import dagger.BindsInstance
 import dagger.Component
 
 /**
@@ -18,8 +20,9 @@ interface ApplicationComponent {
     interface Builder {
         /**
          * Provides application module and builds component
+         * @param context Context becomes a part of the graph
          */
-        fun build(module: ApplicationModule): ApplicationComponent
+        fun build(@BindsInstance context: Context): ApplicationComponent
     }
 
 
