@@ -17,12 +17,19 @@ import javax.inject.Inject
 
 class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost() {
 
-    private lateinit var timer: Timer
+    private lateinit var timer1: Timer
+    private lateinit var timer2: Timer
 
     @Inject
-    fun setTimer(timer: Timer) {
-        Log.i(TAG, "Injecting timer...")
-        this.timer = timer
+    fun setTimer1(timer: Timer) {
+        Log.i(TAG, "Injecting timer 1: $timer")
+        this.timer1 = timer
+    }
+
+    @Inject
+    fun setTimer2(timer: Timer) {
+        Log.i(TAG, "Injecting timer 2: $timer")
+        this.timer2 = timer
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +45,8 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         withBinding {
-            fragmentTimer.setTimer(timer)
+            timer1.setTimer(this@MainFragment.timer1)
+            timer2.setTimer(this@MainFragment.timer2)
         }
     }
 
