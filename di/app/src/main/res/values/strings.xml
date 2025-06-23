@@ -4,5 +4,5 @@
     <string name="btn_start">Start</string>
     <string name="btn_stop">Stop</string>
     <string name="btn_reset">Reset</string>
-    <string name="application_time">Application time</string>
+    <string name="application_time">Application time: %d</string>
 </resources>
