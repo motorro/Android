@@ -2,12 +2,14 @@ package com.motorro.di.di
 
 import android.content.Context
 import com.motorro.di.MainFragment
+import com.motorro.di.di.scopes.ApplicationScoped
 import dagger.BindsInstance
 import dagger.Component
 
 /**
  * DI container
  */
+@ApplicationScoped
 @Component(modules = [
     GlobalScopeModule::class,
     ApplicationModule::class

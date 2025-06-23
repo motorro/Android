@@ -3,6 +3,7 @@ package com.motorro.di.di
 import android.content.Context
 import android.util.Log
 import com.motorro.di.R
+import com.motorro.di.di.scopes.ApplicationScoped
 import com.motorro.di.timer.Timer
 import com.motorro.di.timer.TimerImplementation
 import dagger.Module
@@ -38,6 +39,7 @@ class ApplicationModule {
      * Increments creation count each time the new timer is created
      */
     @Provides
+    @ApplicationScoped
     fun timer(context: Context, delay: Long, scope: CoroutineScope): Timer {
         Log.i(TAG, "Creating timer: $nextTimerNumber. Delay would be: $delay")
         return TimerImplementation(
