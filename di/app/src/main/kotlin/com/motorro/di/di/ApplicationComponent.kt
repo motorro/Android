@@ -1,7 +1,6 @@
 package com.motorro.di.di
 
 import android.content.Context
-import com.motorro.di.MainFragment
 import com.motorro.di.di.scopes.ApplicationScoped
 import dagger.BindsInstance
 import dagger.Component
@@ -19,7 +18,7 @@ interface ApplicationComponent {
      * Explicit component factory
      */
     @Component.Factory
-    interface Builder {
+    interface Factory {
         /**
          * Provides application module and builds component
          * @param context Context becomes a part of the graph
@@ -28,7 +27,7 @@ interface ApplicationComponent {
     }
 
     /**
-     * Provides dependencies to Main Fragment
+     * Main activity subcomponent builder
      */
-    fun inject(fragment: MainFragment)
+    fun mainActivityComponentBuilder(): MainActivityComponent.Builder
 }

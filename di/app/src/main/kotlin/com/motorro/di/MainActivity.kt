@@ -14,9 +14,21 @@ import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
 import com.motorro.di.databinding.ActivityMainBinding
+import com.motorro.di.di.MainActivityComponent
+import com.motorro.di.di.ProvidesApplicationComponent
+import com.motorro.di.di.ProvidesMainActivityComponent
 
-class MainActivity : AppCompatActivity(), WithViewBinding<ActivityMainBinding> by BindingHost() {
+class MainActivity : AppCompatActivity(), WithViewBinding<ActivityMainBinding> by BindingHost(), ProvidesMainActivityComponent {
+
+    override lateinit var mainActivityComponent: MainActivityComponent
+        private set
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        mainActivityComponent = (application as ProvidesApplicationComponent)
+            .applicationComponent
+            .mainActivityComponentBuilder()
+            .build(this)
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
