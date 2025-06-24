@@ -5,4 +5,6 @@
     <string name="btn_stop">Stop</string>
     <string name="btn_reset">Reset</string>
     <string name="application_time">Application time: %d</string>
+    <string name="activity_time">Activity time: %d</string>
+    <string name="fragment_time">Fragment time: %d</string>
 </resources>
