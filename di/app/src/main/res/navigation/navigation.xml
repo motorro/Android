@@ -8,6 +8,14 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.motorro.di.MainFragment"
-        android:label="@string/app_name"
-        tools:layout="@layout/fragment_main" />
+        android:label="@string/main_fragment_title"
+        tools:layout="@layout/fragment_main" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/viewModelFragment"
+        android:name="com.motorro.di.ViewModelFragment"
+        android:label="@string/vm_fragment_title"
+        tools:layout="@layout/fragment_vm" />
+
 </navigation>
