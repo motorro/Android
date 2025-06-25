@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
@@ -44,12 +45,16 @@ class MainActivity : AppCompatActivity(), WithViewBinding<ActivityMainBinding> b
         val navController = navHostFragment.navController
 
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.mainFragment)
+            setOf(
+                R.id.mainFragment,
+                R.id.viewModelFragment
+            )
         )
 
         withBinding {
             setSupportActionBar(topAppBar)
-            topAppBar.setupWithNavController(navController, appBarConfiguration)
+            setupActionBarWithNavController(navController, appBarConfiguration)
+            bottomNavBar.setupWithNavController(navController)
         }
 
         onBackPressedDispatcher.addCallback(this) {

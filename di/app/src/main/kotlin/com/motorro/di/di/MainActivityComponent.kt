@@ -20,4 +20,9 @@ interface MainActivityComponent {
      * Main fragment component builder
      */
     fun mainFragmentComponentBuilder(): MainFragmentComponent.Builder
+
+    /**
+     * View-model fragment component builder
+     */
+    fun vmFragmentComponentBuilder(): ViewModelFragmentComponent.Builder
 }
