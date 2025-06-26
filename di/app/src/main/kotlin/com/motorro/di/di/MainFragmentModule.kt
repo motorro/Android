@@ -5,17 +5,20 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.motorro.di.R
-import com.motorro.di.di.scopes.FragmentScoped
 import com.motorro.di.timer.Timer
 import com.motorro.di.timer.TimerImplementation
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Named
 
 /**
  * Provides dependencies to main fragment
  */
 @Module
+@InstallIn(FragmentComponent::class)
 class MainFragmentModule {
     companion object {
         /**
