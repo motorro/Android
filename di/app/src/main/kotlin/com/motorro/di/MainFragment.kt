@@ -11,11 +11,12 @@ import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
 import com.motorro.di.databinding.FragmentMainBinding
-import com.motorro.di.di.ProvidesMainActivityComponent
 import com.motorro.di.timer.Timer
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
 
+@AndroidEntryPoint
 class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost() {
 
     private lateinit var timer1: Timer
@@ -38,17 +39,6 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
     fun setTimer3(@Named("fragment") timer: Timer) {
         Log.i(TAG, "Injecting fragment timer: $timer")
         this.timer3 = timer
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i(TAG, "About to inject fragment...")
-        (requireActivity() as ProvidesMainActivityComponent)
-            .mainActivityComponent
-            .mainFragmentComponentBuilder()
-            .build(this)
-            .inject(this)
-
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -7,22 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
 import com.motorro.di.databinding.FragmentVmBinding
-import com.motorro.di.di.ProvidesMainActivityComponent
 import com.motorro.di.timer.Timer
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
 
+@AndroidEntryPoint
 class ViewModelFragment : Fragment(), WithViewBinding<FragmentVmBinding> by BindingHost() {
-
-    @Inject
-    override lateinit var defaultViewModelProviderFactory: ViewModelProvider.Factory
-
     private lateinit var timer1: Timer
     private lateinit var timer2: Timer
     private val timer3: Timer by viewModels<TimerViewModel>()
@@ -37,17 +33,6 @@ class ViewModelFragment : Fragment(), WithViewBinding<FragmentVmBinding> by Bind
     fun setTimer2(@Named("activity") timer: Timer) {
         Log.i(TAG, "Injecting activity timer: $timer")
         this.timer2 = timer
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i(TAG, "About to inject fragment...")
-        (requireActivity() as ProvidesMainActivityComponent)
-            .mainActivityComponent
-            .vmFragmentComponentBuilder()
-            .build()
-            .inject(this)
-
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
