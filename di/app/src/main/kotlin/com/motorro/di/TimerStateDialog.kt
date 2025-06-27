@@ -13,6 +13,7 @@ import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
 import com.motorro.di.databinding.FragmentTimerStateBinding
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import java.util.Locale
@@ -21,7 +22,13 @@ import kotlin.time.Duration
 @AndroidEntryPoint
 class TimerStateDialog : DialogFragment(), WithViewBinding<FragmentTimerStateBinding> by BindingHost() {
 
-    private val viewModel: TimerStateViewModel by viewModels()
+    private val viewModel: TimerStateViewModel by viewModels(
+        extrasProducer = {
+            defaultViewModelCreationExtras.withCreationCallback<TimerStateViewModel.Factory> { factory ->
+                factory.create(TimerStateDialogArgs.fromBundle(requireArguments()).providedTime)
+            }
+        }
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return bindView(container, FragmentTimerStateBinding::inflate)
