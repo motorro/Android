@@ -10,4 +10,8 @@
     <string name="activity_time">Activity time: %d</string>
     <string name="fragment_time">Fragment time: %d</string>
     <string name="vm_time">ViewModel time: %d</string>
+    <string name="title_current_system_time">Current system time</string>
+    <string name="title_provided_time">Provided time</string>
+    <string name="btn_close">Close</string>
+    <string name="btn_provide_state">Provide state</string>
 </resources>

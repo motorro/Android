@@ -20,14 +20,26 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread" />
 
+        <Button
+            android:id="@+id/btn_provide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_provide_state"
+            android:layout_marginTop="@dimen/vertical_padding"
+            app:layout_constraintBottom_toTopOf="@+id/timer_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timer_1"/>
+
         <com.motorro.di.view.TimerView
             android:id="@id/timer_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_padding"
             app:layout_constraintBottom_toTopOf="@+id/timer_3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timer_1" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_provide" />
 
         <com.motorro.di.view.TimerView
             android:id="@id/timer_3"

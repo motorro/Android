@@ -10,6 +10,9 @@
         android:name="com.motorro.di.MainFragment"
         android:label="@string/main_fragment_title"
         tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/main_to_status"
+            app:destination="@id/timerStateDialog" />
     </fragment>
 
     <fragment
@@ -17,5 +20,14 @@
         android:name="com.motorro.di.ViewModelFragment"
         android:label="@string/vm_fragment_title"
         tools:layout="@layout/fragment_vm" />
+    <dialog
+        android:id="@+id/timerStateDialog"
+        android:name="com.motorro.di.TimerStateDialog"
+        android:label="fragment_timer_state"
+        tools:layout="@layout/fragment_timer_state" >
+        <argument
+            android:name="providedTime"
+            app:argType="long"/>
+    </dialog>
 
 </navigation>
