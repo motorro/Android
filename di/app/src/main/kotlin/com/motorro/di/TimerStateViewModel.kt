@@ -24,7 +24,9 @@ class TimerStateViewModel @Inject constructor(
     /**
      * Provided time
      */
-    val providedTime: StateFlow<Duration> = MutableStateFlow((savedStateHandle.get<Long>(KEY_PROVIDED_TIME) ?: 0).milliseconds)
+    val providedTime: StateFlow<Duration> = MutableStateFlow(
+        (savedStateHandle.get<Long>(KEY_PROVIDED_TIME) ?: 0).milliseconds
+    )
 
     companion object {
         const val KEY_PROVIDED_TIME = "providedTime"
