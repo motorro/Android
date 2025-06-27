@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
@@ -15,6 +16,7 @@ import com.motorro.di.timer.Timer
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.time.Duration
 
 @AndroidEntryPoint
 class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by BindingHost() {
@@ -51,6 +53,10 @@ class MainFragment : Fragment(), WithViewBinding<FragmentMainBinding> by Binding
             timer1.setTimer(this@MainFragment.timer1)
             timer2.setTimer(this@MainFragment.timer2)
             timer3.setTimer(this@MainFragment.timer3)
+            Duration
+            btnProvide.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.mainToStatus(this@MainFragment.timer1.count.value.inWholeMilliseconds))
+            }
         }
     }
 
