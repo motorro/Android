@@ -10,12 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import com.motorro.di.R
 import com.motorro.di.databinding.ViewTimerBinding
 import com.motorro.di.timer.Timer
+import com.motorro.di.toDisplayString
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
-import java.util.Locale
 import kotlin.properties.Delegates
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -98,15 +98,5 @@ class TimerView @JvmOverloads constructor(
         }
 
         bindTimer()
-    }
-
-    private fun Duration.toDisplayString(): String {
-        val components = this.toComponents { minutes, seconds, nanos -> arrayOf(minutes.toInt(), seconds, nanos / 10_000_000) }
-
-        return String.format(
-            Locale.getDefault(),
-            "%02d:%02d.%02d",
-            *components
-        )
     }
 }
