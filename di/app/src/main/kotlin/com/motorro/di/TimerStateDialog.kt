@@ -16,8 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
-import java.util.Locale
-import kotlin.time.Duration
 
 @AndroidEntryPoint
 class TimerStateDialog : DialogFragment(), WithViewBinding<FragmentTimerStateBinding> by BindingHost() {
@@ -55,15 +53,5 @@ class TimerStateDialog : DialogFragment(), WithViewBinding<FragmentTimerStateBin
                 dismiss()
             }
         }
-    }
-
-    private fun Duration.toDisplayString(): String {
-        val components = this.toComponents { minutes, seconds, nanos -> arrayOf(minutes.toInt(), seconds, nanos / 10_000_000) }
-
-        return String.format(
-            Locale.getDefault(),
-            "%02d:%02d.%02d",
-            *components
-        )
     }
 }

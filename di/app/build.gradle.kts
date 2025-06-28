@@ -83,6 +83,9 @@ dependencies {
 
     // Logging
     implementation(libs.napier)
+    
+    // Startup init
+    implementation(libs.androidx.startup)
 
     // Serialization
     implementation(libs.kotlinx.serialization.core)
