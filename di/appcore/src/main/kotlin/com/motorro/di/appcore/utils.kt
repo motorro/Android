@@ -1,4 +1,4 @@
-package com.motorro.di
+package com.motorro.di.appcore
 
 import java.util.Locale
 import kotlin.time.Duration

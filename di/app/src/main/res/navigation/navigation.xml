@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/viewModelFragment"
-        android:name="com.motorro.di.ViewModelFragment"
+        android:name="com.motorro.di.viewmodel.ViewModelFragment"
         android:label="@string/vm_fragment_title"
         tools:layout="@layout/fragment_vm" />
     <dialog

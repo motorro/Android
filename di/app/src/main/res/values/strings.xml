@@ -3,13 +3,9 @@
     <string name="app_name">DI</string>
     <string name="main_fragment_title">Main Fragment</string>
     <string name="vm_fragment_title">ViewModel Fragment</string>
-    <string name="btn_start">Start</string>
-    <string name="btn_stop">Stop</string>
-    <string name="btn_reset">Reset</string>
     <string name="application_time">Application time: %d</string>
     <string name="activity_time">Activity time: %d</string>
     <string name="fragment_time">Fragment time: %d</string>
-    <string name="vm_time">ViewModel time: %d</string>
     <string name="title_current_system_time">Current system time</string>
     <string name="title_provided_time">Provided time</string>
     <string name="btn_close">Close</string>

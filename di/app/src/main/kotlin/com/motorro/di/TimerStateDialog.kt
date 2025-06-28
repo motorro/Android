@@ -11,6 +11,7 @@ import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
+import com.motorro.di.appcore.toDisplayString
 import com.motorro.di.databinding.FragmentTimerStateBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.withCreationCallback
