@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.motorro.di.view.TimerView
+        <com.motorro.di.appcore.view.TimerView
             android:id="@+id/timer_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="spread" />
 
-        <com.motorro.di.view.TimerView
+        <com.motorro.di.appcore.view.TimerView
             android:id="@id/timer_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timer_1" />
 
-        <com.motorro.di.view.TimerView
+        <com.motorro.di.appcore.view.TimerView
             android:id="@id/timer_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

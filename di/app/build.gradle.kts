@@ -52,9 +52,15 @@ android {
     }
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 dependencies {
     implementation(project(":core"))
     implementation(project(":di:timer"))
+    implementation(project(":di:appcore"))
+    implementation(project(":di:viewmodel"))
 
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.coroutines.android)
@@ -83,7 +89,7 @@ dependencies {
 
     // Logging
     implementation(libs.napier)
-    
+
     // Startup init
     implementation(libs.androidx.startup)
 

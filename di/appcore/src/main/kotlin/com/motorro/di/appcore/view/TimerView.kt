@@ -1,4 +1,4 @@
-package com.motorro.di.view
+package com.motorro.di.appcore.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,10 +7,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.withStyledAttributes
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.motorro.di.R
-import com.motorro.di.databinding.ViewTimerBinding
+import com.motorro.di.appcore.R
+import com.motorro.di.appcore.databinding.ViewTimerBinding
+import com.motorro.di.appcore.toDisplayString
 import com.motorro.di.timer.Timer
-import com.motorro.di.toDisplayString
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

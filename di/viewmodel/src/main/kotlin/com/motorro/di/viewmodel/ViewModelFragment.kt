@@ -1,4 +1,4 @@
-package com.motorro.di
+package com.motorro.di.viewmodel
 
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +11,8 @@ import com.motorro.core.viewbinding.BindingHost
 import com.motorro.core.viewbinding.WithViewBinding
 import com.motorro.core.viewbinding.bindView
 import com.motorro.core.viewbinding.withBinding
-import com.motorro.di.databinding.FragmentVmBinding
 import com.motorro.di.timer.Timer
+import com.motorro.di.viewmodel.databinding.FragmentVmBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named

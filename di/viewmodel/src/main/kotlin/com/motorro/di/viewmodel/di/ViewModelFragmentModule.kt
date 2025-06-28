@@ -1,10 +1,10 @@
-package com.motorro.di.di
+package com.motorro.di.viewmodel.di
 
 import android.content.Context
 import android.util.Log
-import com.motorro.di.R
 import com.motorro.di.timer.Timer
 import com.motorro.di.timer.TimerImplementation
+import com.motorro.di.viewmodel.R
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +22,7 @@ import javax.inject.Named
  */
 @Module
 @InstallIn(ViewModelComponent::class)
-class ViewModelFragmentModule {
+internal class ViewModelFragmentModule {
     companion object {
         /**
          * Next timer number

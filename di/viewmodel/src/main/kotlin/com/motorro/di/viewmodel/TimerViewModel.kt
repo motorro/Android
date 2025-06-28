@@ -1,4 +1,4 @@
-package com.motorro.di
+package com.motorro.di.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.motorro.di.timer.Timer
@@ -10,4 +10,4 @@ import javax.inject.Named
  * Holds timer reference so it is retained through configuration changes
  */
 @HiltViewModel
-class TimerViewModel @Inject constructor(@Named("vm") timer: Timer) : ViewModel(), Timer by timer
+internal class TimerViewModel @Inject constructor(@Named("vm") timer: Timer) : ViewModel(), Timer by timer

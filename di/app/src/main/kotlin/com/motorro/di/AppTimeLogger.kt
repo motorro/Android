@@ -3,6 +3,7 @@ package com.motorro.di
 import android.content.Context
 import android.util.Log
 import androidx.startup.Initializer
+import com.motorro.di.appcore.toDisplayString
 import com.motorro.di.timer.Timer
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
