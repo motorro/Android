@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_recipe_list">Cookbook</string>
+    <string name="content_add_recipe">Add recipe</string>
+    <string name="btn_sync">Synchronize</string>
+    <string name="btn_logout">Logout</string>
+    <string name="hint_search_filter">Search filter</string>
+    <string name="desc_the_image_of_the_recipe">The image of the recipe</string>
+</resources>

@@ -1,58 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/cookbookFragment">
+    app:startDestination="@id/recipe_list">
 
-    <fragment
-        android:id="@+id/cookbookFragment"
-        android:name="com.motorro.cookbook.app.ui.CookbookFragment"
-        android:label="fragment_cookbook"
-        tools:layout="@layout/fragment_cookbook" >
-        <action
-            android:id="@+id/cookbook_to_recipe"
-            app:destination="@id/recipeFragment" />
-        <action
-            android:id="@+id/cookbook_to_add"
-            app:destination="@id/addRecipeFragment" />
-        <action
-            android:id="@+id/cookbook_to_login"
-            app:destination="@id/loginFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/recipeFragment"
-        android:name="com.motorro.cookbook.app.ui.RecipeFragment"
-        android:label="@string/title_recipe"
-        tools:layout="@layout/fragment_recipe">
-        <argument
-            android:name="recipeId"
-            app:argType="string" />
-        <action
-            android:id="@+id/recipe_to_delete_confirmation"
-            app:destination="@id/deleteConfirmationFragment" />
-        <action
-            android:id="@+id/recipe_to_login"
-            app:destination="@id/loginFragment" />
-    </fragment>
-    <dialog
-        android:id="@+id/deleteConfirmationFragment"
-        android:name="com.motorro.cookbook.app.ui.DeleteConfirmationFragment"
-        android:label="fragment_confirmation"
-        tools:layout="@layout/fragment_confirmation" >
-        <argument
-            android:name="title"
-            app:argType="string" />
-    </dialog>
-    <fragment
-        android:id="@+id/addRecipeFragment"
-        android:name="com.motorro.cookbook.app.ui.AddRecipeFragment"
-        android:label="@string/title_add_new"
-        tools:layout="@layout/fragment_add_recipe" />
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.motorro.cookbook.app.ui.LoginFragment"
-        android:label="@string/title_login"
-        tools:layout="@layout/fragment_login" />
+    <include app:graph="@navigation/recipelist"/>
+
+    <include app:graph="@navigation/recipe"/>
+
+    <include app:graph="@navigation/addrecipe"/>
+
+    <include app:graph="@navigation/login"/>
 
 </navigation>

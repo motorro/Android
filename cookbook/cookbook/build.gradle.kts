@@ -3,14 +3,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.navigation.safeargs.kotlin)
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.google.ksp)
-}
-
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-    arg("room.incremental", "true")
-    arg("room.generateKotlin", "true")
 }
 
 android {
@@ -25,10 +17,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
     }
 
     buildTypes {
@@ -53,8 +41,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":cookbook:core"))
+    implementation(project(":cookbook:domain"))
     implementation(project(":cookbook:data"))
-    implementation(project(":core"))
+    implementation(project(":cookbook:appcore"))
+    implementation(project(":cookbook:login"))
+    implementation(project(":cookbook:recipelist"))
+    implementation(project(":cookbook:recipe"))
+    implementation(project(":cookbook:addrecipe"))
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.core)
@@ -92,7 +86,6 @@ dependencies {
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)

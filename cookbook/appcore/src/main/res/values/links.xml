@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="link_login">cookbook://login</string>
+    <string name="link_recipe">cookbook://recipes/{recipeId}</string>
+    <string name="link_add_recipe">cookbook://recipes/add</string>
+</resources>

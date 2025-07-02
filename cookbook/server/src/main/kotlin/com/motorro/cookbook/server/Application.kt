@@ -1,7 +1,7 @@
 package com.motorro.cookbook.server
 
-import com.motorro.cookbook.data.Recipe
-import com.motorro.cookbook.data.UserId
+import com.motorro.cookbook.model.Recipe
+import com.motorro.cookbook.model.UserId
 import com.motorro.cookbook.server.db.initDb
 import com.motorro.cookbook.server.db.tables.RecipesTable
 import io.ktor.http.ContentType

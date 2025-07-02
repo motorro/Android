@@ -1,32 +1,36 @@
 package com.motorro.cookbook.app
 
 import android.app.Application
-import com.motorro.cookbook.app.db.CookbookDao
-import com.motorro.cookbook.app.db.CookbookDb
-import com.motorro.cookbook.app.net.Config
-import com.motorro.cookbook.app.net.ktorHttp
-import com.motorro.cookbook.app.net.lenientJson
-import com.motorro.cookbook.app.net.okhttp
-import com.motorro.cookbook.app.net.retrofit
-import com.motorro.cookbook.app.repository.CookbookApi
-import com.motorro.cookbook.app.repository.KtorCookbookApi
-import com.motorro.cookbook.app.repository.RecipeRepository
-import com.motorro.cookbook.app.repository.RecipeRepositoryImpl
-import com.motorro.cookbook.app.repository.usecase.AddRecipeUsecase
-import com.motorro.cookbook.app.repository.usecase.AddRecipeUsecaseImpl
-import com.motorro.cookbook.app.repository.usecase.CategoriesUsecase
-import com.motorro.cookbook.app.repository.usecase.CategoriesUsecaseImpl
-import com.motorro.cookbook.app.repository.usecase.DeleteRecipeUsecase
-import com.motorro.cookbook.app.repository.usecase.DeleteRecipeUsecaseImpl
-import com.motorro.cookbook.app.repository.usecase.RecipeListUsecase
-import com.motorro.cookbook.app.repository.usecase.RecipeListUsecaseImpl
-import com.motorro.cookbook.app.repository.usecase.RecipeUsecase
-import com.motorro.cookbook.app.repository.usecase.RecipeUsecaseImpl
-import com.motorro.cookbook.app.session.DatastoreSessionStorage
-import com.motorro.cookbook.app.session.RetrofitUserApiImpl
-import com.motorro.cookbook.app.session.RetrofitUserService
-import com.motorro.cookbook.app.session.SessionManager
-import com.motorro.cookbook.app.session.UserApi
+import com.motorro.cookbook.app.navigation.AppLinks
+import com.motorro.cookbook.appcore.di.DiContainer
+import com.motorro.cookbook.appcore.navigation.Links
+import com.motorro.cookbook.data.db.CookbookDb
+import com.motorro.cookbook.data.net.Config
+import com.motorro.cookbook.data.net.ktorHttp
+import com.motorro.cookbook.data.net.lenientJson
+import com.motorro.cookbook.data.net.okhttp
+import com.motorro.cookbook.data.net.retrofit
+import com.motorro.cookbook.data.recipes.CookbookApi
+import com.motorro.cookbook.data.recipes.RecipeRepositoryImpl
+import com.motorro.cookbook.data.recipes.db.CookbookDao
+import com.motorro.cookbook.data.recipes.net.KtorCookbookApi
+import com.motorro.cookbook.data.recipes.usecase.AddRecipeUsecase
+import com.motorro.cookbook.data.recipes.usecase.AddRecipeUsecaseImpl
+import com.motorro.cookbook.data.recipes.usecase.CategoriesUsecase
+import com.motorro.cookbook.data.recipes.usecase.CategoriesUsecaseImpl
+import com.motorro.cookbook.data.recipes.usecase.DeleteRecipeUsecase
+import com.motorro.cookbook.data.recipes.usecase.DeleteRecipeUsecaseImpl
+import com.motorro.cookbook.data.recipes.usecase.RecipeListUsecase
+import com.motorro.cookbook.data.recipes.usecase.RecipeListUsecaseImpl
+import com.motorro.cookbook.data.recipes.usecase.RecipeUsecase
+import com.motorro.cookbook.data.recipes.usecase.RecipeUsecaseImpl
+import com.motorro.cookbook.data.session.DatastoreSessionStorage
+import com.motorro.cookbook.data.session.RetrofitUserApiImpl
+import com.motorro.cookbook.data.session.RetrofitUserService
+import com.motorro.cookbook.domain.recipes.RecipeRepository
+import com.motorro.cookbook.domain.session.SessionManager
+import com.motorro.cookbook.domain.session.SessionManagerImpl
+import com.motorro.cookbook.domain.session.UserApi
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -41,9 +45,7 @@ import kotlin.uuid.Uuid
  */
 @OptIn(DelicateCoroutinesApi::class)
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class App : Application() {
-
-
+class App : Application(), DiContainer {
 
     /**
      * Json instance
@@ -72,8 +74,8 @@ class App : Application() {
     /**
      * Session manager
      */
-    val sessionManager: SessionManager by lazy {
-        SessionManager.Impl(DatastoreSessionStorage(this), userApi(), GlobalScope)
+    override val sessionManager: SessionManager by lazy {
+        SessionManagerImpl(DatastoreSessionStorage(this), userApi(), GlobalScope)
     }
 
     /**
@@ -108,13 +110,14 @@ class App : Application() {
     }
 
     fun recipeUsecaseFactory(): RecipeUsecase.Factory = object : RecipeUsecase.Factory {
-        override fun invoke(recipeId: Uuid): RecipeUsecase = RecipeUsecaseImpl(
-            recipeId,
-            sessionManager,
-            recipesDao(),
-            cookbookApi(),
-            GlobalScope
-        )
+        override fun invoke(recipeId: Uuid): RecipeUsecase =
+            RecipeUsecaseImpl(
+                recipeId,
+                sessionManager,
+                recipesDao(),
+                cookbookApi(),
+                GlobalScope
+            )
     }
 
     /**
@@ -139,17 +142,18 @@ class App : Application() {
     /**
      * Delete recipe use-case
      */
-    fun deleteRecipeUsecase(): DeleteRecipeUsecase = DeleteRecipeUsecaseImpl(
-        sessionManager,
-        recipesDao(),
-        cookbookApi(),
-        GlobalScope
-    )
+    fun deleteRecipeUsecase(): DeleteRecipeUsecase =
+        DeleteRecipeUsecaseImpl(
+            sessionManager,
+            recipesDao(),
+            cookbookApi(),
+            GlobalScope
+        )
 
     /**
      * The recipe repository.
      */
-    val recipeRepository: RecipeRepository by lazy {
+    override val recipeRepository: RecipeRepository by lazy {
         RecipeRepositoryImpl(
             recipeListUsecase,
             recipeUsecaseFactory(),
@@ -157,5 +161,12 @@ class App : Application() {
             addRecipeUsecase(),
             deleteRecipeUsecase()
         )
+    }
+
+    /**
+     * Application deep-links
+     */
+    override val links: Links by lazy {
+        AppLinks(this)
     }
 }
