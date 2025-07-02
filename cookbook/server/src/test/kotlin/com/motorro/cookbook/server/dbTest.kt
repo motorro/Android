@@ -1,6 +1,6 @@
 package com.motorro.cookbook.server
 
-import com.motorro.cookbook.data.UserId
+import com.motorro.cookbook.model.UserId
 import com.motorro.cookbook.server.db.initDb
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking

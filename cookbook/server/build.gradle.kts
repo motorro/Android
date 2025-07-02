@@ -24,7 +24,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(project(":cookbook:data"))
+    implementation(project(":cookbook:model"))
     implementation(libs.kotlinx.coroutines)
     implementation(libs.logback)
     implementation(libs.ktor.server.core)

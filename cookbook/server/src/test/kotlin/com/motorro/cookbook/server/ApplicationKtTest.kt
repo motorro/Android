@@ -1,10 +1,10 @@
 package com.motorro.cookbook.server
 
-import com.motorro.cookbook.data.Image
-import com.motorro.cookbook.data.ImageUpload
-import com.motorro.cookbook.data.Profile
-import com.motorro.cookbook.data.Recipe
-import com.motorro.cookbook.data.UserId
+import com.motorro.cookbook.model.Image
+import com.motorro.cookbook.model.ImageUpload
+import com.motorro.cookbook.model.Profile
+import com.motorro.cookbook.model.Recipe
+import com.motorro.cookbook.model.UserId
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.accept

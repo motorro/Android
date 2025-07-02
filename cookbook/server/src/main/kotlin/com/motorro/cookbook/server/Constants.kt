@@ -1,8 +1,8 @@
 package com.motorro.cookbook.server
 
-import com.motorro.cookbook.data.Image
-import com.motorro.cookbook.data.Recipe
-import com.motorro.cookbook.data.RecipeCategory
+import com.motorro.cookbook.model.Image
+import com.motorro.cookbook.model.Recipe
+import com.motorro.cookbook.model.RecipeCategory
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import io.ktor.http.appendPathSegments

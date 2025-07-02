@@ -1,6 +1,6 @@
 package com.motorro.cookbook.server
 
-import com.motorro.cookbook.data.Image
+import com.motorro.cookbook.model.Image
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 import io.ktor.http.appendPathSegments

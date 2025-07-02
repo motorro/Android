@@ -1,9 +1,9 @@
 package com.motorro.cookbook.server.db.tables
 
-import com.motorro.cookbook.data.Image
-import com.motorro.cookbook.data.ListRecipe
-import com.motorro.cookbook.data.Recipe
-import com.motorro.cookbook.data.RecipeCategory
+import com.motorro.cookbook.model.Image
+import com.motorro.cookbook.model.ListRecipe
+import com.motorro.cookbook.model.Recipe
+import com.motorro.cookbook.model.RecipeCategory
 import com.motorro.cookbook.server.create
 import com.motorro.cookbook.server.ofRelative
 import io.ktor.http.Url
