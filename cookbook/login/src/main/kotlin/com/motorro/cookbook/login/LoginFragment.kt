@@ -18,8 +18,10 @@ import com.motorro.cookbook.appcore.viewbinding.bindView
 import com.motorro.cookbook.appcore.viewbinding.withBinding
 import com.motorro.cookbook.login.data.LoginViewState
 import com.motorro.cookbook.login.databinding.FragmentLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginFragment : Fragment(), WithViewBinding<FragmentLoginBinding> by BindingHost() {
 
     private val model: LoginViewModel by viewModels {

@@ -30,10 +30,12 @@ import com.motorro.cookbook.model.Recipe
 import com.motorro.cookbook.recipe.DeleteConfirmationFragment.Companion.CONFIRMATION_RESULT
 import com.motorro.cookbook.recipe.R
 import com.motorro.cookbook.recipe.databinding.FragmentRecipeBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.uuid.Uuid
 import com.motorro.cookbook.appcore.R as CR
 
+@AndroidEntryPoint
 class RecipeFragment : Fragment(), WithViewBinding<FragmentRecipeBinding> by BindingHost() {
 
     /**

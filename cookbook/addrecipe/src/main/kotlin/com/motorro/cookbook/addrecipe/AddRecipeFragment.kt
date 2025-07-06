@@ -20,8 +20,10 @@ import com.motorro.cookbook.appcore.viewbinding.BindingHost
 import com.motorro.cookbook.appcore.viewbinding.WithViewBinding
 import com.motorro.cookbook.appcore.viewbinding.bindView
 import com.motorro.cookbook.appcore.viewbinding.withBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AddRecipeFragment : Fragment(), WithViewBinding<FragmentAddRecipeBinding> by BindingHost() {
     private val model by viewModels<AddRecipeFragmentViewModel> {
         AddRecipeFragmentViewModel.Factory(requireContext())
