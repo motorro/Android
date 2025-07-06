@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.navigation.safeargs.kotlin)
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -50,6 +52,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.glide)
+
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.androidx)
+    ksp(libs.hilt.android.compiler)
 }
 
 kotlin {

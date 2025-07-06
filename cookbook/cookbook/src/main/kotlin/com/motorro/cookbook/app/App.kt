@@ -31,6 +31,7 @@ import com.motorro.cookbook.domain.recipes.RecipeRepository
 import com.motorro.cookbook.domain.session.SessionManager
 import com.motorro.cookbook.domain.session.SessionManagerImpl
 import com.motorro.cookbook.domain.session.UserApi
+import dagger.hilt.android.HiltAndroidApp
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -45,6 +46,7 @@ import kotlin.uuid.Uuid
  */
 @OptIn(DelicateCoroutinesApi::class)
 @Suppress("MemberVisibilityCanBePrivate", "unused")
+@HiltAndroidApp
 class App : Application(), DiContainer {
 
     /**

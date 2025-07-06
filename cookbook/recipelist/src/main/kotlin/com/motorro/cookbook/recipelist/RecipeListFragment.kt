@@ -28,9 +28,11 @@ import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.domain.session.error.UnauthorizedException
 import com.motorro.cookbook.recipelist.data.RecipeListItem
 import com.motorro.cookbook.recipelist.databinding.FragmentRecipeListBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.motorro.cookbook.appcore.R as CR
 
+@AndroidEntryPoint
 class RecipeListFragment : Fragment(), WithViewBinding<FragmentRecipeListBinding> by BindingHost() {
 
     /**
