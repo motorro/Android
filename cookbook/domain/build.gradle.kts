@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.ksp)
 }
 
 java {
@@ -23,6 +24,10 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.mockk.mockk)
+
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.core)
+
 }
 
 tasks.named<KotlinCompilationTask<*>>("compileKotlin").configure {
