@@ -25,9 +25,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddRecipeFragment : Fragment(), WithViewBinding<FragmentAddRecipeBinding> by BindingHost() {
-    private val model by viewModels<AddRecipeFragmentViewModel> {
-        AddRecipeFragmentViewModel.Factory(requireContext())
-    }
+
+    // Factory managed by Hilt
+    private val model: AddRecipeFragmentViewModel by viewModels()
 
     private val selectPicture = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         model.setImage(uri)

@@ -1,6 +1,5 @@
 package com.motorro.cookbook.recipelist
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.motorro.cookbook.app.ui.RecipeAdapter
-import com.motorro.cookbook.appcore.di.DiContainer
 import com.motorro.cookbook.appcore.navigation.Links
 import com.motorro.cookbook.appcore.ui.MarginItemDecoration
 import com.motorro.cookbook.appcore.viewbinding.BindingHost
@@ -30,6 +28,7 @@ import com.motorro.cookbook.recipelist.data.RecipeListItem
 import com.motorro.cookbook.recipelist.databinding.FragmentRecipeListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import com.motorro.cookbook.appcore.R as CR
 
 @AndroidEntryPoint
@@ -38,20 +37,15 @@ class RecipeListFragment : Fragment(), WithViewBinding<FragmentRecipeListBinding
     /**
      * Application deep-links
      */
-    private lateinit var links: Links
+    @set:Inject
+    lateinit var links: Links
 
-    private val model by viewModels<RecipeListViewModel> {
-        RecipeListViewModel.Factory(requireContext())
-    }
+    // Factory managed by Hilt
+    private val model: RecipeListViewModel by viewModels()
 
     private val recipeAdapter = RecipeAdapter { id ->
         Log.d(TAG, "Recipe clicked: $id")
         findNavController().navigate(links.recipe(id))
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        links = (requireActivity().application as DiContainer).links
     }
 
     override fun onCreateView(

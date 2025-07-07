@@ -1,6 +1,5 @@
 package com.motorro.cookbook.recipe
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.motorro.cookbook.appcore.di.DiContainer
 import com.motorro.cookbook.appcore.navigation.Links
 import com.motorro.cookbook.appcore.utils.subscribeToResult
 import com.motorro.cookbook.appcore.viewbinding.BindingHost
@@ -28,10 +26,11 @@ import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.domain.session.error.UnauthorizedException
 import com.motorro.cookbook.model.Recipe
 import com.motorro.cookbook.recipe.DeleteConfirmationFragment.Companion.CONFIRMATION_RESULT
-import com.motorro.cookbook.recipe.R
 import com.motorro.cookbook.recipe.databinding.FragmentRecipeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.uuid.Uuid
 import com.motorro.cookbook.appcore.R as CR
 
@@ -41,17 +40,18 @@ class RecipeFragment : Fragment(), WithViewBinding<FragmentRecipeBinding> by Bin
     /**
      * Application deep-links
      */
-    private lateinit var links: Links
+    @set:Inject
+    lateinit var links: Links
 
     private val recipeId: Uuid get() = Uuid.parse(RecipeFragmentArgs.fromBundle(requireArguments()).recipeId)
-    private val model by viewModels<RecipeViewModel> {
-        RecipeViewModel.Factory(requireContext(), recipeId)
-    }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        links = (requireActivity().application as DiContainer).links
-    }
+    private val model by viewModels<RecipeViewModel>(
+        extrasProducer = {
+            defaultViewModelCreationExtras.withCreationCallback<RecipeViewModel.Factory> {
+                it.create(recipeId)
+            }
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
