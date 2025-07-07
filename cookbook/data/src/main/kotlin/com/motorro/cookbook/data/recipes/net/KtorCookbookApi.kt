@@ -27,16 +27,18 @@ import io.ktor.utils.io.streams.asInput
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import java.net.URL
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.uuid.Uuid
 
 
 /**
  * Ktor cookbook API implementation
  */
-class KtorCookbookApi(
-    private val context: Context,
+class KtorCookbookApi @Inject constructor(
+    @param:Named("Application") private val context: Context,
     private val httpClient: HttpClient,
-    private val baseUrl: URL
+    @param:Named("Cookbook") private val baseUrl: URL
 ) : CookbookApi {
 
     override suspend fun getRecipeList(): Result<List<ListRecipe>> = request {

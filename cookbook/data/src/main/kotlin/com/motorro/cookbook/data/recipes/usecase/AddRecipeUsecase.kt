@@ -14,13 +14,15 @@ import com.motorro.cookbook.model.ImageUpload
 import com.motorro.cookbook.model.Recipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
 
 /**
  * Adds new recipe
  */
-interface AddRecipeUsecase {
+internal interface AddRecipeUsecase {
     /**
      * Adds new recipe
      * @param recipe Recipe to add
@@ -36,11 +38,11 @@ interface AddRecipeUsecase {
  * @param scope Coroutine scope to run synchronisation
  * @param clock Clock instance
  */
-class AddRecipeUsecaseImpl(
+internal class AddRecipeUsecaseImpl @Inject constructor(
     private val sessionManager: SessionManager,
     private val cookbookDao: CookbookDao,
     private val cookbookApi: CookbookApi,
-    private val scope: CoroutineScope,
+    @param:Named("Application") private val scope: CoroutineScope,
     private val clock: Clock
 ) : AddRecipeUsecase, Logging {
     override fun invoke(recipe: NewRecipe) {

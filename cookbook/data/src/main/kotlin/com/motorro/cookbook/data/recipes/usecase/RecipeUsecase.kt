@@ -16,6 +16,9 @@ import com.motorro.cookbook.domain.session.SessionManager
 import com.motorro.cookbook.domain.session.withUserId
 import com.motorro.cookbook.model.Recipe
 import com.motorro.cookbook.model.UserId
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -27,13 +30,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Named
 import kotlin.uuid.Uuid
 
 /**
  * Recipe repository use-case
  * Recipe ID is bound externally
  */
-interface RecipeUsecase {
+internal interface RecipeUsecase {
     /**
      * Returns the recipe loading state flow with the specified ID.
      */
@@ -47,12 +51,13 @@ interface RecipeUsecase {
     /**
      * Creates use-case for given ID
      */
+    @AssistedFactory
     interface Factory {
         /**
          * Creates use-case for given ID
          * @param recipeId Recipe ID to bind
          */
-        operator fun invoke(recipeId: Uuid): RecipeUsecase
+        operator fun invoke(recipeId: Uuid): RecipeUsecaseImpl
     }
 }
 
@@ -64,12 +69,12 @@ interface RecipeUsecase {
  * @param cookbookApi Cookbook network API
  * @param scope Coroutine scope to run synchronisation
  */
-class RecipeUsecaseImpl(
-    private val recipeId: Uuid,
+internal class RecipeUsecaseImpl @AssistedInject constructor(
+    @Assisted private val recipeId: Uuid,
     private val sessionManager: SessionManager,
     private val cookbookDao: CookbookDao,
     private val cookbookApi: CookbookApi,
-    private val scope: CoroutineScope
+    @param:Named("Application") private val scope: CoroutineScope,
 ) : RecipeUsecase {
 
     // Network operation job

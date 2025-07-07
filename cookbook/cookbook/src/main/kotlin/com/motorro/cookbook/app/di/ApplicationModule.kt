@@ -11,6 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import javax.inject.Named
+import kotlin.time.Clock
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -25,4 +26,7 @@ class ApplicationModule {
 
     @Provides
     fun links(@Named("Application") context: Context): Links = AppLinks(context)
+
+    @Provides
+    fun clock(): Clock = Clock.System
 }

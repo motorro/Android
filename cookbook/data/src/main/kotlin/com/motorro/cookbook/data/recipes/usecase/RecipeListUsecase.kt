@@ -27,11 +27,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Recipe list repository use-case
  */
-interface RecipeListUsecase {
+internal interface RecipeListUsecase {
     /**
      * Returns the list of recipes as a flow with loading state.
      */
@@ -50,11 +52,11 @@ interface RecipeListUsecase {
  * @param cookbookApi Cookbook network API
  * @param scope Coroutine scope to run synchronisation
  */
-class RecipeListUsecaseImpl(
+internal class RecipeListUsecaseImpl @Inject constructor(
     private val sessionManager: SessionManager,
     private val cookbookDao: CookbookDao,
     private val cookbookApi: CookbookApi,
-    private val scope: CoroutineScope
+    @param:Named("Application") private val scope: CoroutineScope,
 ) : RecipeListUsecase {
 
     // Network operation job

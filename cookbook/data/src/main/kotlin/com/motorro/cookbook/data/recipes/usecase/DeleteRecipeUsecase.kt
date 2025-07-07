@@ -9,12 +9,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.uuid.Uuid
 
 /**
  * Deletes recipe
  */
-interface DeleteRecipeUsecase {
+internal interface DeleteRecipeUsecase {
     /**
      * Deletes recipe
      * @param id Recipe ID to delete
@@ -28,11 +30,11 @@ interface DeleteRecipeUsecase {
  * @param cookbookApi Cookbook network API
  * @param scope Coroutine scope to run synchronisation
  */
-class DeleteRecipeUsecaseImpl(
+internal class DeleteRecipeUsecaseImpl @Inject constructor(
     private val sessionManager: SessionManager,
     private val cookbookDao: CookbookDao,
     private val cookbookApi: CookbookApi,
-    private val scope: CoroutineScope
+    @param:Named("Application") private val scope: CoroutineScope,
 ) : DeleteRecipeUsecase {
 
     override fun invoke(id: Uuid) {
