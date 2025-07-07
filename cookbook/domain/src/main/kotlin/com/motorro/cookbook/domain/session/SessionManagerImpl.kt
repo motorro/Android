@@ -15,9 +15,10 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SessionManagerImpl(
+internal class SessionManagerImpl @Inject constructor(
     private val sessionStorage: SessionStorage,
     private val userApi: UserApi,
     scope: CoroutineScope

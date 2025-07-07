@@ -1,9 +1,6 @@
 package com.motorro.cookbook.app
 
 import android.app.Application
-import com.motorro.cookbook.app.navigation.AppLinks
-import com.motorro.cookbook.appcore.di.DiContainer
-import com.motorro.cookbook.appcore.navigation.Links
 import com.motorro.cookbook.data.db.CookbookDb
 import com.motorro.cookbook.data.net.Config
 import com.motorro.cookbook.data.net.ktorHttp
@@ -11,7 +8,6 @@ import com.motorro.cookbook.data.net.lenientJson
 import com.motorro.cookbook.data.net.okhttp
 import com.motorro.cookbook.data.net.retrofit
 import com.motorro.cookbook.data.recipes.CookbookApi
-import com.motorro.cookbook.data.recipes.RecipeRepositoryImpl
 import com.motorro.cookbook.data.recipes.db.CookbookDao
 import com.motorro.cookbook.data.recipes.net.KtorCookbookApi
 import com.motorro.cookbook.data.recipes.usecase.AddRecipeUsecase
@@ -24,12 +20,9 @@ import com.motorro.cookbook.data.recipes.usecase.RecipeListUsecase
 import com.motorro.cookbook.data.recipes.usecase.RecipeListUsecaseImpl
 import com.motorro.cookbook.data.recipes.usecase.RecipeUsecase
 import com.motorro.cookbook.data.recipes.usecase.RecipeUsecaseImpl
-import com.motorro.cookbook.data.session.DatastoreSessionStorage
 import com.motorro.cookbook.data.session.RetrofitUserApiImpl
 import com.motorro.cookbook.data.session.RetrofitUserService
-import com.motorro.cookbook.domain.recipes.RecipeRepository
 import com.motorro.cookbook.domain.session.SessionManager
-import com.motorro.cookbook.domain.session.SessionManagerImpl
 import com.motorro.cookbook.domain.session.UserApi
 import dagger.hilt.android.HiltAndroidApp
 import io.ktor.client.HttpClient
@@ -38,6 +31,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import javax.inject.Inject
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
 
@@ -47,7 +41,10 @@ import kotlin.uuid.Uuid
 @OptIn(DelicateCoroutinesApi::class)
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 @HiltAndroidApp
-class App : Application(), DiContainer {
+class App : Application() {
+
+    @set:Inject
+    lateinit var sessionManager: SessionManager
 
     /**
      * Json instance
@@ -72,13 +69,6 @@ class App : Application(), DiContainer {
     fun userApi(): UserApi = RetrofitUserApiImpl(
         authRetrofit.create(RetrofitUserService::class.java)
     )
-
-    /**
-     * Session manager
-     */
-    override val sessionManager: SessionManager by lazy {
-        SessionManagerImpl(DatastoreSessionStorage(this), userApi(), GlobalScope)
-    }
 
     /**
      * Ktor HTTP client
@@ -151,24 +141,4 @@ class App : Application(), DiContainer {
             cookbookApi(),
             GlobalScope
         )
-
-    /**
-     * The recipe repository.
-     */
-    override val recipeRepository: RecipeRepository by lazy {
-        RecipeRepositoryImpl(
-            recipeListUsecase,
-            recipeUsecaseFactory(),
-            categoriesUsecase(),
-            addRecipeUsecase(),
-            deleteRecipeUsecase()
-        )
-    }
-
-    /**
-     * Application deep-links
-     */
-    override val links: Links by lazy {
-        AppLinks(this)
-    }
 }
