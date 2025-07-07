@@ -11,6 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 internal class SessionModule {
     @Provides
     @Singleton
-    fun sessionStorage(context: Context): SessionStorage = DatastoreSessionStorage(context)
+    fun sessionStorage(@Named("Application") context: Context): SessionStorage = DatastoreSessionStorage(context)
 
     @Provides
     fun userService(retrofit: Retrofit): RetrofitUserService = retrofit.create(RetrofitUserService::class.java)
