@@ -9,11 +9,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
 /**
  * Exports the list of categories
  */
-interface CategoriesUsecase {
+internal interface CategoriesUsecase {
     /**
      * Categories list flow
      */
@@ -27,7 +28,7 @@ interface CategoriesUsecase {
  * @param cookbookDao Cookbook database DAO
  */
 @OptIn(ExperimentalCoroutinesApi::class)
-class CategoriesUsecaseImpl(
+internal class CategoriesUsecaseImpl @Inject constructor(
     sessionManager: SessionManager,
     cookbookDao: CookbookDao,
 ) : CategoriesUsecase {

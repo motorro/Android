@@ -13,12 +13,13 @@ import com.motorro.cookbook.domain.recipes.data.RecipeListLce
 import com.motorro.cookbook.model.RecipeCategory
 import kotlinx.coroutines.flow.Flow
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 import kotlin.uuid.Uuid
 
 /**
  * Combines use-cases to a single repository
  */
-class RecipeRepositoryImpl(
+internal class RecipeRepositoryImpl @Inject constructor(
     private val recipeListUsecase: RecipeListUsecase,
     private val createRecipeUsecase: RecipeUsecase.Factory,
     private val categoriesUsecase: CategoriesUsecase,

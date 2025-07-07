@@ -73,27 +73,6 @@ dependencies {
     implementation(libs.hilt.androidx)
     ksp(libs.hilt.android.compiler)
 
-    // OkHttp
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging)
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinSerialization)
-
-    // Datastore
-    implementation(libs.androidx.datastore.ptoto)
-
-    // Ktor
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.client.auth)
-    implementation(libs.ktor.serialization.contentJson)
-
-    // Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
