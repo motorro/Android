@@ -23,7 +23,7 @@ import java.io.OutputStream
 /**
  * Datastore session storage implementation
  */
-class DatastoreSessionStorage(private val context: Context): SessionStorage {
+internal class DatastoreSessionStorage(private val context: Context): SessionStorage {
     override val session: Flow<Session> = context.sessionDataStore.data
 
     override suspend fun update(session: Session) {
