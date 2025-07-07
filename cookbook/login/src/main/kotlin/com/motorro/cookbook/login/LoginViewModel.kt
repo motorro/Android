@@ -1,12 +1,10 @@
 package com.motorro.cookbook.login
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.motorro.cookbook.appcore.di.DiContainer
 import com.motorro.cookbook.domain.session.SessionManager
 import com.motorro.cookbook.login.data.LoginViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,9 +14,13 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
-class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
     private val login = MutableStateFlow("")
     private val password = MutableStateFlow("")
@@ -81,15 +83,5 @@ class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
         data object Loading : LoginOperationState()
         data object Complete : LoginOperationState()
         data class Error(val message: String) : LoginOperationState()
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    class Factory(context: Context) : ViewModelProvider.Factory {
-
-        private val container = context.applicationContext as DiContainer
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return LoginViewModel(container.sessionManager) as T
-        }
     }
 }

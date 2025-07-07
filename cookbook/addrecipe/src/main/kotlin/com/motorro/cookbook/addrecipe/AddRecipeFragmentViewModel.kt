@@ -1,18 +1,14 @@
 package com.motorro.cookbook.addrecipe
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.motorro.cookbook.appcore.di.DiContainer
 import com.motorro.cookbook.domain.recipes.RecipeRepository
 import com.motorro.cookbook.domain.recipes.data.NewRecipe
 import com.motorro.cookbook.model.Image
 import com.motorro.cookbook.model.RecipeCategory
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,9 +16,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
+@HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddRecipeFragmentViewModel(private val repository: RecipeRepository, private val savedStateHandle: SavedStateHandle) : ViewModel() {
+class AddRecipeFragmentViewModel @Inject constructor(
+    private val repository: RecipeRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     val title: StateFlow<String> get() = savedStateHandle.getStateFlow(KEY_TITLE, "")
     val image: StateFlow<Uri?> get() = savedStateHandle.getStateFlow(KEY_IMAGE, null)
@@ -87,15 +88,5 @@ class AddRecipeFragmentViewModel(private val repository: RecipeRepository, priva
         const val KEY_IMAGE = "image"
         const val KEY_CATEGORY = "category"
         const val KEY_STEPS = "steps"
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    class Factory(context: Context) : ViewModelProvider.Factory {
-
-        private val container = context.applicationContext as DiContainer
-
-        override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-            return AddRecipeFragmentViewModel(container.recipeRepository, extras.createSavedStateHandle()) as T
-        }
     }
 }

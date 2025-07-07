@@ -24,9 +24,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class LoginFragment : Fragment(), WithViewBinding<FragmentLoginBinding> by BindingHost() {
 
-    private val model: LoginViewModel by viewModels {
-        LoginViewModel.Factory(requireContext())
-    }
+    // Factory managed by Hilt
+    private val model: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

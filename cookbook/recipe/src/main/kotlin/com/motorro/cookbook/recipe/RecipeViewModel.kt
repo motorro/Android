@@ -1,19 +1,24 @@
 package com.motorro.cookbook.recipe
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.motorro.cookbook.appcore.di.DiContainer
 import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.domain.recipes.RecipeRepository
 import com.motorro.cookbook.domain.recipes.data.RecipeLce
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlin.uuid.Uuid
 
-class RecipeViewModel(private val repository: RecipeRepository, private val recipeId: Uuid) : ViewModel() {
+@HiltViewModel(assistedFactory = RecipeViewModel.Factory::class)
+class RecipeViewModel @AssistedInject constructor(
+    private val repository: RecipeRepository,
+    @Assisted private val recipeId: Uuid
+) : ViewModel() {
 
     /**
      * Recipe to display
@@ -36,13 +41,8 @@ class RecipeViewModel(private val repository: RecipeRepository, private val reci
         repository.deleteRecipe(recipeId)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    class Factory(context: Context, private val recipeId: Uuid) : ViewModelProvider.Factory {
-
-        private val container = context.applicationContext as DiContainer
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RecipeViewModel(container.recipeRepository, recipeId) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(recipeId: Uuid): RecipeViewModel
     }
 }
