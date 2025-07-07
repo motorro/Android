@@ -16,12 +16,13 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
+import javax.inject.Named
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class SessionManagerImpl @Inject constructor(
     private val sessionStorage: SessionStorage,
     private val userApi: UserApi,
-    scope: CoroutineScope
+    @Named("Application") scope: CoroutineScope
 ) : SessionManager, Logging {
 
     private val loading = MutableStateFlow(false)
