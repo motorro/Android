@@ -3,10 +3,6 @@ package com.motorro.cookbook.app
 import android.app.Application
 import com.motorro.cookbook.data.db.CookbookDb
 import com.motorro.cookbook.data.net.Config
-import com.motorro.cookbook.data.net.ktorHttp
-import com.motorro.cookbook.data.net.lenientJson
-import com.motorro.cookbook.data.net.okhttp
-import com.motorro.cookbook.data.net.retrofit
 import com.motorro.cookbook.data.recipes.CookbookApi
 import com.motorro.cookbook.data.recipes.db.CookbookDao
 import com.motorro.cookbook.data.recipes.net.KtorCookbookApi
@@ -20,17 +16,11 @@ import com.motorro.cookbook.data.recipes.usecase.RecipeListUsecase
 import com.motorro.cookbook.data.recipes.usecase.RecipeListUsecaseImpl
 import com.motorro.cookbook.data.recipes.usecase.RecipeUsecase
 import com.motorro.cookbook.data.recipes.usecase.RecipeUsecaseImpl
-import com.motorro.cookbook.data.session.RetrofitUserApiImpl
-import com.motorro.cookbook.data.session.RetrofitUserService
 import com.motorro.cookbook.domain.session.SessionManager
-import com.motorro.cookbook.domain.session.UserApi
 import dagger.hilt.android.HiltAndroidApp
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
 import javax.inject.Inject
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
@@ -46,41 +36,15 @@ class App : Application() {
     @set:Inject
     lateinit var sessionManager: SessionManager
 
-    /**
-     * Json instance
-     */
-    fun json(): Json = lenientJson()
-
-    /**
-     * OkHttp client
-     */
-    fun okHttpClient(): OkHttpClient = okhttp()
-
-    /**
-     * Authentication retrofit
-     */
-    val authRetrofit: Retrofit by lazy {
-        retrofit(okHttpClient(), json(), Config.getBaseUrl())
-    }
-
-    /**
-     * User API
-     */
-    fun userApi(): UserApi = RetrofitUserApiImpl(
-        authRetrofit.create(RetrofitUserService::class.java)
-    )
-
-    /**
-     * Ktor HTTP client
-     */
-    fun httpClient(): HttpClient = ktorHttp(okHttpClient(), json(), sessionManager)
+    @set:Inject
+    lateinit var httpClient: HttpClient
 
     /**
      * Cookbook network API
      */
     fun cookbookApi(): CookbookApi = KtorCookbookApi(
         context = this,
-        httpClient = httpClient(),
+        httpClient = httpClient,
         baseUrl = Config.getBaseUrl().toUrl()
     )
 

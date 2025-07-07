@@ -9,7 +9,7 @@ import retrofit2.HttpException
 import retrofit2.http.GET
 import retrofit2.http.Header
 
-class RetrofitUserApiImpl(private val userService: RetrofitUserService) : UserApi {
+internal class RetrofitUserApiImpl(private val userService: RetrofitUserService) : UserApi {
     override suspend fun getProfile(username: String, password: String): Profile {
         // Builds 'Authorization' header value
         val credentials: String = Credentials.basic(username, password)
@@ -26,7 +26,7 @@ class RetrofitUserApiImpl(private val userService: RetrofitUserService) : UserAp
 /**
  * Retrofit service
  */
-interface RetrofitUserService {
+internal interface RetrofitUserService {
     /**
      * Gets user profile
      * This method demonstrates how to create custom headers
