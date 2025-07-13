@@ -41,12 +41,26 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    flavorDimensions += "data"
+    productFlavors {
+        create("server") {
+            dimension = "data"
+        }
+        create("mock") {
+            dimension = "data"
+            applicationIdSuffix = ".mock"
+        }
+    }
 }
 
 dependencies {
     implementation(project(":cookbook:core"))
     implementation(project(":cookbook:domain"))
-    implementation(project(":cookbook:data"))
+
+    "serverImplementation"(project(":cookbook:data"))
+    "mockImplementation"(project(":cookbook:mockdata"))
+
     implementation(project(":cookbook:appcore"))
     implementation(project(":cookbook:login"))
     implementation(project(":cookbook:recipelist"))
@@ -81,4 +95,8 @@ dependencies {
 
 kotlin {
     compilerOptions.optIn.add("kotlin.uuid.ExperimentalUuidApi")
+}
+
+configurations.implementation{
+    exclude(group = "com.intellij", module = "annotations")
 }
