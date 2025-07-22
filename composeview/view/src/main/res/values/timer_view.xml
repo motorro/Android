@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="timerViewStyle" format="reference"/>
+
+    <style name="TimerView"/>
+
+    <!-- Component attributes -->
+    <declare-styleable name="TimerView">
+        <attr name="timer_title" format="string"/>
+        <attr name="timer_duration" format="string"/>
+        <attr name="timer_running" format="boolean"/>
+    </declare-styleable>
+
+</resources>
