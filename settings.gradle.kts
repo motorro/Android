@@ -26,3 +26,5 @@ plugins {
 rootProject.name = "Android"
 include(":core")
 include(":composecore")
+include(":composeview:appcore")
+include(":composeview:view")
