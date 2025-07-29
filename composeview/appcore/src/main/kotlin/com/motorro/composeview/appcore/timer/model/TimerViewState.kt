@@ -3,11 +3,13 @@ package com.motorro.composeview.appcore.timer.model
 import com.motorro.composeview.appcore.timer.Timer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import javax.annotation.concurrent.Immutable
 import kotlin.time.Duration
 
 /**
  * Timer view state
  */
+@Immutable
 data class TimerViewState(
     val id: Int,
     val title: String,

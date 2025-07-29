@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Compose</string>
+    <string name="title_timer">Timer</string>
+    <string name="title_list">Timer list</string>
+</resources>

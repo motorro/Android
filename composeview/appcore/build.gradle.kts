@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.compose)
 }
 
 android {
@@ -31,12 +32,22 @@ android {
             jvmTarget.set(JvmTarget.JVM_21)
         }
     }
+    buildFeatures {
+        compose = true
+    }
+}
+
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    metricsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
 dependencies {
     api(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.datetime)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
 
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
