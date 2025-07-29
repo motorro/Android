@@ -1,19 +1,73 @@
 package com.motorro.composeview.compose
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.motorro.composeview.compose.ui.timer.TimerScreen
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+
+enum class MainDestinations(val route: Any, @field:DrawableRes val icon: Int, @field:StringRes val caption: Int) {
+    Timer(TimerDestination, R.drawable.ic_home_black_24dp, R.string.title_timer),
+    List(ListDestination, R.drawable.ic_dashboard_black_24dp, R.string.title_list)
+}
 
 @Composable
 fun ComposeApp() {
+    val startDestination = MainDestinations.Timer
+    val navController = rememberNavController()
+    val navGraph = remember {
+        navController.composeAppNavGraph()
+    }
+    var selectedDestination by rememberSaveable {
+        mutableIntStateOf(startDestination.ordinal)
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        content = { contentPadding ->
-            TimerScreen(hiltViewModel(), Modifier.padding(contentPadding))
+        bottomBar = {
+            NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
+                MainDestinations.entries.forEachIndexed { index, destination ->
+                    NavigationBarItem(
+                        selected = selectedDestination == index,
+                        onClick = {
+                            navController.navigate(route = destination.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                            selectedDestination = index
+                        },
+                        icon = {
+                            Icon(
+                                painter = painterResource(destination.icon),
+                                contentDescription = stringResource(destination.caption)
+                            )
+                        },
+                        label = { Text(stringResource(destination.caption)) }
+                    )
+                }
+            }
         }
-    )
+    ) { contentPadding ->
+        NavHost(navController, navGraph, modifier = Modifier.padding(contentPadding))
+    }
 }
