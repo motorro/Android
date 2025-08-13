@@ -27,3 +27,4 @@ rootProject.name = "Android"
 include(":core")
 include(":composecore")
 include(":composestate:compose")
+include(":composestate:view")
