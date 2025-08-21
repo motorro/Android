@@ -1,16 +1,26 @@
 package com.motorro.composestate.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.motorro.composestate.R
 
 // Non-savable class
 private class Counters(count1: Int = 0, count2: Int = 0) {
@@ -31,10 +41,27 @@ fun Counter() {
     }
 
     val count: Counters = rememberSaveable(saver = counterSaver) { Counters() }
+    val inRange by remember {
+        derivedStateOf { count.count1 in 2..6 }
+    }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceEvenly) {
-        Counter(count = count.count1, onChange = { count.count1 = it })
+        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Counter(count = count.count1, onChange = { count.count1 = it })
+            Text(text = stringResource(R.string.lbl_in_range, inRange))
+        }
         Counter(count = count.count2, onChange = { count.count2 = it })
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { count.count1 }.collect {
+            Log.i("Counter", "Count 1: $it")
+        }
+    }
+    LaunchedEffect(Unit) {
+        snapshotFlow { inRange }.collect {
+            Log.i("Counter", "In range: $it")
+        }
     }
 }
 
