@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -22,7 +22,7 @@ import com.motorro.composestate.R
 
 @Composable
 fun Counter() {
-    var count: Int by remember { mutableIntStateOf(0) }
+    var count: Int by rememberSaveable { mutableIntStateOf(0) }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
