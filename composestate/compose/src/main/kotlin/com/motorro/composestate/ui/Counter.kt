@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.motorro.composestate.R
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.isActive
 
 // Non-savable class
 private class Counters(count1: Int = 0, count2: Int = 0) {
@@ -43,6 +45,15 @@ fun Counter() {
     val count: Counters = rememberSaveable(saver = counterSaver) { Counters() }
     val inRange1 by remember {
         derivedStateOf { count.count1 in 2..6 }
+    }
+
+    LaunchedEffect(count.count1) {
+        Log.i("Counter", "Resetting count 2")
+        count.count2 = 0
+        while (currentCoroutineContext().isActive) {
+            kotlinx.coroutines.delay(500)
+            count.count2++
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceEvenly) {
