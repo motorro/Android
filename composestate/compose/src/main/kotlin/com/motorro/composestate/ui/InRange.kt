@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.motorro.composestate.R
 
@@ -46,9 +47,12 @@ fun InRange(modifier: Modifier = Modifier, value: () -> Boolean) {
             }
     ) {
 
-        val iconModifier = Modifier.offset(
-            x = if (value()) 12.dp else 60.dp,
-        )
+        val iconModifier = Modifier.offset {
+            IntOffset(
+                x = if (value()) 12.dp.roundToPx() else 60.dp.roundToPx(),
+                y = 0
+            )
+        }
 
         Icon(
             painterResource(R.drawable.ic_dot),
