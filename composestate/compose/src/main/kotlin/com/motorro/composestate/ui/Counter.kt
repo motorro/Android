@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -13,6 +15,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -26,6 +29,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.motorro.composestate.R
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 // Non-savable class
 private class Counters(count1: Int = 0, count2: Int = 0) {
@@ -34,7 +38,7 @@ private class Counters(count1: Int = 0, count2: Int = 0) {
 }
 
 @Composable
-fun Counter() {
+fun Counter(snackbarHostState: SnackbarHostState) {
 
     val counterSaver = run {
         val count1Key = "count1"
@@ -71,7 +75,7 @@ fun Counter() {
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceEvenly) {
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceEvenly, horizontalAlignment = Alignment.CenterHorizontally) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Counter(count = count.count1, onChange = { count.count1 = it })
             Text(text = stringResource(R.string.lbl_in_range, inRange1))
@@ -79,6 +83,16 @@ fun Counter() {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Counter(count = count.count2, onChange = { count.count2 = it })
             InRange(value = { count.count2 in 2..6 })
+        }
+
+        val scope = rememberCoroutineScope()
+        val snackbarMessage = stringResource(R.string.lbl_snackbar_message)
+        Button(onClick = {
+            scope.launch {
+                snackbarHostState.showSnackbar(snackbarMessage)
+            }
+        }) {
+            Text(stringResource(R.string.lbl_snackbar))
         }
     }
 
@@ -107,5 +121,5 @@ fun Counter(count: Int, modifier: Modifier = Modifier, onChange: (Int) -> Unit) 
 @Preview
 @Composable
 fun CounterPreview() {
-    Counter()
+    Counter(SnackbarHostState())
 }
