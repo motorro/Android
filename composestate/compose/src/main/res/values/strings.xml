@@ -4,4 +4,5 @@
     <string name="btn_increment">Increment</string>
     <string name="lbl_count">Count: %1$d</string>
     <string name="lbl_in_range">Count in range: %1$b</string>
+    <string name="desc_in_range">In range</string>
 </resources>

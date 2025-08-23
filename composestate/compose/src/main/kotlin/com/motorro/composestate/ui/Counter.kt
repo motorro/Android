@@ -41,16 +41,19 @@ fun Counter() {
     }
 
     val count: Counters = rememberSaveable(saver = counterSaver) { Counters() }
-    val inRange by remember {
+    val inRange1 by remember {
         derivedStateOf { count.count1 in 2..6 }
     }
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceEvenly) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Counter(count = count.count1, onChange = { count.count1 = it })
-            Text(text = stringResource(R.string.lbl_in_range, inRange))
+            Text(text = stringResource(R.string.lbl_in_range, inRange1))
         }
-        Counter(count = count.count2, onChange = { count.count2 = it })
+        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Counter(count = count.count2, onChange = { count.count2 = it })
+            InRange(value = { count.count2 in 2..6 })
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -59,16 +62,17 @@ fun Counter() {
         }
     }
     LaunchedEffect(Unit) {
-        snapshotFlow { inRange }.collect {
+        snapshotFlow { inRange1 }.collect {
             Log.i("Counter", "In range: $it")
         }
     }
 }
 
 @Composable
-fun Counter(count: Int, onChange: (Int) -> Unit) {
+fun Counter(count: Int, modifier: Modifier = Modifier, onChange: (Int) -> Unit) {
     CounterView(
         count = count,
+        modifier = modifier,
         onIncrement = { onChange(count + 1) },
         onDecrement = { onChange((count - 1).coerceAtLeast(0)) }
     )
