@@ -13,9 +13,9 @@ import androidx.compose.ui.res.stringResource
 import com.motorro.composestate.R
 
 @Composable
-fun CounterView(count: Int, onIncrement: () -> Unit, onDecrement: () -> Unit) {
+fun CounterView(count: Int, modifier: Modifier = Modifier, onIncrement: () -> Unit, onDecrement: () -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
