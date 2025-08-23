@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.Modifier
 import com.motorro.composestate.ui.Counter
 import com.motorro.composestate.ui.theme.AndroidTheme
@@ -19,12 +21,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val snackbarHostState = SnackbarHostState()
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    snackbarHost = {
+                        SnackbarHost(snackbarHostState)
+                    }
+                ) { innerPadding ->
                     Column(
                         modifier = Modifier.padding(innerPadding).fillMaxSize(),
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Counter()
+                        Counter(snackbarHostState)
                     }
                 }
             }
