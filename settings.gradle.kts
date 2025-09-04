@@ -26,3 +26,6 @@ plugins {
 rootProject.name = "Android"
 include(":core")
 include(":composecore")
+include(":statemachine:common")
+include(":statemachine:commonpreview")
+include(":statemachine:navigation")

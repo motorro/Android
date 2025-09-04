@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="loading">Loading...</string>
+    <string name="error">Error!</string>
+    <string name="retry">Retry</string>
+    <string name="close">Close</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="eula">Terms and conditions</string>
+    <string name="accept_eula">I accept the terms and conditions</string>
+    <string name="auth">Authenticate</string>
+    <string name="auth_prompt">Please login or register</string>
+    <string name="logout">Logout</string>
+</resources>

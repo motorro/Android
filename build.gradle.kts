@@ -4,12 +4,17 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlinMultiplatformAndroidLibrary) apply false
     alias(libs.plugins.compose) apply false
+    alias(libs.plugins.composeHotReload) apply false
+    alias(libs.plugins.composeMultiplatform) apply false
+    alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.ktor) apply false
     alias(libs.plugins.google.ksp) apply false
     alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.mockery) apply false
 }
 
 allprojects {
