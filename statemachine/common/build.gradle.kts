@@ -56,6 +56,12 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.test)
             }
         }
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.test)
+            }
+        }
         androidMain {
             dependencies {
                 implementation(libs.compose.multiplatform.uiToolingPreview)
