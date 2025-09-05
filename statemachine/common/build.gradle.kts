@@ -44,7 +44,14 @@ kotlin {
                 api(compose.materialIconsExtended)
                 api(compose.ui)
                 api(compose.components.resources)
+                api(libs.kotlinx.coroutines)
                 implementation(compose.components.uiToolingPreview)
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
         androidMain {
