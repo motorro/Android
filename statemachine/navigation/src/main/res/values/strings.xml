@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Navigation</string>
+    <string name="loading">Loading…</string>
+    <string name="login">Logging-in…</string>
+    <string name="title_content">Content</string>
+    <string name="title_login">Login</string>
 </resources>
