@@ -26,7 +26,7 @@ class ContentViewModel(application: Application) : AndroidViewModel(application)
      */
     val uiState: StateFlow<ContentScreenState> get() = _uiState
 
-    private val _navigationEvents = MutableSharedFlow<ContentNavigationEvent>()
+    private val _navigationEvents = MutableSharedFlow<ContentNavigationEvent>(1)
 
     /**
      * Navigation events to be observed by the UI.
