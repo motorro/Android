@@ -12,7 +12,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidTheme {
-                ComposeApp()
+                ComposeApp {
+                    finish()
+                }
             }
         }
     }

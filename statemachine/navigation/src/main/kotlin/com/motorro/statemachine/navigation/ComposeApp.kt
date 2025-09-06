@@ -6,10 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun ComposeApp() {
+fun ComposeApp(onTerminate: () -> Unit) {
     val navController = rememberNavController()
     val navGraph = remember {
-        navController.composeAppNavGraph()
+        navController.composeAppNavGraph(onTerminate)
     }
     NavHost(navController, navGraph)
 }
