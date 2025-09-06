@@ -21,12 +21,13 @@ data object LoginDestination
 @Serializable
 data object LogoutDestination
 
-fun NavController.composeAppNavGraph(): NavGraph = createGraph(ContentDestination) {
+fun NavController.composeAppNavGraph(onTerminate: () -> Unit): NavGraph = createGraph(ContentDestination) {
     composable<ContentDestination> {
         val viewModel: ContentViewModel = viewModel()
         ContentScreen(
             viewModel = viewModel,
-            navController = this@composeAppNavGraph
+            navController = this@composeAppNavGraph,
+            onTerminate = onTerminate
         )
     }
 
@@ -34,7 +35,8 @@ fun NavController.composeAppNavGraph(): NavGraph = createGraph(ContentDestinatio
         val viewModel: LoginViewModel = viewModel()
         LoginScreen(
             viewModel = viewModel,
-            navController = this@composeAppNavGraph
+            navController = this@composeAppNavGraph,
+            onTerminate = onTerminate
         )
     }
 

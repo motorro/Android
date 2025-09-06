@@ -20,7 +20,8 @@ import com.motorro.statemachine.navigation.R
 @Composable
 fun ContentScreen(
     viewModel: ContentViewModel,
-    navController: NavController
+    navController: NavController,
+    onTerminate: () -> Unit
 ) {
     // Navigation
     val onBack = { navController.popBackStack() }
@@ -34,13 +35,13 @@ fun ContentScreen(
         when(val s = state.value) {
             is ContentScreenState.Content -> ContentScreen(s.state, modifier) {
                 when(it) {
-                    ContentGesture.Back -> onBack()
+                    ContentGesture.Back -> onTerminate()
                     ContentGesture.Logout -> viewModel.logout()
                 }
             }
             is ContentScreenState.Loading -> LoadingScreen(s.state, modifier) {
                 when(it) {
-                    LoadingGesture.Back -> onBack()
+                    LoadingGesture.Back -> onTerminate()
                 }
             }
         }
