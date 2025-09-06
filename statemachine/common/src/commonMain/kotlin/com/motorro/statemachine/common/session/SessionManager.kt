@@ -50,11 +50,21 @@ interface SessionManager {
     suspend fun logout()
 
     companion object {
+        private val user = User(
+            "user",
+            "password",
+            "user@motorro.com"
+        )
+
         /**
          * Session manager with delay
          */
         @OptIn(DelicateCoroutinesApi::class)
-        val Instance: SessionManager = MockSessionManager(GlobalScope, 1000.milliseconds) { (1..10).random() <= 3 }
+        val Instance: SessionManager = MockSessionManager(
+            scope = GlobalScope,
+            delay = 1000.milliseconds,
+            users = setOf(user)
+        ) { (1..10).random() <= 4 }
     }
 }
 
