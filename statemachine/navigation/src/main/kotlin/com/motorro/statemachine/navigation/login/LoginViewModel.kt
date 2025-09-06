@@ -60,9 +60,15 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    var savedUsername: String? = null
+    var savedPassword: String? = null
+
     fun login() {
         // Checking valid state
         val state = _uiState.value as? LoginUiState.Form ?: return
+
+        savedUsername = state.username
+        savedPassword = state.password
 
         if (state.isValid()) {
             doLogin(state.username, state.password)
@@ -70,7 +76,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun retry() {
+        // Checking valid state
+        val state = _uiState.value as? LoginUiState.Error ?: return
+        val username = savedUsername
+        val password = savedPassword
 
+        if (state.state.canRetry && username != null && password != null) {
+            doLogin(username, password)
+        }
     }
 
     private fun doLogin(username: String, password: String) {
