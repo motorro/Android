@@ -1,6 +1,5 @@
 package com.motorro.statemachine.navigation
 
-import androidx.compose.material3.Text
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -10,6 +9,8 @@ import com.motorro.statemachine.navigation.content.ContentScreen
 import com.motorro.statemachine.navigation.content.ContentViewModel
 import com.motorro.statemachine.navigation.login.LoginScreen
 import com.motorro.statemachine.navigation.login.LoginViewModel
+import com.motorro.statemachine.navigation.logout.LogoutScreen
+import com.motorro.statemachine.navigation.logout.LogoutViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -41,6 +42,10 @@ fun NavController.composeAppNavGraph(onTerminate: () -> Unit): NavGraph = create
     }
 
     composable<LogoutDestination> {
-        Text("Logout")
+        val viewModel: LogoutViewModel = viewModel()
+        LogoutScreen(
+            viewModel = viewModel,
+            navController = this@composeAppNavGraph
+        )
     }
 }

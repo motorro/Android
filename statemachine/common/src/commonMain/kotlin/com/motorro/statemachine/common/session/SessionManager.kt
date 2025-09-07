@@ -130,7 +130,8 @@ internal class MockSessionManager(scope: CoroutineScope, private val delay: Dura
         state.getSession() as Session.Active
     }
 
-    override suspend fun logout() = runOperation {
+    override suspend fun logout() {
+        delay(delay)
         users.update { it.logout() }
     }
 }
