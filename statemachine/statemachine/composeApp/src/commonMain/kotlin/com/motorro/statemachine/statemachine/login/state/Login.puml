@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+scale 350 width
+[*] -> LoginForm
+
+LoginForm -> LoggingIn
+
+LoggingIn -> [*]: Success
+LoggingIn --> Error: Error
+
+Error -> LoginForm: Fatal
+Error -> LoggingIn: Non-fatal
+
+@enduml
