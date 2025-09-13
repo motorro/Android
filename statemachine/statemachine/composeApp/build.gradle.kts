@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.mockmp)
 }
 
 kotlin {
@@ -103,5 +105,11 @@ compose.desktop {
             packageName = "com.motorro.statemachine.statemachine"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+mockmp {
+    onTest {
+        withHelper()
     }
 }
