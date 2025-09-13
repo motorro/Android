@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">StateMachine</string>
+    <string name="title_counter_1">Counter 1</string>
+    <string name="title_counter_2">Counter 2</string>
+    <string name="title_state_machine">State Machine</string>
 </resources>
