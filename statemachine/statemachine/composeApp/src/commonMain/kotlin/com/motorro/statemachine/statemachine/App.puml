@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+[*] -> Content
+
+Content -> Form
+Content -> LoggingOut
+Content --> Finished
+
+Finished -> [*]
+
+state Login {
+  state Form
+  Form -> LoggingIn
+  LoggingIn -> Error
+  Error -left-> LoggingIn
+  LoggingIn -left-> Content
+}
+
+LoggingOut --> Content
+
+@enduml
