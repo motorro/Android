@@ -1,19 +1,16 @@
-package com.motorro.statemachine.statemachine.login.state
+package com.motorro.statemachine.login.state
 
-import com.motorro.statemachine.statemachine.AppStateFactory
-import com.motorro.statemachine.statemachine.BaseAppState
-import com.motorro.statemachine.statemachine.data.AppGesture
-import com.motorro.statemachine.statemachine.data.LoginGesture
-import com.motorro.statemachine.statemachine.data.LoginUiState
-import com.motorro.statemachine.statemachine.login.data.LoginDataState
+import com.motorro.statemachine.login.data.LoginDataState
+import com.motorro.statemachine.login.data.LoginFlowGesture
+import com.motorro.statemachine.login.data.LoginFlowUiState
 import kotlin.properties.Delegates
 
 /**
  * Manages login form state
- * @param factory State factory
+ * @param context Login flow context
  * @param data Login flow data
  */
-class LoginFormState(factory: AppStateFactory, data: LoginDataState) : BaseAppState(factory) {
+internal class LoginFormState(context: LoginContext, data: LoginDataState) : BaseLoginState(context) {
 
     /**
      * Inner state data
@@ -34,25 +31,24 @@ class LoginFormState(factory: AppStateFactory, data: LoginDataState) : BaseAppSt
     /**
      * Called to process the gesture
      */
-    override fun doProcess(gesture: AppGesture) {
+    override fun doProcess(gesture: LoginFlowGesture) {
         when(gesture) {
-            is LoginGesture.UsernameChanged -> {
+            is LoginFlowGesture.UsernameChanged -> {
                 data = data.copy(username = gesture.value)
             }
-            is LoginGesture.PasswordChanged -> {
+            is LoginFlowGesture.PasswordChanged -> {
                 data = data.copy(password = gesture.value)
             }
-            is AppGesture.Action -> {
+            is LoginFlowGesture.Action -> {
                 if (data.isValid()) {
                     info { "Data is valid. Advancing to login..." }
                     setMachineState(factory.loggingIn(data))
                 }
             }
-            is AppGesture.Back -> {
-                info { "Back pressed. Terminating..." }
-                setMachineState(factory.terminated())
+            is LoginFlowGesture.Back -> {
+                info { "Back pressed. Failing the flow..." }
+                flowHost.failure()
             }
-            else -> super.doProcess(gesture)
         }
     }
 
@@ -61,7 +57,7 @@ class LoginFormState(factory: AppStateFactory, data: LoginDataState) : BaseAppSt
     private fun render(data: LoginDataState) {
         info { "Updating UI state..." }
         setUiState(
-            LoginUiState.Form(
+            LoginFlowUiState.Form(
                 username = data.username,
                 password = data.password,
                 loginEnabled = data.isValid()

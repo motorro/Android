@@ -5,12 +5,13 @@ import android.statemachine.statemachine.composeapp.generated.resources.loading
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.motorro.statemachine.common.ui.theme.AndroidTheme
+import com.motorro.statemachine.login.LoginScreen
 import com.motorro.statemachine.statemachine.content.ui.ContentScreen
 import com.motorro.statemachine.statemachine.data.AppGesture
 import com.motorro.statemachine.statemachine.data.AppUiState
 import com.motorro.statemachine.statemachine.data.ContentUiState
+import com.motorro.statemachine.statemachine.data.LoginGesture
 import com.motorro.statemachine.statemachine.data.LoginUiState
-import com.motorro.statemachine.statemachine.login.ui.LoginScreen
 import com.motorro.statemachine.statemachine.ui.LoadingScreen
 import org.jetbrains.compose.resources.stringResource
 
@@ -19,7 +20,9 @@ fun App(uiState: AppUiState, onGesture: (AppGesture) -> Unit, onFinish: () -> Un
     AndroidTheme {
         when(uiState) {
             is AppUiState.Loading -> LoadingScreen(uiState.message ?: stringResource(Res.string.loading), onGesture)
-            is LoginUiState -> LoginScreen(uiState, onGesture)
+            is LoginUiState -> LoginScreen(uiState.child) {
+                onGesture(LoginGesture(it))
+            }
             is ContentUiState -> ContentScreen(uiState, onGesture)
             AppUiState.Terminated -> LaunchedEffect(uiState) {
                 onFinish()

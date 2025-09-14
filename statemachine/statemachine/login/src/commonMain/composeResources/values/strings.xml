@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="logging_in">Logging-in…</string>
+    <string name="title_logging_in">Logging-in…</string>
+    <string name="title_login">Login</string>
+    <string name="title_error">Error</string>
+</resources>

@@ -1,32 +1,30 @@
-package com.motorro.statemachine.statemachine.login.state
+package com.motorro.statemachine.login.state
 
 import com.motorro.statemachine.common.data.exception.AppException
-import com.motorro.statemachine.statemachine.AppStateFactory
-import com.motorro.statemachine.statemachine.BaseAppState
-import com.motorro.statemachine.statemachine.data.AppGesture
-import com.motorro.statemachine.statemachine.data.LoginUiState
-import com.motorro.statemachine.statemachine.login.data.LoginDataState
+import com.motorro.statemachine.login.data.LoginDataState
+import com.motorro.statemachine.login.data.LoginFlowGesture
+import com.motorro.statemachine.login.data.LoginFlowUiState
 
 /**
  * Handles login error
- * @param factory State factory
+ * @param context Login flow context
  * @param data Login data
  * @param error Login error
  */
-class LoginErrorState(
-    factory: AppStateFactory,
+internal class LoginErrorState(
+    context: LoginContext,
     private val data: LoginDataState,
     private val error: AppException
-) : BaseAppState(factory) {
+) : BaseLoginState(context) {
 
     override fun doStart() {
         super.doStart()
-        setUiState(LoginUiState.Error(error.message, error.isFatal.not()))
+        setUiState(LoginFlowUiState.Error(error.message, error.isFatal.not()))
     }
 
-    override fun doProcess(gesture: AppGesture) {
+    override fun doProcess(gesture: LoginFlowGesture) {
         when(gesture) {
-            is AppGesture.Action -> {
+            is LoginFlowGesture.Action -> {
                 info { "Action pressed..." }
                 if (error.isFatal) {
                     info { "Fatal error. Returning to form..." }
@@ -36,7 +34,7 @@ class LoginErrorState(
                     setMachineState(factory.loggingIn(data))
                 }
             }
-            AppGesture.Back -> {
+            LoginFlowGesture.Back -> {
                 info { "Back pressed. Returning to form..." }
                 setMachineState(factory.loginForm(data))
             }

@@ -9,7 +9,6 @@ import com.motorro.statemachine.statemachine.data.ContentUiState
 import com.motorro.statemachine.statemachine.user
 import dev.mokkery.answering.returns
 import dev.mokkery.every
-import dev.mokkery.matcher.any
 import dev.mokkery.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
@@ -38,13 +37,13 @@ class ContentStateTest : BaseStateTest() {
     @Test
     fun movesToLoginIfThereIsNoUser() = test {
         every { sessionManager.session } returns flowOf(Session.NotLoggedIn).stateIn(backgroundScope)
-        every { stateFactory.loginForm(any()) } returns nextState
+        every { stateFactory.authenticating() } returns nextState
 
         state.start(stateMachine)
 
         verify {
             sessionManager.session
-            stateFactory.loginForm()
+            stateFactory.authenticating()
             stateMachine.setMachineState(nextState)
         }
     }

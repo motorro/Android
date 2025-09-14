@@ -1,12 +1,7 @@
 package com.motorro.statemachine.statemachine
 
-import com.motorro.statemachine.common.data.exception.AppException
 import com.motorro.statemachine.statemachine.content.state.ContentState
 import com.motorro.statemachine.statemachine.data.AppUiState
-import com.motorro.statemachine.statemachine.login.data.LoginDataState
-import com.motorro.statemachine.statemachine.login.state.LoggingInState
-import com.motorro.statemachine.statemachine.login.state.LoginErrorState
-import com.motorro.statemachine.statemachine.login.state.LoginFormState
 import com.motorro.statemachine.statemachine.logout.state.LoggingOutState
 
 /**
@@ -24,19 +19,9 @@ interface AppStateFactory {
     fun content(): AppState
 
     /**
-     * Login form
+     * Authenticating...
      */
-    fun loginForm(data: LoginDataState? = null): AppState
-
-    /**
-     * Running log-in
-     */
-    fun loggingIn(data: LoginDataState): AppState
-
-    /**
-     * Login error
-     */
-    fun loginError(data: LoginDataState, error: AppException): AppState
+    fun authenticating(): AppState
 
     /**
      * Logout flow
@@ -57,18 +42,7 @@ interface AppStateFactory {
 
             override fun content() = ContentState.Factory()(this)
 
-            override fun loginForm(data: LoginDataState?) = LoginFormState(
-                this,
-                data ?: LoginDataState()
-            )
-
-            override fun loggingIn(data: LoginDataState) = LoggingInState.Factory()(this, data)
-
-            override fun loginError(data: LoginDataState, error: AppException) = LoginErrorState(
-                this,
-                data,
-                error
-            )
+            override fun authenticating() = LoginProxy(this)
 
             override fun loggingOut() = LoggingOutState.Factory()(this)
         }
