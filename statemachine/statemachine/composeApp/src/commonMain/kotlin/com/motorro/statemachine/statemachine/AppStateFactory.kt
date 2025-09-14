@@ -42,7 +42,7 @@ interface AppStateFactory {
 
             override fun content() = ContentState.Factory()(this)
 
-            override fun authenticating() = LoginProxy(this)
+            override fun authenticating() = AuthProxy(this)
 
             override fun loggingOut() = LoggingOutState.Factory()(this)
         }
