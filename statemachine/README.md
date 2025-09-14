@@ -1,3 +1,12 @@
+# Вебинар 32. StateMachine
 
-# Navigation components
-Источник: [Conditional Navigation](https://developer.android.com/guide/navigation/use-graph/conditional)
+1. Узкие места официально рекомендуемой архитектуры и [Jetpack Navigation](https://developer.android.com/guide/navigation/use-graph/conditional)
+2. Navigation Inversion - смена традиционного подхода к навигации и архитектуре в приложении
+3. StateMachine - вариант простой и доступной UDF-архитектуры
+
+## Вопросы для самопроверки:
+
+1. В чем трудности навигации Jetpack Compose изнутри ViewModel?
+2. В чем проблема поддерживаемости монолитных ViewModel, обслуживающих несколько экранов?
+3. В чем основные черты архитектуры MVI для внешнего клиента ViewModel? Как мы передаем действия пользователей и получаем обновления экрана?
+4. В чем заключается принцип паттерна StateMachine, и как он относится к архитектуре MVI?
