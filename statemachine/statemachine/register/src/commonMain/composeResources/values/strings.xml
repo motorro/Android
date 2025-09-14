@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="registering">Registering…</string>
+    <string name="title_registering">Registering…</string>
+    <string name="title_register">Register</string>
+    <string name="title_accept_eula">Accept EULA</string>
+    <string name="title_error">Error</string>
+</resources>

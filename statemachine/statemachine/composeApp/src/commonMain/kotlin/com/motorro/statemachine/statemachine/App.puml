@@ -3,20 +3,34 @@
 
 [*] -> Content
 
-Content -> Form
+Content -> AuthPrompt
 Content -> LoggingOut
 Content --> Finished
 
 Finished -> [*]
 
-state Login {
-  state Form
-  Form -> LoggingIn
-  LoggingIn -> Error
-  Error -left-> LoggingIn
-  LoggingIn -left-> Content
+state Auth {
+    state AuthPrompt
+
+    AuthPrompt --> LoginForm
+    AuthPrompt --> RegisterForm
+
+    state Login {
+      state LoginForm
+      LoginForm -> LoggingIn
+      LoggingIn -> LoginError
+      LoginError -left-> LoggingIn
+    }
+
+    state Register {
+      state RegisterForm
+      RegisterForm -> Registering
+      Registering -> RegisterError
+      RegisterError -left-> Registering
+    }
 }
 
+Auth --> Content
 LoggingOut --> Content
 
 @enduml

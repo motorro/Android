@@ -43,7 +43,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(project(":statemachine:common"))
-            implementation(project(":statemachine:statemachine:login"))
+            implementation(project(":statemachine:statemachine:auth"))
             implementation(libs.commonstatemachine.machine)
             implementation(libs.commonstatemachine.coroutines)
             implementation(compose.runtime)
