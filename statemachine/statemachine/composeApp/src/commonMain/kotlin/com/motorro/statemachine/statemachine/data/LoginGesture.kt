@@ -1,18 +1,8 @@
 package com.motorro.statemachine.statemachine.data
 
+import com.motorro.statemachine.login.data.LoginFlowGesture
+
 /**
  * Login state gesture
  */
-interface LoginGesture : AppGesture {
-    /**
-     * Username changed
-     * @property value The new username
-     */
-    data class UsernameChanged(val value: String) : AppGesture
-
-    /**
-     * Password changed
-     * @property value The new password
-     */
-    data class PasswordChanged(val value: String) : AppGesture
-}
+data class LoginGesture(val child: LoginFlowGesture) : AppGesture

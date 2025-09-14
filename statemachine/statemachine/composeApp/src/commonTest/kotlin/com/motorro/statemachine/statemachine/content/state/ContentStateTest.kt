@@ -29,13 +29,13 @@ class ContentStateTest : BaseStateTest() {
     @Test
     fun movesToLoginIfThereIsNoUser() = test {
         every { sessionManager.session } returns flowOf(Session.NotLoggedIn).stateIn(backgroundScope)
-        every { stateFactory.loginForm(isAny()) } returns nextState
+        every { stateFactory.authenticating() } returns nextState
 
         state.start(stateMachine)
 
         verify {
             sessionManager.session
-            stateFactory.loginForm()
+            stateFactory.authenticating()
             stateMachine.setMachineState(nextState)
         }
     }

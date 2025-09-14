@@ -36,7 +36,7 @@ class ContentState(factory: AppStateFactory, private val sessionManager: Session
                     Session.NotLoggedIn -> {
                         info { "Not logged in. Redirecting to authentication..." }
                         // Create a new state and set it as the machine state
-                        setMachineState(factory.loginForm())
+                        setMachineState(factory.authenticating())
                     }
                 }
             }

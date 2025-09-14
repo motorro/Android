@@ -13,7 +13,7 @@ kotlin {
 
     @Suppress("UnstableApiUsage")
     androidLibrary {
-        namespace = "com.motorro.statemachine.common"
+        namespace = "com.motorro.statemachine.login"
         compileSdk = libs.versions.compileSdk.get().toInt()
         minSdk = libs.versions.minSdk.get().toInt()
 
@@ -30,7 +30,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "common"
+            baseName = "login"
             isStatic = true
         }
     }
@@ -38,45 +38,18 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(compose.runtime)
-                api(compose.foundation)
-                api(compose.material3)
-                api(compose.materialIconsExtended)
-                api(compose.ui)
-                api(compose.components.resources)
-                api(libs.kotlinx.coroutines)
-                implementation(libs.napier)
+                implementation(project(":statemachine:common"))
                 implementation(libs.commonstatemachine.machine)
                 implementation(libs.commonstatemachine.coroutines)
                 implementation(compose.components.uiToolingPreview)
             }
-        }
-        commonTest {
-            dependencies {
-                implementation(libs.kotlin.test)
-                implementation(libs.kotlinx.coroutines.test)
-            }
-        }
-        androidMain {
-            dependencies {
-                implementation(compose.preview)
-                implementation(libs.androidx.activity.compose)
-            }
-        }
-        iosMain {
-            dependencies {
-
-            }
-        }
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
         }
     }
 }
 
 compose.resources {
     publicResClass = false
-    packageOfResClass = "com.motorro.statemachine.common"
+    packageOfResClass = "com.motorro.statemachine.login"
     generateResClass = always
 }
 
