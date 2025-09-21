@@ -1,6 +1,7 @@
 <resources>
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_back">Back</string>
     <string name="desc_authenticate">Authenticate</string>
     <string name="str_auth">Please login or register to continue</string>
     <string name="btn_login">Login</string>
