@@ -56,6 +56,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3.icons)
+    implementation(libs.commonstatemachine.machine)
+    implementation(libs.commonstatemachine.coroutines)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.test.manifest)
@@ -63,4 +65,9 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.androidx)
     ksp(libs.hilt.android.compiler)
+
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk.mockk)
 }
