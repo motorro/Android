@@ -37,7 +37,7 @@ fun <DATA: Any, ERR: CoreException> LceView(
         is LceState.Error -> {
             val data = state.data
             when {
-                state.error is UnauthorizedException -> onLogin
+                state.error is UnauthorizedException -> onLogin(modifier)
                 null != data -> content(data, state.error, modifier)
                 else -> ErrorView(state.error.message, onErrorAction, modifier)
             }

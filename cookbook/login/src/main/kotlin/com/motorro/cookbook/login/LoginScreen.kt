@@ -25,7 +25,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
 import com.motorro.cookbook.appcore.compose.ui.theme.AppDimens
+import com.motorro.cookbook.appcore.compose.ui.theme.appBarColors
 import com.motorro.cookbook.login.data.LoginGesture
 import com.motorro.cookbook.login.data.LoginViewState
 import com.motorro.cookbook.appcore.R as ACR
@@ -76,11 +76,7 @@ fun LoginScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                colors = MaterialTheme.appBarColors()
             )
         }
     ) { paddingValues ->

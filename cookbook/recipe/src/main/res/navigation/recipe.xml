@@ -15,21 +15,8 @@
             android:name="recipeId"
             app:argType="string" />
 
-        <action
-            android:id="@+id/recipe_to_delete_confirmation"
-            app:destination="@id/deleteConfirmationFragment" />
-
         <deepLink app:uri="@string/link_recipe" />
 
     </fragment>
 
-    <dialog
-        android:id="@+id/deleteConfirmationFragment"
-        android:name="com.motorro.cookbook.recipe.DeleteConfirmationFragment"
-        android:label="fragment_confirmation"
-        tools:layout="@layout/fragment_confirmation" >
-        <argument
-            android:name="title"
-            app:argType="string" />
-    </dialog>
 </navigation>
