@@ -3,6 +3,8 @@ package com.motorro.cookbook.login.state
 import com.motorro.cookbook.core.error.CoreException
 import com.motorro.cookbook.login.data.LoginFlowData
 import com.motorro.cookbook.model.Profile
+import javax.inject.Inject
+import javax.inject.Provider
 
 /**
  * Login flow state factory
@@ -27,4 +29,36 @@ internal interface LoginStateFactory {
      * Login cancelled
      */
     fun cancelled(): LoginState
+
+    /**
+     * Factory implementation
+     */
+    class Impl @Inject constructor(
+        private val createLoggingInState: Provider<LoggingInState.Factory>
+    ) : LoginStateFactory {
+
+        private val context = object : LoginContext {
+            override val factory = this@Impl
+        }
+
+        override fun form(data: LoginFlowData, error: CoreException?) = LoginFormState(
+            context,
+            data,
+            error
+        )
+
+        override fun loggingIn(data: LoginFlowData) = createLoggingInState.get()(
+            context,
+            data
+        )
+
+        override fun complete(profile: Profile) = TerminatedState(
+            context,
+            profile
+        )
+
+        override fun cancelled() = TerminatedState(
+            context
+        )
+    }
 }

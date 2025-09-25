@@ -27,4 +27,11 @@ sealed class LoginViewState {
         override val username: String = ""
         override val password: String = ""
     }
+
+    companion object {
+        /**
+         * Empty state
+         */
+        val EMPTY = Form("", "", false)
+    }
 }

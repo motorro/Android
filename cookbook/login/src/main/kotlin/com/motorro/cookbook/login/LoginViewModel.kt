@@ -1,107 +1,26 @@
 package com.motorro.cookbook.login
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.motorro.cookbook.domain.session.SessionManager
+import com.motorro.commonstatemachine.coroutines.FlowStateMachine
+import com.motorro.cookbook.login.data.LoginFlowData
 import com.motorro.cookbook.login.data.LoginGesture
 import com.motorro.cookbook.login.data.LoginViewState
+import com.motorro.cookbook.login.state.LoginStateFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
-class LoginViewModel @Inject constructor(
-    private val sessionManager: SessionManager
-) : ViewModel() {
+class LoginViewModel @Inject internal constructor(stateFactory: LoginStateFactory) : ViewModel() {
+    private val stateMachine = FlowStateMachine(LoginViewState.EMPTY) {
+        stateFactory.form(LoginFlowData())
+    }
 
-    private var loginJob: Job? = null
-
-    private val login = MutableStateFlow("")
-    private val password = MutableStateFlow("")
-    private val state = MutableStateFlow<LoginOperationState>(LoginOperationState.Idle)
-
-    val viewState: StateFlow<LoginViewState> = state.flatMapLatest {
-        when(it) {
-            LoginOperationState.Complete -> flowOf(
-                LoginViewState.LoggedIn
-            )
-            is LoginOperationState.Error -> combine(login, password) { l, p ->
-                LoginViewState.Error(
-                    it.message,
-                    l,
-                    p,
-                    loginEnabled(l, p)
-                )
-            }
-            LoginOperationState.Idle -> combine(login, password) { l, p ->
-                LoginViewState.Form(
-                    l,
-                    p,
-                    loginEnabled(l, p)
-                )
-            }
-            LoginOperationState.Loading -> flowOf(
-                LoginViewState.Loading(
-                    login.value,
-                    password.value,
-                )
-            )
-        }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        LoginViewState.Form(login.value, password.value, loginEnabled(login.value, password.value))
-    )
+    val viewState: StateFlow<LoginViewState> = stateMachine.uiState
 
     fun process(gesture: LoginGesture) {
-        when(gesture) {
-            LoginGesture.Back -> {
-                loginJob?.cancel()
-                // Dirty temporary solution
-                state.tryEmit(LoginOperationState.Complete)
-            }
-            LoginGesture.Login -> login()
-            is LoginGesture.LoginChanged -> setLogin(gesture.login)
-            is LoginGesture.PasswordChanged -> setPassword(gesture.password)
-        }
-    }
-
-    private fun setLogin(login: String) {
-        this.login.tryEmit(login)
-    }
-
-    private fun setPassword(password: String) {
-        this.password.tryEmit(password)
-    }
-
-    private fun login() {
-        loginJob?.cancel()
-        if (loginEnabled(login.value, password.value)) {
-            loginJob = viewModelScope.launch {
-                state.emit(LoginOperationState.Loading)
-                sessionManager.login(login.value, password.value)
-                    .onSuccess { state.tryEmit(LoginOperationState.Complete) }
-                    .onFailure { state.tryEmit(LoginOperationState.Error(it.message ?: "Unknown error")) }
-            }
-        }
-    }
-
-    private fun loginEnabled(login: String, password: String): Boolean = login.isNotBlank() && password.isNotBlank()
-
-    private sealed class LoginOperationState {
-        data object Idle : LoginOperationState()
-        data object Loading : LoginOperationState()
-        data object Complete : LoginOperationState()
-        data class Error(val message: String) : LoginOperationState()
+        stateMachine.process(gesture)
     }
 }
