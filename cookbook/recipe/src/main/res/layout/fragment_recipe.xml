@@ -1,113 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:theme="@style/Theme.Cookbook"
     tools:context=".RecipeFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-        style="?attr/appBarLayoutStyle"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:minHeight="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="?attr/colorOnPrimary"
-            app:menu="@menu/menu_recipe"
-            tools:title="Vodka and herring"/>
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/content"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:layout_height="match_parent"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/title"
-                style="?attr/textAppearanceHeadline3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/horizontal_margin"
-                android:layout_marginEnd="@dimen/horizontal_margin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Vodka and herring" />
-
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="0dp"
-                android:layout_height="240dp"
-                android:layout_marginStart="@dimen/horizontal_margin"
-                android:layout_marginTop="@dimen/vertical_margin_small"
-                android:layout_marginEnd="@dimen/horizontal_margin"
-                android:contentDescription="@string/desc_the_image_of_the_recipe"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:srcCompat="@drawable/ic_image" />
-
-            <TextView
-                android:id="@+id/category"
-                style="?attr/textAppearanceHeadline5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/horizontal_margin"
-                android:layout_marginEnd="@dimen/horizontal_margin"
-                android:layout_marginTop="@dimen/vertical_margin_small"
-                tools:text="Alcohol"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image" />
-
-            <TextView
-                android:id="@+id/description"
-                style="?attr/textAppearanceBody2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/category"
-                android:layout_marginTop="@dimen/vertical_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin"
-                android:layout_marginEnd="@dimen/horizontal_margin"
-                tools:text="Vodka and herring" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-    <include
-        android:id="@+id/error"
-        layout="@layout/layout_error"
-        android:visibility="gone"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-
-    <include
-        android:id="@+id/auth"
-        layout="@layout/layout_auth"
-        android:visibility="gone"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

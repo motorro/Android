@@ -1,44 +1,34 @@
 package com.motorro.cookbook.recipe
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.motorro.cookbook.core.lce.LceState
-import com.motorro.cookbook.domain.recipes.RecipeRepository
-import com.motorro.cookbook.domain.recipes.data.RecipeLce
+import com.motorro.commonstatemachine.coroutines.FlowStateMachine
+import com.motorro.cookbook.recipe.data.RecipeGesture
+import com.motorro.cookbook.recipe.data.RecipeViewState
+import com.motorro.cookbook.recipe.state.RecipeStateFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlin.uuid.Uuid
 
 @HiltViewModel(assistedFactory = RecipeViewModel.Factory::class)
-class RecipeViewModel @AssistedInject constructor(
-    private val repository: RecipeRepository,
-    @Assisted private val recipeId: Uuid
-) : ViewModel() {
+class RecipeViewModel @AssistedInject internal constructor(factory: RecipeStateFactory, @Assisted recipeId: Uuid) : ViewModel() {
+
+    private val stateMachine = FlowStateMachine<RecipeGesture, RecipeViewState>(RecipeViewState.EMPTY) {
+        factory.init(recipeId)
+    }
 
     /**
-     * Recipe to display
+     * View state
      */
-    val recipe: StateFlow<RecipeLce> get() = repository.getRecipe(recipeId).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        LceState.Loading()
-    )
+    val viewState: StateFlow<RecipeViewState> = stateMachine.uiState
 
     /**
-     * Refreshes data
+     * Gesture processing
      */
-    fun refresh() = repository.synchronizeRecipe(recipeId)
-
-    /**
-     * Deletes recipe
-     */
-    fun deleteRecipe() {
-        repository.deleteRecipe(recipeId)
+    fun process(gesture: RecipeGesture) {
+        stateMachine.process(gesture)
     }
 
     @AssistedFactory
