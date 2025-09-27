@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.navigation.safeargs.kotlin)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose)
@@ -56,6 +55,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3.icons)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.test.manifest)
