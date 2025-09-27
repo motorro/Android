@@ -8,12 +8,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface Destination {
     /**
-     * Add recipe destination
-     */
-    @Serializable
-    data object AddRecipeDestination : Destination
-
-    /**
      * Login destination
      */
     @Serializable

@@ -1,6 +1,7 @@
 package com.motorro.cookbook.addrecipe.state
 
 import androidx.lifecycle.SavedStateHandle
+import com.motorro.cookbook.appcore.navigation.CommonFlowHost
 import com.motorro.cookbook.domain.recipes.data.NewRecipe
 import com.motorro.cookbook.recipe.state.FormState
 import dagger.assisted.Assisted
@@ -35,12 +36,14 @@ internal interface AddRecipeStateFactory {
     class Impl @AssistedInject constructor(
         private val createForm: Provider<FormState.Factory>,
         private val createSaving: Provider<SavingState.Factory>,
-        @Assisted savedStateHandle: SavedStateHandle
+        @Assisted savedStateHandle: SavedStateHandle,
+        @Assisted flowHost: CommonFlowHost
     ) : AddRecipeStateFactory {
 
         private val context = object : AddRecipeContext {
             override val factory = this@Impl
             override val savedStateHandle = savedStateHandle
+            override val flowHost = flowHost
         }
 
         override fun form() = createForm.get()(
@@ -58,7 +61,7 @@ internal interface AddRecipeStateFactory {
 
         @AssistedFactory
         interface Factory {
-            fun create(savedStateHandle: SavedStateHandle): Impl
+            fun create(savedStateHandle: SavedStateHandle, flowHost: CommonFlowHost): Impl
         }
     }
 }

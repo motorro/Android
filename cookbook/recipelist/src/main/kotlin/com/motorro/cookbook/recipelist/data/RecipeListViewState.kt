@@ -1,5 +1,7 @@
 package com.motorro.cookbook.recipelist.data
 
+import com.motorro.cookbook.addrecipe.data.AddRecipeViewState
+
 /**
  * Recipe-list screen flow view-state
  */
@@ -26,6 +28,11 @@ sealed class RecipeListViewState {
      * Terminated state - use to close the screen
      */
     data object Terminated : RecipeListViewState()
+
+    /**
+     * Proxies add-recipe flow
+     */
+    data class AddRecipe(val child: AddRecipeViewState) : RecipeListViewState()
 
     companion object {
         /**

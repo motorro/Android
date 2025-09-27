@@ -25,8 +25,6 @@ sealed class AddRecipeViewState {
         val saving: Boolean
     ) : AddRecipeViewState()
 
-    data object Terminated : AddRecipeViewState()
-
     companion object {
         /**
          * Empty state

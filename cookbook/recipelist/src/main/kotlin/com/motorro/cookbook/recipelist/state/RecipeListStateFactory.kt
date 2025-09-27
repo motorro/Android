@@ -1,5 +1,8 @@
 package com.motorro.cookbook.recipelist.state
 
+import com.motorro.commonstatemachine.CommonMachineState
+import com.motorro.cookbook.recipelist.data.RecipeListGesture
+import com.motorro.cookbook.recipelist.data.RecipeListViewState
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -28,9 +31,15 @@ internal interface RecipeListStateFactory {
      */
     fun terminated(): RecipeListState
 
+    /**
+     * Switches to the add-recipe flow
+     */
+    fun addingRecipe(): CommonMachineState<RecipeListGesture, RecipeListViewState>
+
     class Impl @Inject constructor(
         private val createContent: Provider<ContentState.Factory>,
-        private val createLogout: Provider<LoggingOutState.Factory>
+        private val createLogout: Provider<LoggingOutState.Factory>,
+        private val createAddingRecipe: Provider<AddRecipeProxy.Factory>
     ) : RecipeListStateFactory {
 
         private val context = object : RecipeListContext {
@@ -46,5 +55,9 @@ internal interface RecipeListStateFactory {
         )
 
         override fun terminated() = TerminatedState(context)
+
+        override fun addingRecipe() = createAddingRecipe.get()(
+            context
+        )
     }
 }

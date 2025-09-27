@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
+import com.motorro.cookbook.addrecipe.AddRecipeScreen
 import com.motorro.cookbook.appcore.compose.ui.auth.AuthPromptView
 import com.motorro.cookbook.appcore.compose.ui.lce.LceView
 import com.motorro.cookbook.appcore.compose.ui.loading.LoadingScreen
@@ -52,7 +53,6 @@ fun RecipeListScreen(
     viewState: RecipeListViewState,
     onGesture: (RecipeListGesture) -> Unit,
     onRecipe: (Uuid) -> Unit,
-    onAddRecipe: () -> Unit,
     onLogin: () -> Unit,
     onTerminated: () -> Unit,
     modifier: Modifier = Modifier
@@ -66,13 +66,17 @@ fun RecipeListScreen(
           viewState = viewState,
           onGesture = onGesture,
           onRecipe = onRecipe,
-          onAddRecipe = onAddRecipe,
           onLogin = onLogin,
           modifier = modifier
       )
       RecipeListViewState.Terminated -> LaunchedEffect(viewState) {
           onTerminated()
       }
+      is RecipeListViewState.AddRecipe -> AddRecipeScreen(
+          viewState = viewState.child,
+          onGesture = { onGesture(RecipeListGesture.AddRecipeFlow(it)) },
+          modifier = modifier
+      )
   }
 }
 
@@ -82,7 +86,6 @@ fun RecipeListScreen(
     viewState: RecipeListViewState.Content,
     onGesture: (RecipeListGesture) -> Unit,
     onRecipe: (Uuid) -> Unit,
-    onAddRecipe: () -> Unit,
     onLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -111,7 +114,7 @@ fun RecipeListScreen(
         floatingActionButton = {
             AnimatedVisibility(viewState.addEnabled) {
                 FloatingActionButton(
-                    onClick = onAddRecipe,
+                    onClick = { onGesture(RecipeListGesture.AddRecipeClicked) },
                     containerColor = MaterialTheme.colorScheme.primary,
                 ) {
                     Icon(
@@ -174,7 +177,6 @@ fun PreviewRecipeListScreenLoading() {
             viewState = RecipeListViewState.Content(LceState.Loading(null), addEnabled = false, refreshEnabled = false),
             onGesture = {},
             onRecipe = {},
-            onAddRecipe = {},
             onLogin = {},
             onTerminated = {}
         )
@@ -220,7 +222,6 @@ fun PreviewRecipeListScreenContent() {
             viewState = RecipeListViewState.Content(LceState.Content(sampleRecipes), addEnabled = true, refreshEnabled = true),
             onGesture = {},
             onRecipe = {},
-            onAddRecipe = {},
             onLogin = {},
             onTerminated = {}
         )
@@ -266,7 +267,6 @@ fun PreviewRecipeListScreenContentLoading() {
             viewState = RecipeListViewState.Content(LceState.Content(sampleRecipes), addEnabled = true, refreshEnabled = true),
             onGesture = {},
             onRecipe = {},
-            onAddRecipe = {},
             onLogin = {},
             onTerminated = {}
         )
@@ -285,7 +285,6 @@ fun PreviewRecipeListScreenError() {
             ),
             onGesture = {},
             onRecipe = {},
-            onAddRecipe = {},
             onLogin = {},
             onTerminated = {}
         )

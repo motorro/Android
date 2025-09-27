@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.motorro.commonstatemachine.CommonStateMachine
 import com.motorro.cookbook.addrecipe.data.AddRecipeGesture
 import com.motorro.cookbook.addrecipe.data.AddRecipeViewState
+import com.motorro.cookbook.appcore.navigation.CommonFlowHost
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,6 +29,8 @@ internal abstract class BaseStateTest {
 
     protected lateinit var nextState: AddRecipeState
 
+    protected lateinit var flowHost: CommonFlowHost
+
     protected open fun createDispatcher(): TestDispatcher = UnconfinedTestDispatcher()
 
     @Before
@@ -39,12 +42,15 @@ internal abstract class BaseStateTest {
         stateMachine = mockk(relaxed = true)
         factory = mockk()
         nextState = mockk()
+        flowHost = mockk()
 
         context = object : AddRecipeContext {
             override val factory: AddRecipeStateFactory
                 get() = this@BaseStateTest.factory
             override val savedStateHandle: SavedStateHandle
                 get() = this@BaseStateTest.savedStateHandle
+            override val flowHost: CommonFlowHost
+                get() = this@BaseStateTest.flowHost
         }
 
         doInit()

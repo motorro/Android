@@ -65,7 +65,6 @@ dependencies {
     implementation(project(":cookbook:login"))
     implementation(project(":cookbook:recipelist"))
     implementation(project(":cookbook:recipe"))
-    implementation(project(":cookbook:addrecipe"))
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.core)
