@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.activity.compose)
 
     api(libs.commonstatemachine.machine)
     api(libs.commonstatemachine.coroutines)
