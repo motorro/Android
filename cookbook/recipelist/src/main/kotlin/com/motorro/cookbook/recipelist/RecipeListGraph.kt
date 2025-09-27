@@ -18,9 +18,6 @@ fun NavGraphBuilder.recipeListGraph(navController: NavController) {
             onRecipe = {
                 navController.navigate(Destination.RecipeDestination(it.toString()))
             },
-            onAddRecipe = {
-                navController.navigate(Destination.AddRecipeDestination)
-            },
             onLogin = {
                 navController.navigate(Destination.LoginDestination)
             },

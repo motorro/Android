@@ -6,7 +6,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.motorro.cookbook.addrecipe.addRecipeGraph
 import com.motorro.cookbook.appcore.compose.ui.theme.CookbookTheme
 import com.motorro.cookbook.appcore.navigation.Destination
 import com.motorro.cookbook.login.loginGraph
@@ -27,7 +26,6 @@ class MainActivity : AppCompatActivity() {
                 NavHost(navController = navController, startDestination = Destination.RecipeListDestination) {
                     recipeListGraph(navController)
                     recipeGraph(navController)
-                    addRecipeGraph(navController)
                     loginGraph(navController)
                 }
             }

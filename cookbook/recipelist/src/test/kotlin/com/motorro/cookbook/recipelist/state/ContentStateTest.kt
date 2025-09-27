@@ -69,6 +69,20 @@ internal class ContentStateTest : BaseStateTest() {
     }
 
     @Test
+    fun switchesToAddRecipeOnAddRecipeClick() = test {
+        every { factory.addingRecipe() } returns nextState
+        every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Content(emptyList()))
+
+        state.start(stateMachine)
+        state.process(RecipeListGesture.AddRecipeClicked)
+
+        verify {
+            factory.addingRecipe()
+            stateMachine.setMachineState(nextState)
+        }
+    }
+
+    @Test
     fun reloadsDataOnFatalError() = test {
         every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Error(ERROR_FATAL))
         every { repository.synchronizeList() } just Runs

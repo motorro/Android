@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":cookbook:core"))
     implementation(project(":cookbook:domain"))
     implementation(project(":cookbook:appcore"))
+    implementation(project(":cookbook:addrecipe"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

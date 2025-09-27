@@ -45,10 +45,15 @@ internal class ContentState(
                 d { "Refresh is pressed. Reloading recipe-list..." }
                 repository.synchronizeList()
             }
+            RecipeListGesture.AddRecipeClicked -> {
+                d { "Add recipe is pressed. Navigating to add-recipe..." }
+                setMachineState(factory.addingRecipe())
+            }
             RecipeListGesture.DismissError -> {
                 d { "Dismiss error is pressed. Reloading recipe-list..." }
                 repository.synchronizeList()
             }
+            else -> super.doProcess(gesture)
         }
     }
 
