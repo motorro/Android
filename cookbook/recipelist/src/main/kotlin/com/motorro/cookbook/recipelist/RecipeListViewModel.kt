@@ -1,42 +1,29 @@
 package com.motorro.cookbook.recipelist
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.motorro.cookbook.core.lce.LceState
-import com.motorro.cookbook.domain.recipes.RecipeRepository
-import com.motorro.cookbook.domain.session.SessionManager
-import com.motorro.cookbook.recipelist.data.RecipeListItemLce
-import com.motorro.cookbook.recipelist.data.getRecipeList
+import com.motorro.commonstatemachine.coroutines.FlowStateMachine
+import com.motorro.cookbook.recipelist.data.RecipeListGesture
+import com.motorro.cookbook.recipelist.data.RecipeListViewState
+import com.motorro.cookbook.recipelist.state.RecipeListStateFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecipeListViewModel @Inject constructor(
-    private val sessionManager: SessionManager,
-    private val recipeRepository: RecipeRepository
-) : ViewModel() {
-    /**
-     * List of recipes
-     */
-    val recipes: StateFlow<RecipeListItemLce> = recipeRepository.getRecipeList().stateIn(
-        viewModelScope,
-        SharingStarted.Eagerly,
-        LceState.Loading()
-    )
+class RecipeListViewModel @Inject internal constructor(stateFactory: RecipeListStateFactory) : ViewModel() {
+    private val stateMachine = FlowStateMachine(RecipeListViewState.Loading) {
+        stateFactory.init()
+    }
 
     /**
-     * Refreshes data
+     * View state
      */
-    fun refresh() = recipeRepository.synchronizeList()
+    val viewState: StateFlow<RecipeListViewState> = stateMachine.uiState
 
     /**
-     * Logs out user
+     * Gesture processing
      */
-    fun logout() = viewModelScope.launch {
-        sessionManager.logout()
+    fun process(gesture: RecipeListGesture) {
+        stateMachine.process(gesture)
     }
 }

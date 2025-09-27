@@ -10,5 +10,6 @@ import androidx.compose.runtime.Composable
 fun MaterialTheme.appBarColors() = TopAppBarDefaults.topAppBarColors(
     containerColor = colorScheme.primary,
     titleContentColor = colorScheme.onPrimary,
-    navigationIconContentColor = colorScheme.onPrimary
+    navigationIconContentColor = colorScheme.onPrimary,
+    actionIconContentColor = colorScheme.onPrimary
 )
