@@ -1,36 +1,35 @@
 package com.motorro.cookbook.app
 
 import android.os.Bundle
-import androidx.activity.addCallback
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.findNavController
-import com.motorro.cookbook.app.databinding.ActivityMainBinding
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.motorro.cookbook.addrecipe.addRecipeGraph
+import com.motorro.cookbook.appcore.compose.ui.theme.CookbookTheme
+import com.motorro.cookbook.appcore.navigation.Destination
+import com.motorro.cookbook.login.loginGraph
+import com.motorro.cookbook.recipe.recipeGraph
+import com.motorro.cookbook.recipelist.recipeListGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        setContent {
+            CookbookTheme {
+                val navController = rememberNavController()
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        onBackPressedDispatcher.addCallback(this) {
-            if (!findNavController(R.id.navigation).popBackStack()) {
-                finish()
+                NavHost(navController = navController, startDestination = Destination.RecipeListDestination) {
+                    recipeListGraph(navController)
+                    recipeGraph(navController)
+                    addRecipeGraph(navController)
+                    loginGraph(navController)
+                }
             }
         }
     }

@@ -3,9 +3,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.navigation.safeargs.kotlin)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose)
 }
 
 android {
@@ -38,7 +39,7 @@ android {
         }
     }
     buildFeatures {
-        viewBinding = true
+        compose = true
     }
 }
 
@@ -54,8 +55,13 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.androidx)

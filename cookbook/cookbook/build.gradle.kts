@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.navigation.safeargs.kotlin)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.compose)
 }
 
 android {
@@ -39,7 +39,7 @@ android {
         }
     }
     buildFeatures {
-        viewBinding = true
+        compose = true
     }
 
     flavorDimensions += "data"
@@ -75,13 +75,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.fragment)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.glide)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.androidx)

@@ -59,7 +59,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
     implementation(libs.glide)
     implementation(libs.glide.compose)
 
