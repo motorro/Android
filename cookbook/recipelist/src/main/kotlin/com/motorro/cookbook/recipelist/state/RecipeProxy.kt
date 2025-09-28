@@ -1,6 +1,9 @@
 package com.motorro.cookbook.recipelist.state
 
+import com.motorro.commonstatemachine.CommonMachineState
 import com.motorro.commonstatemachine.ProxyMachineState
+import com.motorro.cookbook.appcore.navigation.CommonFlowHost
+import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.recipe.api.RecipeApi
 import com.motorro.cookbook.recipe.data.RecipeGesture
 import com.motorro.cookbook.recipe.data.RecipeViewState
@@ -25,11 +28,10 @@ private typealias RecipeProxyType = ProxyMachineState<
 internal class RecipeProxy(
     private val context: RecipeListContext,
     private val data: RecipeListFlowData,
-    private val recipeId: Uuid,
-    private val recipeApi: RecipeApi,
+    private val init: (CommonFlowHost) -> CommonMachineState<RecipeGesture, RecipeViewState>,
 ) : RecipeProxyType(RecipeApi.DEFAULT_UI_STATE) {
 
-    override fun init() = recipeApi.start(recipeId) {
+    override fun init() = init {
         setMachineState(context.factory.content(data))
     }
 
@@ -45,11 +47,24 @@ internal class RecipeProxy(
      * [RecipeProxy] factory
      */
     class Factory @Inject constructor(private val recipeApi: RecipeApi) {
-        operator fun invoke(context: RecipeListContext, data: RecipeListFlowData, recipeId: Uuid) = RecipeProxy(
+        operator fun invoke(
+            context: RecipeListContext,
+            data: RecipeListFlowData,
+            recipeId: Uuid
+        ) = RecipeProxy(
             context,
             data,
-            recipeId,
-            recipeApi
+            init = { recipeApi.start(recipeId, it) }
+        )
+
+        operator fun invoke(
+            context: RecipeListContext,
+            data: RecipeListFlowData,
+            listRecipe: ListRecipe
+        ) = RecipeProxy(
+            context,
+            data,
+            init = { recipeApi.start(listRecipe, it) }
         )
     }
 }

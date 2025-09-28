@@ -1,6 +1,7 @@
 package com.motorro.cookbook.recipe.di
 
 import com.motorro.cookbook.appcore.navigation.CommonFlowHost
+import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.recipe.api.RecipeApi
 import com.motorro.cookbook.recipe.state.RecipeStateFactory
 import dagger.Module
@@ -21,5 +22,10 @@ internal class RecipeFlowModule {
             recipeId: Uuid,
             flowHost: CommonFlowHost
         ) = factory.create(flowHost).init(recipeId)
+
+        override fun start(
+            listRecipe: ListRecipe,
+            flowHost: CommonFlowHost
+        ) = factory.create(flowHost).init(listRecipe)
     }
 }

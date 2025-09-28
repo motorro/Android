@@ -6,7 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -59,12 +60,16 @@ private fun RecipeDemoScreen(
 ) {
     when(state) {
         RecipeDemoViewState.Starter -> {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Button(
-                    modifier = Modifier.align(Alignment.Center),
-                    onClick = { onGesture(RecipeDemoGesture.ToRecipe) }
-                ) {
-                    Text("Go to recipe")
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(onClick = { onGesture(RecipeDemoGesture.ToRecipe) }) {
+                    Text("Go to recipe with ID")
+                }
+                Button(onClick = { onGesture(RecipeDemoGesture.ToPreloadedRecipe) }) {
+                    Text("Go to recipe with DATA")
                 }
             }
         }

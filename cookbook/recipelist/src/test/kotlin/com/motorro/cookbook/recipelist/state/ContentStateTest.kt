@@ -3,6 +3,7 @@ package com.motorro.cookbook.recipelist.state
 import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.domain.recipes.RecipeRepository
 import com.motorro.cookbook.domain.recipes.data.RecipeListLce
+import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.recipelist.data.RecipeListFlowData
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
@@ -16,6 +17,8 @@ import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.uuid.Uuid
 
 internal class ContentStateTest : BaseStateTest() {
 
@@ -100,14 +103,32 @@ internal class ContentStateTest : BaseStateTest() {
     @Test
     fun switchesToRecipeOnRecipeClick() = test {
         val reicpeId = LIST_RECIPE.id
-        every { factory.recipe(any(), any()) } returns nextState
+        every { factory.recipe(any(), any<Uuid>()) } returns nextState
         every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Content(emptyList()))
 
         state.start(stateMachine)
         state.process(RecipeListGesture.RecipeClicked(reicpeId))
 
         verify {
-            factory.recipe(data, reicpeId)
+            factory.recipe(any(), withArg<Uuid> {
+                assertEquals(reicpeId, it)
+            })
+            stateMachine.setMachineState(nextState)
+        }
+    }
+
+    @Test
+    fun switchesToRecipeOnRecipeClickWithPreloadedDataIfAvailable() = test {
+        every { factory.recipe(any(), any<ListRecipe>()) } returns nextState
+        every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Content(listOf(LIST_RECIPE)))
+
+        state.start(stateMachine)
+        state.process(RecipeListGesture.RecipeClicked(LIST_RECIPE.id))
+
+        verify {
+            factory.recipe(any(), withArg<ListRecipe> {
+                assertEquals(LIST_RECIPE, it)
+            })
             stateMachine.setMachineState(nextState)
         }
     }
