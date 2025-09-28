@@ -63,8 +63,16 @@ internal class ContentState(
                 setMachineState(factory.addingRecipe(data))
             }
             RecipeListGesture.DismissError -> {
-                d { "Dismiss error is pressed. Reloading recipe-list..." }
-                repository.synchronizeList()
+                val state = data.list
+                if (state is LceState.Error) {
+                    if (state.error.isFatal) {
+                        d { "Fatal error. Restarting..." }
+                        setMachineState(factory.init())
+                    } else {
+                        d { "Non-fatal error. Reloading recipe-list..." }
+                        repository.synchronizeList()
+                    }
+                }
             }
             else -> super.doProcess(gesture)
         }
