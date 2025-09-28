@@ -98,14 +98,17 @@ internal class ContentStateTest : BaseStateTest() {
     }
 
     @Test
-    fun reloadsDataOnFatalError() = test {
+    fun restartsOnFatalError() = test {
         every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Error(ERROR_FATAL))
-        every { repository.synchronizeList() } just Runs
+        every { factory.init() } returns nextState
 
         state.start(stateMachine)
         state.process(RecipeListGesture.DismissError)
 
-        verify { repository.synchronizeList() }
+        verify {
+            factory.init()
+            stateMachine.setMachineState(nextState)
+        }
     }
 
     @Test
