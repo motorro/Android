@@ -21,11 +21,6 @@ sealed class RecipeViewState {
      */
     data class DeleteConfirmation(val data: Recipe) : RecipeViewState()
 
-    /**
-     * Terminated state - use to close the screen
-     */
-    data object Terminated : RecipeViewState()
-
     companion object {
         /**
          * Empty initial state

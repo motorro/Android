@@ -1,22 +1,24 @@
 package com.motorro.cookbook.recipedemo
 
 import android.os.Bundle
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.motorro.cookbook.appcore.compose.ui.theme.CookbookTheme
-import com.motorro.cookbook.appcore.navigation.Destination
-import com.motorro.cookbook.data.recipes.RECIPES
-import com.motorro.cookbook.recipe.recipeGraph
+import com.motorro.cookbook.recipe.RecipeScreen
+import com.motorro.cookbook.recipedemo.data.RecipeDemoGesture
+import com.motorro.cookbook.recipedemo.data.RecipeDemoViewState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
 
@@ -26,31 +28,55 @@ data object Start
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private val model: RecipeDemoViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         setContent {
 
-            val controller = rememberNavController()
+            BackHandler {
+                model.process(RecipeDemoGesture.Back)
+            }
 
             CookbookTheme {
-                NavHost(controller, Start) {
-                    composable<Start> {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Button(
-                                modifier = Modifier.align(Alignment.Center),
-                                onClick = {
-                                    controller.navigate(Destination.RecipeDestination(RECIPES.first().id.toString()))
-                                }
-                            ) {
-                                Text("Go to recipe")
-                            }
-                        }
-                    }
-                    recipeGraph(controller)
+                RecipeDemoScreen(
+                    state = model.viewState.collectAsStateWithLifecycle().value,
+                    onGesture = model::process,
+                    onTerminated = { finish() }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RecipeDemoScreen(
+    state: RecipeDemoViewState,
+    onGesture: (RecipeDemoGesture) -> Unit,
+    onTerminated: () -> Unit
+) {
+    when(state) {
+        RecipeDemoViewState.Starter -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Button(
+                    modifier = Modifier.align(Alignment.Center),
+                    onClick = { onGesture(RecipeDemoGesture.ToRecipe) }
+                ) {
+                    Text("Go to recipe")
                 }
             }
+        }
+        is RecipeDemoViewState.RecipeFlow -> RecipeScreen(
+            viewState = state.child,
+            onGesture = { onGesture(RecipeDemoGesture.RecipeFlow(it)) },
+            onLogin = {
+                throw NotImplementedError("Login not implemented")
+            }
+        )
+        RecipeDemoViewState.Terminated -> LaunchedEffect(state) {
+            onTerminated
         }
     }
 }

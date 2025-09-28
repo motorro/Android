@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -41,8 +42,10 @@ import com.motorro.cookbook.core.error.UnknownException
 import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.model.RecipeCategory
+import com.motorro.cookbook.recipe.RecipeScreen
 import com.motorro.cookbook.recipelist.R
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
+import com.motorro.cookbook.recipelist.data.RecipeListGesture.*
 import com.motorro.cookbook.recipelist.data.RecipeListItem
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
 import kotlin.time.Instant
@@ -52,7 +55,6 @@ import kotlin.uuid.Uuid
 fun RecipeListScreen(
     viewState: RecipeListViewState,
     onGesture: (RecipeListGesture) -> Unit,
-    onRecipe: (Uuid) -> Unit,
     onLogin: () -> Unit,
     onTerminated: () -> Unit,
     modifier: Modifier = Modifier
@@ -65,7 +67,6 @@ fun RecipeListScreen(
       is RecipeListViewState.Content -> RecipeListScreen(
           viewState = viewState,
           onGesture = onGesture,
-          onRecipe = onRecipe,
           onLogin = onLogin,
           modifier = modifier
       )
@@ -74,7 +75,13 @@ fun RecipeListScreen(
       }
       is RecipeListViewState.AddRecipe -> AddRecipeScreen(
           viewState = viewState.child,
-          onGesture = { onGesture(RecipeListGesture.AddRecipeFlow(it)) },
+          onGesture = { onGesture(AddRecipeFlow(it)) },
+          modifier = modifier
+      )
+      is RecipeListViewState.Recipe -> RecipeScreen(
+          viewState = viewState.child,
+          onGesture = { onGesture(RecipeFlow(it)) },
+          onLogin = onLogin,
           modifier = modifier
       )
   }
@@ -85,10 +92,15 @@ fun RecipeListScreen(
 fun RecipeListScreen(
     viewState: RecipeListViewState.Content,
     onGesture: (RecipeListGesture) -> Unit,
-    onRecipe: (Uuid) -> Unit,
     onLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    // Switching flow internally
+    val onRecipe: (Uuid) -> Unit = remember {
+        { onGesture(RecipeListGesture.RecipeClicked(it)) }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -176,7 +188,6 @@ fun PreviewRecipeListScreenLoading() {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Loading(null), addEnabled = false, refreshEnabled = false),
             onGesture = {},
-            onRecipe = {},
             onLogin = {},
             onTerminated = {}
         )
@@ -221,7 +232,6 @@ fun PreviewRecipeListScreenContent() {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Content(sampleRecipes), addEnabled = true, refreshEnabled = true),
             onGesture = {},
-            onRecipe = {},
             onLogin = {},
             onTerminated = {}
         )
@@ -266,7 +276,6 @@ fun PreviewRecipeListScreenContentLoading() {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Content(sampleRecipes), addEnabled = true, refreshEnabled = true),
             onGesture = {},
-            onRecipe = {},
             onLogin = {},
             onTerminated = {}
         )
@@ -284,7 +293,6 @@ fun PreviewRecipeListScreenError() {
                 refreshEnabled = false
             ),
             onGesture = {},
-            onRecipe = {},
             onLogin = {},
             onTerminated = {}
         )

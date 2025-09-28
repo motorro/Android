@@ -14,12 +14,6 @@ sealed interface Destination {
     data object LoginDestination : Destination
 
     /**
-     * Recipe destination
-     */
-    @Serializable
-    data class RecipeDestination(val id: String? = null) : Destination
-
-    /**
      * Recipe list destination
      */
     @Serializable

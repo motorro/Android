@@ -98,6 +98,21 @@ internal class ContentStateTest : BaseStateTest() {
     }
 
     @Test
+    fun switchesToRecipeOnRecipeClick() = test {
+        val reicpeId = LIST_RECIPE.id
+        every { factory.recipe(any(), any()) } returns nextState
+        every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Content(emptyList()))
+
+        state.start(stateMachine)
+        state.process(RecipeListGesture.RecipeClicked(reicpeId))
+
+        verify {
+            factory.recipe(data, reicpeId)
+            stateMachine.setMachineState(nextState)
+        }
+    }
+
+    @Test
     fun restartsOnFatalError() = test {
         every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Error(ERROR_FATAL))
         every { factory.init() } returns nextState

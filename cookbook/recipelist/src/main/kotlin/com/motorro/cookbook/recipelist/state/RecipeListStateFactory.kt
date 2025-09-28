@@ -6,6 +6,7 @@ import com.motorro.cookbook.recipelist.data.RecipeListGesture
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.uuid.Uuid
 
 /**
  * Recipe-list flow state factory
@@ -37,10 +38,16 @@ internal interface RecipeListStateFactory {
      */
     fun addingRecipe(data: RecipeListFlowData): CommonMachineState<RecipeListGesture, RecipeListViewState>
 
+    /**
+     * Switches to the recipe flow
+     */
+    fun recipe(data: RecipeListFlowData, recipeId: Uuid): CommonMachineState<RecipeListGesture, RecipeListViewState>
+
     class Impl @Inject constructor(
         private val createContent: Provider<ContentState.Factory>,
         private val createLogout: Provider<LoggingOutState.Factory>,
-        private val createAddingRecipe: Provider<AddRecipeProxy.Factory>
+        private val createAddingRecipe: Provider<AddRecipeProxy.Factory>,
+        private val createRecipe: Provider<RecipeProxy.Factory>
     ) : RecipeListStateFactory {
 
         private val context = object : RecipeListContext {
@@ -61,6 +68,12 @@ internal interface RecipeListStateFactory {
         override fun addingRecipe(data: RecipeListFlowData) = createAddingRecipe.get()(
             context,
             data
+        )
+
+        override fun recipe(data: RecipeListFlowData, recipeId: Uuid) = createRecipe.get()(
+            context,
+            data,
+            recipeId
         )
     }
 }

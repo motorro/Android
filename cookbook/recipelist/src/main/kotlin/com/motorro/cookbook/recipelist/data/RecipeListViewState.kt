@@ -1,6 +1,7 @@
 package com.motorro.cookbook.recipelist.data
 
 import com.motorro.cookbook.addrecipe.data.AddRecipeViewState
+import com.motorro.cookbook.recipe.data.RecipeViewState
 
 /**
  * Recipe-list screen flow view-state
@@ -33,6 +34,11 @@ sealed class RecipeListViewState {
      * Proxies add-recipe flow
      */
     data class AddRecipe(val child: AddRecipeViewState) : RecipeListViewState()
+
+    /**
+     * Proxies recipe flow
+     */
+    data class Recipe(val child: RecipeViewState) : RecipeListViewState()
 
     companion object {
         /**
