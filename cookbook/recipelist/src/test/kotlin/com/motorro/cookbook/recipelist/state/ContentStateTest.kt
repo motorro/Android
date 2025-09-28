@@ -3,6 +3,7 @@ package com.motorro.cookbook.recipelist.state
 import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.domain.recipes.RecipeRepository
 import com.motorro.cookbook.domain.recipes.data.RecipeListLce
+import com.motorro.cookbook.recipelist.data.RecipeListFlowData
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
 import com.motorro.cookbook.recipelist.data.toRecipeListItems
@@ -21,13 +22,21 @@ internal class ContentStateTest : BaseStateTest() {
     private lateinit var repository: RecipeRepository
     private lateinit var state: RecipeListState
 
+    private val data = RecipeListFlowData(
+        list = LceState.Content(emptyList())
+    )
+
     override fun doInit() {
         repository = mockk()
-        state = ContentState(context, repository)
+        state = ContentState(
+            context,
+            data,
+            repository
+        )
     }
 
     @Test
-    fun loadsRecipeList() = test {
+    fun loadsRecipeListAndDisplaysCachedItemsOnEmptyLoading() = test {
         val list = listOf(LIST_RECIPE)
         every { repository.recipes } returns listOf<RecipeListLce>(LceState.Loading(), LceState.Content(list)).asFlow()
 
@@ -35,12 +44,18 @@ internal class ContentStateTest : BaseStateTest() {
 
         @Suppress("UnusedFlow")
         verifyOrder {
-            stateMachine.setUiState(RecipeListViewState.Loading)
+            stateMachine.setUiState(
+                RecipeListViewState.Content(
+                    state = LceState.Content(emptyList()),
+                    addEnabled = true,
+                    refreshEnabled = true
+                )
+            )
             repository.recipes
             stateMachine.setUiState(
                 RecipeListViewState.Content(
-                    state = LceState.Loading(),
-                    addEnabled = false,
+                    state = LceState.Loading(emptyList()),
+                    addEnabled = true,
                     refreshEnabled = false
                 )
             )
@@ -70,14 +85,14 @@ internal class ContentStateTest : BaseStateTest() {
 
     @Test
     fun switchesToAddRecipeOnAddRecipeClick() = test {
-        every { factory.addingRecipe() } returns nextState
+        every { factory.addingRecipe(any()) } returns nextState
         every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Content(emptyList()))
 
         state.start(stateMachine)
         state.process(RecipeListGesture.AddRecipeClicked)
 
         verify {
-            factory.addingRecipe()
+            factory.addingRecipe(data)
             stateMachine.setMachineState(nextState)
         }
     }

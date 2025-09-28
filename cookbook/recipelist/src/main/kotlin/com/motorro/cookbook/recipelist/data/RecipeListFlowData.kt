@@ -6,4 +6,4 @@ import com.motorro.cookbook.domain.recipes.data.RecipeListLce
 /**
  * Inter-state data for recipe-list flow
  */
-data class RecipeFlowData(val data: RecipeListLce = LceState.Loading(null))
+data class RecipeListFlowData(val list: RecipeListLce = LceState.Loading(null))

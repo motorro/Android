@@ -1,6 +1,7 @@
 package com.motorro.cookbook.recipelist.state
 
 import com.motorro.commonstatemachine.CommonMachineState
+import com.motorro.cookbook.recipelist.data.RecipeListFlowData
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
 import javax.inject.Inject
@@ -14,12 +15,12 @@ internal interface RecipeListStateFactory {
     /**
      * Creates initial state
      */
-    fun init(): RecipeListState = content()
+    fun init(): RecipeListState = content(RecipeListFlowData())
 
     /**
      * Recipe loading and display
      */
-    fun content(): RecipeListState
+    fun content(data: RecipeListFlowData): RecipeListState
 
     /**
      * Logging out
@@ -34,7 +35,7 @@ internal interface RecipeListStateFactory {
     /**
      * Switches to the add-recipe flow
      */
-    fun addingRecipe(): CommonMachineState<RecipeListGesture, RecipeListViewState>
+    fun addingRecipe(data: RecipeListFlowData): CommonMachineState<RecipeListGesture, RecipeListViewState>
 
     class Impl @Inject constructor(
         private val createContent: Provider<ContentState.Factory>,
@@ -46,8 +47,9 @@ internal interface RecipeListStateFactory {
             override val factory: RecipeListStateFactory get() = this@Impl
         }
 
-        override fun content() = createContent.get()(
-            context
+        override fun content(data: RecipeListFlowData) = createContent.get()(
+            context,
+            data
         )
 
         override fun loggingOut() = createLogout.get()(
@@ -56,8 +58,9 @@ internal interface RecipeListStateFactory {
 
         override fun terminated() = TerminatedState(context)
 
-        override fun addingRecipe() = createAddingRecipe.get()(
-            context
+        override fun addingRecipe(data: RecipeListFlowData) = createAddingRecipe.get()(
+            context,
+            data
         )
     }
 }
