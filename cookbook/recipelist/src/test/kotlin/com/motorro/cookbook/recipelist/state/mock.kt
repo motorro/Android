@@ -1,6 +1,7 @@
 package com.motorro.cookbook.recipelist.state
 
 import com.motorro.cookbook.core.error.UnknownException
+import com.motorro.cookbook.domain.session.error.UnauthorizedException
 import com.motorro.cookbook.model.Image
 import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.model.RecipeCategory
@@ -20,3 +21,4 @@ internal val LIST_RECIPE: ListRecipe = ListRecipe(
 
 internal val ERROR_NON_FATAL = UnknownException(IOException("Non-fatal"), false)
 internal val ERROR_FATAL = UnknownException(IOException("Fatal"), true)
+internal val ERROR_AUTH = UnauthorizedException()

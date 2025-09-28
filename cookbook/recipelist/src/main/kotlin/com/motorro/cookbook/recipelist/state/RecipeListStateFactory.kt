@@ -1,6 +1,7 @@
 package com.motorro.cookbook.recipelist.state
 
 import com.motorro.commonstatemachine.CommonMachineState
+import com.motorro.cookbook.appcore.navigation.auth.AuthenticationApi
 import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.recipelist.data.RecipeListFlowData
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
@@ -49,11 +50,17 @@ internal interface RecipeListStateFactory {
      */
     fun recipe(data: RecipeListFlowData, listRecipe: ListRecipe): CommonMachineState<RecipeListGesture, RecipeListViewState>
 
+    /**
+     * Switches to the authentication flow
+     */
+    fun authenticating(): CommonMachineState<RecipeListGesture, RecipeListViewState>
+
     class Impl @Inject constructor(
         private val createContent: Provider<ContentState.Factory>,
         private val createLogout: Provider<LoggingOutState.Factory>,
         private val createAddingRecipe: Provider<AddRecipeProxy.Factory>,
-        private val createRecipe: Provider<RecipeProxy.Factory>
+        private val createRecipe: Provider<RecipeProxy.Factory>,
+        private val createAuthentication: Provider<AuthenticationApi>
     ) : RecipeListStateFactory {
 
         private val context = object : RecipeListContext {
@@ -86,6 +93,18 @@ internal interface RecipeListStateFactory {
             context,
             data,
             listRecipe
+        )
+
+        override fun authenticating() = createAuthentication.get().createProxy(
+            onLoginFactory = { init() },
+            onCancelFactory = { terminated() },
+            mapGesture = {
+                when(it) {
+                    is RecipeListGesture.Auth -> it.child
+                    else -> null
+                }
+            },
+            mapUiState = { RecipeListViewState.Auth(it) }
         )
     }
 }

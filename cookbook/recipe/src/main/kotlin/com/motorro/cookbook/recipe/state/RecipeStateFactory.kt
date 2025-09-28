@@ -1,10 +1,14 @@
 package com.motorro.cookbook.recipe.state
 
+import com.motorro.commonstatemachine.CommonMachineState
 import com.motorro.cookbook.appcore.navigation.CommonFlowHost
+import com.motorro.cookbook.appcore.navigation.auth.AuthenticationApi
 import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.model.Recipe
 import com.motorro.cookbook.recipe.data.RecipeFlowData
+import com.motorro.cookbook.recipe.data.RecipeGesture
+import com.motorro.cookbook.recipe.data.RecipeViewState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -49,6 +53,12 @@ internal interface RecipeStateFactory {
     fun content(data: RecipeFlowData): RecipeState
 
     /**
+     * Switches to the authentication flow
+     * @param recipeId Recipe ID to open after authentication succeeds
+     */
+    fun authenticating(recipeId: Uuid): CommonMachineState<RecipeGesture, RecipeViewState>
+
+    /**
      * Asks to delete
      */
     fun deleteConfirmation(data: RecipeFlowData): RecipeState
@@ -69,6 +79,7 @@ internal interface RecipeStateFactory {
     class Impl @AssistedInject constructor(
         private val createContentState: Provider<ContentState.Factory>,
         private val createDeletingState: Provider<DeletingState.Factory>,
+        private val createAuthentication: Provider<AuthenticationApi>,
         @Assisted flowHost: CommonFlowHost
     ) : RecipeStateFactory {
 
@@ -80,6 +91,18 @@ internal interface RecipeStateFactory {
         override fun content(data: RecipeFlowData) = createContentState.get()(
             context,
             data
+        )
+
+        override fun authenticating(recipeId: Uuid): CommonMachineState<RecipeGesture, RecipeViewState> = createAuthentication.get().createProxy(
+            onLoginFactory = { init(recipeId) },
+            onCancelFactory = { terminated() },
+            mapGesture = {
+                when(it) {
+                    is RecipeGesture.Auth -> it.child
+                    else -> null
+                }
+            },
+            mapUiState = { RecipeViewState.Auth(it) }
         )
 
         override fun deleteConfirmation(data: RecipeFlowData) = DeleteConfirmationState(

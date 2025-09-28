@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+[*] -> ListContent
+
+state RecipeList {
+  state "Terminated" as ListTerminated
+  state "Content" as ListContent
+  ListContent -down-> Form
+  ListContent -down-> RecipeContent
+  ListContent -up-> LoggingOut
+  LoggingOut -down-> ListContent
+  ListContent -> ListTerminated
+  ListContent -up-> LoginForm
+}
+
+state AddRecipe {
+  state "Terminated" as AddRecipeTerminated
+  state Form
+  Form -> Saving
+  Saving -> AddRecipeTerminated: onComplete
+}
+
+state Recipe {
+  state "Terminated" as RecipeTerminated
+  state "Content" as RecipeContent
+  RecipeContent -> DeleteConfirmation
+  RecipeContent -up-> LoginForm
+  DeleteConfirmation -> Deleting
+  Deleting -> RecipeTerminated
+}
+
+state Login {
+    state "Terminated" as LoginTerminated
+    state "Form" as LoginForm
+    LoginForm -> LoggingIn
+    LoggingIn -> LoginTerminated
+}
+@enduml

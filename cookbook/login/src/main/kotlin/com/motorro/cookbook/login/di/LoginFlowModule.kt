@@ -1,17 +1,18 @@
 package com.motorro.cookbook.login.di
 
-import com.motorro.cookbook.login.state.LoginStateFactory
+import com.motorro.cookbook.appcore.navigation.auth.AuthenticationApi
+import com.motorro.cookbook.login.api.LoginAuthenticationApi
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 
 /**
  * Binds login flow components
  */
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 internal abstract class LoginFlowModule {
     @Binds
-    abstract fun stateFactory(impl: LoginStateFactory.Impl): LoginStateFactory
+    abstract fun authApi(impl: LoginAuthenticationApi): AuthenticationApi
 }

@@ -31,13 +31,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
 import com.motorro.cookbook.addrecipe.AddRecipeScreen
-import com.motorro.cookbook.appcore.compose.ui.auth.AuthPromptView
 import com.motorro.cookbook.appcore.compose.ui.lce.LceView
 import com.motorro.cookbook.appcore.compose.ui.loading.LoadingScreen
 import com.motorro.cookbook.appcore.compose.ui.loading.LoadingView
 import com.motorro.cookbook.appcore.compose.ui.theme.AppDimens
 import com.motorro.cookbook.appcore.compose.ui.theme.CookbookTheme
 import com.motorro.cookbook.appcore.compose.ui.theme.appBarColors
+import com.motorro.cookbook.appcore.navigation.auth.LocalAuthenticationApi
 import com.motorro.cookbook.core.error.UnknownException
 import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.model.ListRecipe
@@ -55,7 +55,6 @@ import kotlin.uuid.Uuid
 fun RecipeListScreen(
     viewState: RecipeListViewState,
     onGesture: (RecipeListGesture) -> Unit,
-    onLogin: () -> Unit,
     onTerminated: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -67,7 +66,6 @@ fun RecipeListScreen(
       is RecipeListViewState.Content -> RecipeListScreen(
           viewState = viewState,
           onGesture = onGesture,
-          onLogin = onLogin,
           modifier = modifier
       )
       RecipeListViewState.Terminated -> LaunchedEffect(viewState) {
@@ -81,7 +79,11 @@ fun RecipeListScreen(
       is RecipeListViewState.Recipe -> RecipeScreen(
           viewState = viewState.child,
           onGesture = { onGesture(RecipeFlow(it)) },
-          onLogin = onLogin,
+          modifier = modifier
+      )
+      is RecipeListViewState.Auth -> LocalAuthenticationApi.current.AuthenticationScreen(
+          state = viewState.child,
+          onGesture = { onGesture(Auth(it)) },
           modifier = modifier
       )
   }
@@ -92,13 +94,12 @@ fun RecipeListScreen(
 fun RecipeListScreen(
     viewState: RecipeListViewState.Content,
     onGesture: (RecipeListGesture) -> Unit,
-    onLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     // Switching flow internally
     val onRecipe: (Uuid) -> Unit = remember {
-        { onGesture(RecipeListGesture.RecipeClicked(it)) }
+        { onGesture(RecipeClicked(it)) }
     }
 
     Scaffold(
@@ -113,7 +114,7 @@ fun RecipeListScreen(
                             contentDescription = stringResource(id = R.string.btn_sync)
                         )
                     }
-                    IconButton(onClick = { onGesture(RecipeListGesture.Logout) }) {
+                    IconButton(onClick = { onGesture(Logout) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ExitToApp,
                             contentDescription = stringResource(id = R.string.btn_logout)
@@ -126,7 +127,7 @@ fun RecipeListScreen(
         floatingActionButton = {
             AnimatedVisibility(viewState.addEnabled) {
                 FloatingActionButton(
-                    onClick = { onGesture(RecipeListGesture.AddRecipeClicked) },
+                    onClick = { onGesture(AddRecipeClicked) },
                     containerColor = MaterialTheme.colorScheme.primary,
                 ) {
                     Icon(
@@ -139,7 +140,7 @@ fun RecipeListScreen(
     ) { paddingValues ->
         LceView(
             state = viewState.state,
-            onErrorAction = { onGesture(RecipeListGesture.DismissError) },
+            onErrorAction = { onGesture(DismissError) },
             modifier = modifier.padding(paddingValues),
             loading = { d, m ->
                 if (null == d) {
@@ -151,9 +152,6 @@ fun RecipeListScreen(
                     }
                 }
 
-            },
-            onLogin = { m ->
-                AuthPromptView(onLogin, m)
             },
             content = { d, _, m ->
                 RecipeListContent(d, onRecipe, m)
@@ -188,7 +186,6 @@ fun PreviewRecipeListScreenLoading() {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Loading(null), addEnabled = false, refreshEnabled = false),
             onGesture = {},
-            onLogin = {},
             onTerminated = {}
         )
     }
@@ -232,7 +229,6 @@ fun PreviewRecipeListScreenContent() {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Content(sampleRecipes), addEnabled = true, refreshEnabled = true),
             onGesture = {},
-            onLogin = {},
             onTerminated = {}
         )
     }
@@ -276,7 +272,6 @@ fun PreviewRecipeListScreenContentLoading() {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Content(sampleRecipes), addEnabled = true, refreshEnabled = true),
             onGesture = {},
-            onLogin = {},
             onTerminated = {}
         )
     }
@@ -293,7 +288,6 @@ fun PreviewRecipeListScreenError() {
                 refreshEnabled = false
             ),
             onGesture = {},
-            onLogin = {},
             onTerminated = {}
         )
     }
