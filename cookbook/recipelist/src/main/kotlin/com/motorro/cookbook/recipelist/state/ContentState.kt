@@ -64,7 +64,14 @@ internal class ContentState(
             }
             is RecipeListGesture.RecipeClicked -> {
                 d { "Recipe is clicked. Navigating to recipe ${gesture.id}..." }
-                setMachineState(factory.recipe(data, gesture.id))
+                val recipe = data.list.data?.firstOrNull { it.id == gesture.id }
+                if (recipe != null) {
+                    d { "Recipe is available. Navigating to recipe with preloaded DATA" }
+                    setMachineState(factory.recipe(data, recipe))
+                } else {
+                    d { "Recipe is not available. Navigating to recipe with ID" }
+                    setMachineState(factory.recipe(data, gesture.id))
+                }
             }
             RecipeListGesture.DismissError -> {
                 val state = data.list

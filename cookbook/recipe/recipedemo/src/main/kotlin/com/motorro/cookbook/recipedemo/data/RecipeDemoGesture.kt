@@ -6,6 +6,7 @@ sealed class RecipeDemoGesture {
     data object Back : RecipeDemoGesture()
 
     data object ToRecipe : RecipeDemoGesture()
+    data object ToPreloadedRecipe : RecipeDemoGesture()
 
     /**
      * Recipe flow

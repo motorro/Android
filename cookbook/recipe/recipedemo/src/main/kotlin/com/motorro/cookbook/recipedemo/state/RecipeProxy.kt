@@ -1,6 +1,8 @@
 package com.motorro.cookbook.recipedemo.state
 
 import com.motorro.commonstatemachine.ProxyMachineState
+import com.motorro.cookbook.appcore.navigation.CommonFlowHost
+import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.recipe.api.RecipeApi
 import com.motorro.cookbook.recipe.data.RecipeGesture
 import com.motorro.cookbook.recipe.data.RecipeViewState
@@ -22,11 +24,18 @@ private typealias RecipeProxyType = ProxyMachineState<
  */
 class RecipeProxy(
     private val api: RecipeApi,
-    private val recipeId: Uuid
+    private val recipeId: Uuid? = null,
+    private val listRecipe: ListRecipe? = null
 ) : RecipeProxyType(RecipeApi.DEFAULT_UI_STATE) {
 
-    override fun init() = api.start(recipeId) {
+    private val flowHost = CommonFlowHost {
         setMachineState(StarterState(api))
+    }
+
+    override fun init() = when {
+        recipeId != null -> api.start(recipeId, flowHost)
+        listRecipe != null -> api.start(listRecipe, flowHost)
+        else -> throw IllegalArgumentException("No recipeId or listRecipe provided")
     }
 
     override fun mapGesture(parent: RecipeDemoGesture): RecipeGesture? = when (parent) {

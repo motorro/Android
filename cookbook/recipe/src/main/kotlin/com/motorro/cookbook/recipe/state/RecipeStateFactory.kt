@@ -1,6 +1,9 @@
 package com.motorro.cookbook.recipe.state
 
 import com.motorro.cookbook.appcore.navigation.CommonFlowHost
+import com.motorro.cookbook.core.lce.LceState
+import com.motorro.cookbook.model.ListRecipe
+import com.motorro.cookbook.model.Recipe
 import com.motorro.cookbook.recipe.data.RecipeFlowData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -17,6 +20,28 @@ internal interface RecipeStateFactory {
      * Creates initial state
      */
     fun init(recipeId: Uuid): RecipeState = content(RecipeFlowData(recipeId))
+
+    /**
+     * Creates initial state
+     */
+    fun init(listRecipe: ListRecipe): RecipeState = content(
+        with(listRecipe) {
+            RecipeFlowData(
+                id = id,
+                data = LceState.Content(
+                    Recipe(
+                        id = id,
+                        title = title,
+                        category = category,
+                        image = image,
+                        description = "",
+                        dateTimeCreated = dateTimeCreated,
+                        deleted = deleted
+                    )
+                )
+            )
+        }
+    )
 
     /**
      * Recipe loading and display
