@@ -134,6 +134,19 @@ internal class ContentStateTest : BaseStateTest() {
     }
 
     @Test
+    fun transfersToAuthenticationOnAuthError() = test {
+        every { repository.recipes } returns flowOf(LceState.Error(ERROR_AUTH))
+        every { factory.authenticating() } returns nextState
+
+        state.start(stateMachine)
+
+        verify {
+            factory.authenticating()
+            stateMachine.setMachineState(nextState)
+        }
+    }
+
+    @Test
     fun restartsOnFatalError() = test {
         every { repository.recipes } returns flowOf<RecipeListLce>(LceState.Error(ERROR_FATAL))
         every { factory.init() } returns nextState

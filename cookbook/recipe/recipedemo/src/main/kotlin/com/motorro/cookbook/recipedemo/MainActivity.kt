@@ -76,9 +76,6 @@ private fun RecipeDemoScreen(
         is RecipeDemoViewState.RecipeFlow -> RecipeScreen(
             viewState = state.child,
             onGesture = { onGesture(RecipeDemoGesture.RecipeFlow(it)) },
-            onLogin = {
-                throw NotImplementedError("Login not implemented")
-            }
         )
         RecipeDemoViewState.Terminated -> LaunchedEffect(state) {
             onTerminated

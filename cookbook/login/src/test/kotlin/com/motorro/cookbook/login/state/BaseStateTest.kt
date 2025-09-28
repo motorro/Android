@@ -1,6 +1,7 @@
 package com.motorro.cookbook.login.state
 
 import com.motorro.commonstatemachine.CommonStateMachine
+import com.motorro.cookbook.appcore.navigation.auth.AuthFlowHost
 import com.motorro.cookbook.login.data.LoginGesture
 import com.motorro.cookbook.login.data.LoginViewState
 import io.mockk.mockk
@@ -26,6 +27,8 @@ internal abstract class BaseStateTest {
 
     protected lateinit var nextState: LoginState
 
+    protected lateinit var flowHost: AuthFlowHost
+
     protected open fun createDispatcher(): TestDispatcher = UnconfinedTestDispatcher()
 
     @Before
@@ -36,10 +39,13 @@ internal abstract class BaseStateTest {
         stateMachine = mockk(relaxed = true)
         factory = mockk()
         nextState = mockk()
+        flowHost = mockk()
 
         context = object : LoginContext {
             override val factory: LoginStateFactory
                 get() = this@BaseStateTest.factory
+            override val flowHost: AuthFlowHost
+                get() = this@BaseStateTest.flowHost
         }
 
         doInit()

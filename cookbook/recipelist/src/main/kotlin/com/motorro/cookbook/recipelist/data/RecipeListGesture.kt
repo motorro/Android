@@ -1,6 +1,7 @@
 package com.motorro.cookbook.recipelist.data
 
 import com.motorro.cookbook.addrecipe.data.AddRecipeGesture
+import com.motorro.cookbook.appcore.navigation.auth.AuthGesture
 import com.motorro.cookbook.recipe.data.RecipeGesture
 import kotlin.uuid.Uuid
 
@@ -32,4 +33,9 @@ sealed class RecipeListGesture {
      * Proxies recipe flow
      */
     data class RecipeFlow(val child: RecipeGesture) : RecipeListGesture()
+
+    /**
+     * Proxies authentication flow
+     */
+    data class Auth(val child: AuthGesture) : RecipeListGesture()
 }

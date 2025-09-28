@@ -1,9 +1,11 @@
 package com.motorro.cookbook.login.data
 
+import com.motorro.cookbook.appcore.navigation.auth.AuthViewState
+
 /**
  * View-state for login form
  */
-sealed class LoginViewState {
+internal sealed class LoginViewState : AuthViewState {
 
     abstract val controlsEnabled: Boolean
     abstract val loginEnabled: Boolean
@@ -20,12 +22,6 @@ sealed class LoginViewState {
     }
     data class Error(val message: String, override val username: String, override val password: String, override val loginEnabled: Boolean) : LoginViewState() {
         override val controlsEnabled: Boolean = true
-    }
-    data object LoggedIn : LoginViewState() {
-        override val loginEnabled: Boolean = false
-        override val controlsEnabled: Boolean = false
-        override val username: String = ""
-        override val password: String = ""
     }
 
     companion object {

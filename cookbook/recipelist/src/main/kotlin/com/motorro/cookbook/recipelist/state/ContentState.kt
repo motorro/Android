@@ -4,6 +4,7 @@ import com.motorro.cookbook.core.lce.LceState
 import com.motorro.cookbook.core.lce.map
 import com.motorro.cookbook.core.lce.replaceEmptyData
 import com.motorro.cookbook.domain.recipes.RecipeRepository
+import com.motorro.cookbook.domain.session.error.UnauthorizedException
 import com.motorro.cookbook.recipelist.data.RecipeListFlowData
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
@@ -41,6 +42,12 @@ internal class ContentState(
             .recipes
             .map { it.replaceEmptyData(data.list.data) }
             .onEach { data = data.copy(list = it) }
+            .onEach {
+                if (it is LceState.Error && it.error is UnauthorizedException) {
+                    d { "Unauthorized. Navigating to authentication..." }
+                    setMachineState(factory.authenticating())
+                }
+            }
             .launchIn(stateScope)
     }
 

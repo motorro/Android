@@ -20,15 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.motorro.cookbook.appcore.compose.ui.auth.AuthPromptView
 import com.motorro.cookbook.appcore.compose.ui.lce.LceView
 import com.motorro.cookbook.appcore.compose.ui.loading.LoadingView
 import com.motorro.cookbook.appcore.compose.ui.theme.AppDimens
 import com.motorro.cookbook.appcore.compose.ui.theme.CookbookTheme
 import com.motorro.cookbook.appcore.compose.ui.theme.appBarColors
+import com.motorro.cookbook.appcore.navigation.auth.LocalAuthenticationApi
 import com.motorro.cookbook.core.error.UnknownException
 import com.motorro.cookbook.core.lce.LceState
-import com.motorro.cookbook.domain.session.error.UnauthorizedException
 import com.motorro.cookbook.model.Image
 import com.motorro.cookbook.model.Recipe
 import com.motorro.cookbook.model.RecipeCategory
@@ -44,12 +43,12 @@ import com.motorro.cookbook.appcore.R as ACR
 fun RecipeScreen(
     viewState: RecipeViewState,
     onGesture: (RecipeGesture) -> Unit,
-    onLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val recipeTitle = when (viewState) {
         is RecipeViewState.Content -> viewState.state.data?.title
         is RecipeViewState.DeleteConfirmation -> viewState.data.title
+        else -> null
     } ?: stringResource(R.string.title_recipe)
 
     if (viewState is RecipeViewState.DeleteConfirmation) {
@@ -121,9 +120,6 @@ fun RecipeScreen(
                         }
 
                     },
-                    onLogin = { m ->
-                        AuthPromptView(onLogin, m)
-                    },
                     content = { d, _, m ->
                         RecipeContent(d, m)
                     }
@@ -132,6 +128,11 @@ fun RecipeScreen(
             is RecipeViewState.DeleteConfirmation -> {
                 RecipeContent(viewState.data, modifier.padding(paddingValues))
             }
+            is RecipeViewState.Auth -> LocalAuthenticationApi.current.AuthenticationScreen(
+                state = viewState.child,
+                onGesture = { onGesture(RecipeGesture.Auth(it)) },
+                modifier = modifier.padding(paddingValues)
+            )
         }
     }
 }
@@ -227,7 +228,6 @@ fun RecipeScreenLoadingPreview() {
         RecipeScreen(
             viewState = RecipeViewState.Content(LceState.Loading(null), deleteEnabled = false),
             onGesture = {},
-            onLogin = {}
         )
     }
 }
@@ -250,8 +250,7 @@ fun RecipeScreenContentPreview() {
                 ),
                 deleteEnabled = true
             ),
-            onGesture = {},
-            onLogin = {}
+            onGesture = {}
         )
     }
 }
@@ -262,20 +261,7 @@ fun RecipeScreenErrorPreview() {
     CookbookTheme {
         RecipeScreen(
             viewState = RecipeViewState.Content(LceState.Error(UnknownException(IOException("Preview error"))), deleteEnabled = false),
-            onGesture = {},
-            onLogin = {}
-        )
-    }
-}
-
-@Composable
-@Preview(showBackground = true, name = "Recipe Screen - Unauthorized")
-fun RecipeScreenUnauthorizedPreview() {
-    CookbookTheme {
-        RecipeScreen(
-            viewState = RecipeViewState.Content(LceState.Error(UnauthorizedException()), deleteEnabled = false),
-            onGesture = {},
-            onLogin = {}
+            onGesture = {}
         )
     }
 }
@@ -295,8 +281,7 @@ fun RecipeScreenDeleteConfirmPreview() {
                     dateTimeCreated = Instant.parse("2025-05-03T06:57:00Z")
                 )
             ),
-            onGesture = {},
-            onLogin = {}
+            onGesture = {}
         )
     }
 }

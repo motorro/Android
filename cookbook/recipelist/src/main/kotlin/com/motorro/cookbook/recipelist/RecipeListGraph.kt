@@ -15,9 +15,6 @@ fun NavGraphBuilder.recipeListGraph(navController: NavController) {
         RecipeListScreen(
             viewState = model.viewState.collectAsStateWithLifecycle().value,
             onGesture = model::process,
-            onLogin = {
-                navController.navigate(Destination.LoginDestination)
-            },
             onTerminated = { navController.popBackStack() }
         )
     }

@@ -6,7 +6,6 @@ import com.motorro.cookbook.appcore.compose.ui.error.ErrorView
 import com.motorro.cookbook.appcore.compose.ui.loading.LoadingView
 import com.motorro.cookbook.core.error.CoreException
 import com.motorro.cookbook.core.lce.LceState
-import com.motorro.cookbook.domain.session.error.UnauthorizedException
 
 /**
  * Common LCE screen
@@ -17,7 +16,6 @@ fun <DATA: Any, ERR: CoreException> LceView(
     onErrorAction: () -> Unit,
     modifier: Modifier = Modifier,
     loading: (@Composable (data: DATA?, modifier: Modifier) -> Unit)? = null,
-    onLogin: @Composable (modifier: Modifier) -> Unit,
     content: @Composable (data: DATA, error: ERR?, modifier: Modifier) -> Unit
 ) {
     when(state) {
@@ -37,7 +35,6 @@ fun <DATA: Any, ERR: CoreException> LceView(
         is LceState.Error -> {
             val data = state.data
             when {
-                state.error is UnauthorizedException -> onLogin(modifier)
                 null != data -> content(data, state.error, modifier)
                 else -> ErrorView(state.error.message, onErrorAction, modifier)
             }

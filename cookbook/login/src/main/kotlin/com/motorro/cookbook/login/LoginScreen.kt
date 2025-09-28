@@ -26,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,20 +47,12 @@ import com.motorro.cookbook.appcore.R as ACR
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun LoginScreen(
+internal fun LoginScreen(
     state: LoginViewState,
     onGesture: (LoginGesture) -> Unit,
-    onComplete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
-
-    if (state is LoginViewState.LoggedIn) {
-        LaunchedEffect(state) {
-            onComplete()
-        }
-        return
-    }
 
     Scaffold(
         modifier = modifier,
@@ -166,7 +157,6 @@ fun PreviewLoginScreenForm() {
         LoginScreen(
             state = LoginViewState.Form("user", "pass", loginEnabled = true),
             onGesture = {},
-            onComplete = {},
         )
     }
 }
@@ -178,7 +168,6 @@ fun PreviewLoginScreenLoading() {
         LoginScreen(
             state = LoginViewState.Loading("user", "pass"),
             onGesture = {},
-            onComplete = {},
         )
     }
 }
@@ -190,7 +179,6 @@ fun PreviewLoginScreenError() {
         LoginScreen(
             state = LoginViewState.Error("Incorrect login or password", "user", "pass", loginEnabled = true),
             onGesture = {},
-            onComplete = {},
         )
     }
 }

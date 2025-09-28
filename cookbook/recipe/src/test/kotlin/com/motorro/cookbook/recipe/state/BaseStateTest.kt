@@ -39,6 +39,7 @@ internal abstract class BaseStateTest {
         stateMachine = mockk(relaxed = true)
         factory = mockk()
         nextState = mockk()
+        flowHost = mockk()
 
         context = object : RecipeContext {
             override val factory: RecipeStateFactory
