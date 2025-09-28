@@ -1,26 +1,35 @@
 package com.motorro.cookbook.recipelist.state
 
 import com.motorro.cookbook.core.lce.LceState
+import com.motorro.cookbook.core.lce.map
+import com.motorro.cookbook.core.lce.replaceEmptyData
 import com.motorro.cookbook.domain.recipes.RecipeRepository
+import com.motorro.cookbook.recipelist.data.RecipeListFlowData
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
-import com.motorro.cookbook.recipelist.data.RecipeListItemLce
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
-import com.motorro.cookbook.recipelist.data.getRecipeList
+import com.motorro.cookbook.recipelist.data.toRecipeListItems
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 /**
  * Recipe-list content
  */
 internal class ContentState(
     context: RecipeListContext,
+    data: RecipeListFlowData,
     private val repository: RecipeRepository
 ) : RecipeListState(context) {
 
+    private var data: RecipeListFlowData by Delegates.observable(data) { _, _, new ->
+        render(new)
+    }
+
     override fun doStart() {
         super.doStart()
-        setUiState(RecipeListViewState.Loading)
+        render(data)
         load()
     }
 
@@ -28,7 +37,11 @@ internal class ContentState(
      * Loads recipe
      */
     private fun load() {
-        repository.getRecipeList().onEach(::render).launchIn(stateScope)
+        repository
+            .recipes
+            .map { it.replaceEmptyData(data.list.data) }
+            .onEach { data = data.copy(list = it) }
+            .launchIn(stateScope)
     }
 
     override fun doProcess(gesture: RecipeListGesture) {
@@ -47,7 +60,7 @@ internal class ContentState(
             }
             RecipeListGesture.AddRecipeClicked -> {
                 d { "Add recipe is pressed. Navigating to add-recipe..." }
-                setMachineState(factory.addingRecipe())
+                setMachineState(factory.addingRecipe(data))
             }
             RecipeListGesture.DismissError -> {
                 d { "Dismiss error is pressed. Reloading recipe-list..." }
@@ -60,12 +73,12 @@ internal class ContentState(
     /**
      * Renders recipe
      */
-    fun render(state: RecipeListItemLce) {
+    fun render(state: RecipeListFlowData) {
         setUiState(
             RecipeListViewState.Content(
-                state = state,
-                addEnabled = null != state.data,
-                refreshEnabled = state !is LceState.Loading
+                state = state.list.map { it.toRecipeListItems() },
+                addEnabled = null != state.list.data,
+                refreshEnabled = state.list !is LceState.Loading
             )
         )
     }
@@ -74,8 +87,9 @@ internal class ContentState(
      * Factory for [ContentState]
      */
     class Factory @Inject constructor(private val repository: RecipeRepository) {
-        operator fun invoke(context: RecipeListContext) = ContentState(
+        operator fun invoke(context: RecipeListContext, data: RecipeListFlowData) = ContentState(
             context,
+            data,
             repository
         )
     }

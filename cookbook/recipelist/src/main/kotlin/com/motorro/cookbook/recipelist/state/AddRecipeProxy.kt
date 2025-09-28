@@ -4,6 +4,7 @@ import com.motorro.commonstatemachine.ProxyMachineState
 import com.motorro.cookbook.addrecipe.api.AddRecipeApi
 import com.motorro.cookbook.addrecipe.data.AddRecipeGesture
 import com.motorro.cookbook.addrecipe.data.AddRecipeViewState
+import com.motorro.cookbook.recipelist.data.RecipeListFlowData
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
 import javax.inject.Inject
@@ -22,10 +23,11 @@ private typealias AddRecipeProxyType = ProxyMachineState<
  */
 internal class AddRecipeProxy(
     private val context: RecipeListContext,
+    private val data: RecipeListFlowData,
     private val addRecipeApi: AddRecipeApi
 ) : AddRecipeProxyType(AddRecipeApi.DEFAULT_UI_STATE) {
     override fun init() = addRecipeApi.start {
-        setMachineState(context.factory.content())
+        setMachineState(context.factory.content(data))
     }
 
     override fun mapGesture(parent: RecipeListGesture): AddRecipeGesture? = when (parent) {
@@ -42,8 +44,9 @@ internal class AddRecipeProxy(
      * [AddRecipeProxy] factory
      */
     class Factory @Inject constructor(private val addRecipeApi: AddRecipeApi) {
-        operator fun invoke(context: RecipeListContext) = AddRecipeProxy(
+        operator fun invoke(context: RecipeListContext, data: RecipeListFlowData) = AddRecipeProxy(
             context,
+            data,
             addRecipeApi
         )
     }
