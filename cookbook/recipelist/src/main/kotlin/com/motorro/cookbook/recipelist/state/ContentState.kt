@@ -62,6 +62,10 @@ internal class ContentState(
                 d { "Add recipe is pressed. Navigating to add-recipe..." }
                 setMachineState(factory.addingRecipe(data))
             }
+            is RecipeListGesture.RecipeClicked -> {
+                d { "Recipe is clicked. Navigating to recipe ${gesture.id}..." }
+                setMachineState(factory.recipe(data, gesture.id))
+            }
             RecipeListGesture.DismissError -> {
                 val state = data.list
                 if (state is LceState.Error) {

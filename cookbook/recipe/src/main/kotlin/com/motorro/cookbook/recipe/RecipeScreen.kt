@@ -9,7 +9,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,14 +44,12 @@ import com.motorro.cookbook.appcore.R as ACR
 fun RecipeScreen(
     viewState: RecipeViewState,
     onGesture: (RecipeGesture) -> Unit,
-    onTerminated: () -> Unit,
     onLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val recipeTitle = when (viewState) {
         is RecipeViewState.Content -> viewState.state.data?.title
         is RecipeViewState.DeleteConfirmation -> viewState.data.title
-        else -> null
     } ?: stringResource(R.string.title_recipe)
 
     if (viewState is RecipeViewState.DeleteConfirmation) {
@@ -134,9 +131,6 @@ fun RecipeScreen(
             }
             is RecipeViewState.DeleteConfirmation -> {
                 RecipeContent(viewState.data, modifier.padding(paddingValues))
-            }
-            RecipeViewState.Terminated -> LaunchedEffect(viewState) {
-                onTerminated()
             }
         }
     }
@@ -233,7 +227,6 @@ fun RecipeScreenLoadingPreview() {
         RecipeScreen(
             viewState = RecipeViewState.Content(LceState.Loading(null), deleteEnabled = false),
             onGesture = {},
-            onTerminated = {},
             onLogin = {}
         )
     }
@@ -258,7 +251,6 @@ fun RecipeScreenContentPreview() {
                 deleteEnabled = true
             ),
             onGesture = {},
-            onTerminated = {},
             onLogin = {}
         )
     }
@@ -271,7 +263,6 @@ fun RecipeScreenErrorPreview() {
         RecipeScreen(
             viewState = RecipeViewState.Content(LceState.Error(UnknownException(IOException("Preview error"))), deleteEnabled = false),
             onGesture = {},
-            onTerminated = {},
             onLogin = {}
         )
     }
@@ -284,7 +275,6 @@ fun RecipeScreenUnauthorizedPreview() {
         RecipeScreen(
             viewState = RecipeViewState.Content(LceState.Error(UnauthorizedException()), deleteEnabled = false),
             onGesture = {},
-            onTerminated = {},
             onLogin = {}
         )
     }
@@ -306,7 +296,6 @@ fun RecipeScreenDeleteConfirmPreview() {
                 )
             ),
             onGesture = {},
-            onTerminated = {},
             onLogin = {}
         )
     }

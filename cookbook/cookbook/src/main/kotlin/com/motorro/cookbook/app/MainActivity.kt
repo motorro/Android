@@ -9,7 +9,6 @@ import androidx.navigation.compose.rememberNavController
 import com.motorro.cookbook.appcore.compose.ui.theme.CookbookTheme
 import com.motorro.cookbook.appcore.navigation.Destination
 import com.motorro.cookbook.login.loginGraph
-import com.motorro.cookbook.recipe.recipeGraph
 import com.motorro.cookbook.recipelist.recipeListGraph
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
                 NavHost(navController = navController, startDestination = Destination.RecipeListDestination) {
                     recipeListGraph(navController)
-                    recipeGraph(navController)
                     loginGraph(navController)
                 }
             }

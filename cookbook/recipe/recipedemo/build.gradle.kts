@@ -60,8 +60,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.hilt.navigation.compose)
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.androidx)

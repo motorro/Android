@@ -1,7 +1,10 @@
 package com.motorro.cookbook.recipe.state
 
+import com.motorro.cookbook.appcore.navigation.CommonFlowHost
 import com.motorro.cookbook.recipe.data.RecipeFlowData
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import javax.inject.Provider
 import kotlin.uuid.Uuid
 
@@ -38,13 +41,15 @@ internal interface RecipeStateFactory {
     /**
      * Factory for [RecipeStateFactory]
      */
-    class Impl @Inject constructor(
+    class Impl @AssistedInject constructor(
         private val createContentState: Provider<ContentState.Factory>,
         private val createDeletingState: Provider<DeletingState.Factory>,
+        @Assisted flowHost: CommonFlowHost
     ) : RecipeStateFactory {
 
         private val context = object : RecipeContext {
             override val factory = this@Impl
+            override val flowHost = flowHost
         }
 
         override fun content(data: RecipeFlowData) = createContentState.get()(
@@ -65,5 +70,10 @@ internal interface RecipeStateFactory {
         override fun terminated() = TerminatedState(
             context
         )
+
+        @AssistedFactory
+        interface Factory {
+            fun create(flowHost: CommonFlowHost): Impl
+        }
     }
 }

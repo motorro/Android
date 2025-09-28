@@ -1,6 +1,7 @@
 package com.motorro.cookbook.recipe.state
 
 import com.motorro.commonstatemachine.CommonStateMachine
+import com.motorro.cookbook.appcore.navigation.CommonFlowHost
 import com.motorro.cookbook.recipe.data.RecipeGesture
 import com.motorro.cookbook.recipe.data.RecipeViewState
 import io.mockk.mockk
@@ -26,6 +27,8 @@ internal abstract class BaseStateTest {
 
     protected lateinit var nextState: RecipeState
 
+    protected lateinit var flowHost: CommonFlowHost
+
     protected open fun createDispatcher(): TestDispatcher = UnconfinedTestDispatcher()
 
     @Before
@@ -40,6 +43,8 @@ internal abstract class BaseStateTest {
         context = object : RecipeContext {
             override val factory: RecipeStateFactory
                 get() = this@BaseStateTest.factory
+            override val flowHost: CommonFlowHost
+                get() = this@BaseStateTest.flowHost
         }
 
         doInit()
