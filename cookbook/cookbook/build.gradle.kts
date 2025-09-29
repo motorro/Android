@@ -42,6 +42,7 @@ android {
     }
 
     flavorDimensions += "data"
+    flavorDimensions += "login"
     productFlavors {
         create("server") {
             dimension = "data"
@@ -49,6 +50,14 @@ android {
         create("mock") {
             dimension = "data"
             applicationIdSuffix = ".mock"
+        }
+        create("password") {
+            dimension = "login"
+            applicationIdSuffix = ".password"
+        }
+        create("social") {
+            dimension = "login"
+            applicationIdSuffix = ".social"
         }
     }
 }
@@ -59,9 +68,10 @@ dependencies {
 
     "serverImplementation"(project(":cookbook:data"))
     "mockImplementation"(project(":cookbook:mockdata"))
+    "passwordImplementation"(project(":cookbook:login"))
+    "socialImplementation"(project(":cookbook:loginsocial"))
 
     implementation(project(":cookbook:appcore"))
-    implementation(project(":cookbook:login"))
     implementation(project(":cookbook:recipelist"))
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.coroutines.android)
