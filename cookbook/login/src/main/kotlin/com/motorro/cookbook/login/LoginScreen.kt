@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
 import com.motorro.cookbook.appcore.compose.ui.theme.AppDimens
+import com.motorro.cookbook.login.data.LoginGesture
 import com.motorro.cookbook.login.data.LoginViewState
 import com.motorro.cookbook.appcore.R as ACR
 
@@ -49,9 +50,7 @@ import com.motorro.cookbook.appcore.R as ACR
 @OptIn(ExperimentalMaterial3Api::class)
 fun LoginScreen(
     state: LoginViewState,
-    onLoginChanged: (String) -> Unit,
-    onPasswordChanged: (String) -> Unit,
-    onLoginPressed: () -> Unit,
+    onGesture: (LoginGesture) -> Unit,
     onComplete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -70,7 +69,7 @@ fun LoginScreen(
             TopAppBar(
                 title = { Text(stringResource(id = R.string.title_login)) },
                 navigationIcon = {
-                    IconButton(onClick = onComplete) {
+                    IconButton(onClick = { onGesture(LoginGesture.Back) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
                             contentDescription = stringResource(ACR.string.btn_back)
@@ -101,7 +100,7 @@ fun LoginScreen(
             ) {
                 OutlinedTextField(
                     value = state.username,
-                    onValueChange = onLoginChanged,
+                    onValueChange = { onGesture(LoginGesture.LoginChanged(it)) },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(stringResource(id = R.string.hint_username)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -111,18 +110,18 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(AppDimens.spacer_small))
 
-                OutlinedTextField(
-                    value = state.password,
-                    onValueChange = onPasswordChanged,
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text(stringResource(id = R.string.hint_password)) },
-                    singleLine = true,
-                    enabled = state.controlsEnabled,
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    trailingIcon = {
-                        val image = if (passwordVisible) Icons.Default.Visibility else Icons.Filled.VisibilityOff
-                        val description = if (passwordVisible) stringResource(R.string.hide_password) else stringResource(R.string.show_password)
+            OutlinedTextField(
+                value = state.password,
+                onValueChange = { onGesture(LoginGesture.PasswordChanged(it)) },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(id = R.string.hint_password)) },
+                singleLine = true,
+                enabled = state.controlsEnabled,
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    val image = if (passwordVisible) Icons.Default.Visibility else Icons.Filled.VisibilityOff
+                    val description = if (passwordVisible) stringResource(R.string.hide_password) else stringResource(R.string.show_password)
 
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
                             Icon(imageVector = image, description)
@@ -132,13 +131,13 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(AppDimens.spacer))
 
-                Button(
-                    onClick = onLoginPressed,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = state.controlsEnabled && state.loginEnabled
-                ) {
-                    Text(stringResource(id = R.string.btn_login))
-                }
+            Button(
+                onClick = { onGesture(LoginGesture.Login) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = state.controlsEnabled && state.loginEnabled
+            ) {
+                Text(stringResource(id = R.string.btn_login))
+            }
 
                 if (state is LoginViewState.Error) {
                     Spacer(modifier = Modifier.height(AppDimens.spacer))
@@ -170,9 +169,7 @@ fun PreviewLoginScreenForm() {
     MaterialTheme { // Wrap with your app's theme or MaterialTheme for preview
         LoginScreen(
             state = LoginViewState.Form("user", "pass", loginEnabled = true),
-            onLoginChanged = {},
-            onPasswordChanged = {},
-            onLoginPressed = {},
+            onGesture = {},
             onComplete = {},
         )
     }
@@ -184,9 +181,7 @@ fun PreviewLoginScreenLoading() {
     MaterialTheme {
         LoginScreen(
             state = LoginViewState.Loading("user", "pass"),
-            onLoginChanged = {},
-            onPasswordChanged = {},
-            onLoginPressed = {},
+            onGesture = {},
             onComplete = {},
         )
     }
@@ -198,9 +193,7 @@ fun PreviewLoginScreenError() {
     MaterialTheme {
         LoginScreen(
             state = LoginViewState.Error("Incorrect login or password", "user", "pass", loginEnabled = true),
-            onLoginChanged = {},
-            onPasswordChanged = {},
-            onLoginPressed = {},
+            onGesture = {},
             onComplete = {},
         )
     }

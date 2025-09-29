@@ -3,9 +3,11 @@ package com.motorro.cookbook.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.motorro.cookbook.domain.session.SessionManager
+import com.motorro.cookbook.login.data.LoginGesture
 import com.motorro.cookbook.login.data.LoginViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +23,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : ViewModel() {
+
+    private var loginJob: Job? = null
 
     private val login = MutableStateFlow("")
     private val password = MutableStateFlow("")
@@ -59,20 +63,36 @@ class LoginViewModel @Inject constructor(
         LoginViewState.Form(login.value, password.value, loginEnabled(login.value, password.value))
     )
 
-    fun setLogin(login: String) {
+    fun process(gesture: LoginGesture) {
+        when(gesture) {
+            LoginGesture.Back -> {
+                loginJob?.cancel()
+                // Dirty temporary solution
+                state.tryEmit(LoginOperationState.Complete)
+            }
+            LoginGesture.Login -> login()
+            is LoginGesture.LoginChanged -> setLogin(gesture.login)
+            is LoginGesture.PasswordChanged -> setPassword(gesture.password)
+        }
+    }
+
+    private fun setLogin(login: String) {
         this.login.tryEmit(login)
     }
 
-    fun setPassword(password: String) {
+    private fun setPassword(password: String) {
         this.password.tryEmit(password)
     }
 
-    fun login() {
-        if (loginEnabled(login.value, password.value)) viewModelScope.launch {
-            state.emit(LoginOperationState.Loading)
-            sessionManager.login(login.value, password.value)
-                .onSuccess { state.tryEmit(LoginOperationState.Complete) }
-                .onFailure { state.tryEmit(LoginOperationState.Error(it.message ?: "Unknown error")) }
+    private fun login() {
+        loginJob?.cancel()
+        if (loginEnabled(login.value, password.value)) {
+            loginJob = viewModelScope.launch {
+                state.emit(LoginOperationState.Loading)
+                sessionManager.login(login.value, password.value)
+                    .onSuccess { state.tryEmit(LoginOperationState.Complete) }
+                    .onFailure { state.tryEmit(LoginOperationState.Error(it.message ?: "Unknown error")) }
+            }
         }
     }
 

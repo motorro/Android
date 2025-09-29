@@ -42,10 +42,8 @@ class LoginFragment : Fragment(), WithViewBinding<FragmentLoginBinding> by Bindi
                     CookbookTheme {
                         LoginScreen(
                             state = model.viewState.collectAsStateWithLifecycle().value,
-                            onLoginChanged = model::setLogin,
-                            onPasswordChanged = model::setPassword,
-                            onLoginPressed = model::login,
-                            onComplete = findNavController()::popBackStack,
+                            onGesture = model::process,
+                            onComplete = findNavController()::popBackStack
                         )
                     }
                 }
