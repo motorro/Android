@@ -27,11 +27,6 @@ sealed class RecipeListViewState {
     ) : RecipeListViewState()
 
     /**
-     * Terminated state - use to close the screen
-     */
-    data object Terminated : RecipeListViewState()
-
-    /**
      * Proxies add-recipe flow
      */
     data class AddRecipe(val child: AddRecipeViewState) : RecipeListViewState()

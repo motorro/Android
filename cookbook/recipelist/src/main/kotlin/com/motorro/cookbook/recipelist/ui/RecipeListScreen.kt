@@ -23,7 +23,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +54,6 @@ import kotlin.uuid.Uuid
 fun RecipeListScreen(
     viewState: RecipeListViewState,
     onGesture: (RecipeListGesture) -> Unit,
-    onTerminated: () -> Unit,
     modifier: Modifier = Modifier
 ) {
   when(viewState) {
@@ -68,9 +66,6 @@ fun RecipeListScreen(
           onGesture = onGesture,
           modifier = modifier
       )
-      RecipeListViewState.Terminated -> LaunchedEffect(viewState) {
-          onTerminated()
-      }
       is RecipeListViewState.AddRecipe -> AddRecipeScreen(
           viewState = viewState.child,
           onGesture = { onGesture(AddRecipeFlow(it)) },
@@ -91,7 +86,7 @@ fun RecipeListScreen(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun RecipeListScreen(
+private fun RecipeListScreen(
     viewState: RecipeListViewState.Content,
     onGesture: (RecipeListGesture) -> Unit,
     modifier: Modifier = Modifier
@@ -185,8 +180,7 @@ fun PreviewRecipeListScreenLoading() {
     CookbookTheme {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Loading(null), addEnabled = false, refreshEnabled = false),
-            onGesture = {},
-            onTerminated = {}
+            onGesture = {}
         )
     }
 }
@@ -228,8 +222,7 @@ fun PreviewRecipeListScreenContent() {
     CookbookTheme {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Content(sampleRecipes), addEnabled = true, refreshEnabled = true),
-            onGesture = {},
-            onTerminated = {}
+            onGesture = {}
         )
     }
 }
@@ -271,8 +264,7 @@ fun PreviewRecipeListScreenContentLoading() {
     CookbookTheme {
         RecipeListScreen(
             viewState = RecipeListViewState.Content(LceState.Content(sampleRecipes), addEnabled = true, refreshEnabled = true),
-            onGesture = {},
-            onTerminated = {}
+            onGesture = {}
         )
     }
 }
@@ -287,8 +279,7 @@ fun PreviewRecipeListScreenError() {
                 addEnabled = false,
                 refreshEnabled = false
             ),
-            onGesture = {},
-            onTerminated = {}
+            onGesture = {}
         )
     }
 }

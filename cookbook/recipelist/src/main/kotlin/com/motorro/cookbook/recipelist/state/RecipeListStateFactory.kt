@@ -1,12 +1,15 @@
 package com.motorro.cookbook.recipelist.state
 
 import com.motorro.commonstatemachine.CommonMachineState
+import com.motorro.cookbook.appcore.navigation.CommonFlowHost
 import com.motorro.cookbook.appcore.navigation.auth.AuthenticationApi
 import com.motorro.cookbook.model.ListRecipe
 import com.motorro.cookbook.recipelist.data.RecipeListFlowData
 import com.motorro.cookbook.recipelist.data.RecipeListGesture
 import com.motorro.cookbook.recipelist.data.RecipeListViewState
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import javax.inject.Provider
 import kotlin.uuid.Uuid
 
@@ -55,16 +58,18 @@ internal interface RecipeListStateFactory {
      */
     fun authenticating(): CommonMachineState<RecipeListGesture, RecipeListViewState>
 
-    class Impl @Inject constructor(
+    class Impl @AssistedInject constructor(
         private val createContent: Provider<ContentState.Factory>,
         private val createLogout: Provider<LoggingOutState.Factory>,
         private val createAddingRecipe: Provider<AddRecipeProxy.Factory>,
         private val createRecipe: Provider<RecipeProxy.Factory>,
-        private val createAuthentication: Provider<AuthenticationApi>
+        private val createAuthentication: Provider<AuthenticationApi>,
+        @Assisted flowHost: CommonFlowHost
     ) : RecipeListStateFactory {
 
         private val context = object : RecipeListContext {
             override val factory: RecipeListStateFactory get() = this@Impl
+            override val flowHost: CommonFlowHost = flowHost
         }
 
         override fun content(data: RecipeListFlowData) = createContent.get()(
@@ -106,5 +111,10 @@ internal interface RecipeListStateFactory {
             },
             mapUiState = { RecipeListViewState.Auth(it) }
         )
+
+        @AssistedFactory
+        interface Factory {
+            fun create(flowHost: CommonFlowHost): Impl
+        }
     }
 }
