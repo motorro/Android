@@ -4,22 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.motorro.cookbook.appcore.compose.ui.theme.CookbookTheme
 import com.motorro.cookbook.appcore.viewbinding.BindingHost
 import com.motorro.cookbook.appcore.viewbinding.WithViewBinding
 import com.motorro.cookbook.appcore.viewbinding.bindView
 import com.motorro.cookbook.appcore.viewbinding.withBinding
-import com.motorro.cookbook.login.data.LoginViewState
 import com.motorro.cookbook.login.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(), WithViewBinding<FragmentLoginBinding> by BindingHost() {
@@ -40,50 +36,19 @@ class LoginFragment : Fragment(), WithViewBinding<FragmentLoginBinding> by Bindi
         super.onViewCreated(view, savedInstanceState)
 
         withBinding {
-            username.doAfterTextChanged {
-                model.setLogin(it.toString())
-            }
-            password.doAfterTextChanged {
-                model.setPassword(it.toString())
-            }
-            login.setOnClickListener {
-                model.login()
-            }
-        }
-
-        fun setControlsState(state: LoginViewState) = withBinding {
-            username.isEnabled = state.controlsEnabled
-            password.isEnabled = state.controlsEnabled
-            login.isEnabled = state.loginEnabled
-            error.isVisible = state is LoginViewState.Error
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                model.viewState.collect { state -> withBinding {
-                    setControlsState(state)
-                    when(state) {
-                        is LoginViewState.Form -> {
-                            progress.hide()
-                            username.setTextKeepState(state.username)
-                            password.setTextKeepState(state.password)
-                        }
-                        is LoginViewState.Error -> {
-                            progress.hide()
-                            username.setTextKeepState(state.username)
-                            password.setTextKeepState(state.password)
-                            errorText.text = state.message
-                        }
-                        is LoginViewState.Loading -> {
-                            progress.show()
-                            username.setTextKeepState(state.username)
-                            password.setTextKeepState(state.password)
-                        }
-                        LoginViewState.LoggedIn -> {
-                            findNavController().popBackStack()
-                        }
+            composeView.apply {
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    CookbookTheme {
+                        LoginScreen(
+                            state = model.viewState.collectAsStateWithLifecycle().value,
+                            onLoginChanged = model::setLogin,
+                            onPasswordChanged = model::setPassword,
+                            onLoginPressed = model::login,
+                            onComplete = findNavController()::popBackStack,
+                        )
                     }
-                }}
+                }
             }
         }
     }

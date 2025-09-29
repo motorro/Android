@@ -4,4 +4,6 @@
     <string name="hint_password">Password</string>
     <string name="hint_username">Username</string>
     <string name="btn_login">Login</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
 </resources>
