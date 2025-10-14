@@ -7,4 +7,5 @@ sealed class NotificationGesture {
     data class TextChanged(val text: String) : NotificationGesture()
     data class ChannelChanged(val channel: MyNotificationChannel) : NotificationGesture()
     data object Send : NotificationGesture()
+    data object Dismiss : NotificationGesture()
 }
