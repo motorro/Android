@@ -18,6 +18,7 @@
     <string name="edit_title">Title</string>
     <string name="edit_text">Text</string>
     <string name="edit_notification_channel">Notification channel</string>
+    <string name="checkbox_update_latest">Update latest notification</string>
     <string name="btn_send">Send notification</string>
     <string name="btn_dismiss">Dismiss last notification</string>
 </resources>

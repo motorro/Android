@@ -49,6 +49,9 @@ class FormState(context: NotificationContext) : BaseNotificationState(context) {
             is NotificationGesture.ChannelChanged -> updateData {
                 copy(channel = gesture.channel)
             }
+            NotificationGesture.UpdateLatestToggled -> updateData {
+                copy(updateLatest = updateLatest.not())
+            }
         }
     }
 

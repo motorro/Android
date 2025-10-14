@@ -8,5 +8,6 @@ import kotlinx.parcelize.Parcelize
 data class NotificationData(
     val title: String = "",
     val text: String = "",
-    val channel: MyNotificationChannel = MyNotificationChannel.URGENT
+    val channel: MyNotificationChannel = MyNotificationChannel.URGENT,
+    val updateLatest: Boolean = false
 ) : Parcelable
