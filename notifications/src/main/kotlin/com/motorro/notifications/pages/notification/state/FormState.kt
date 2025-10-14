@@ -2,6 +2,7 @@ package com.motorro.notifications.pages.notification.state
 
 import androidx.annotation.CallSuper
 import com.motorro.commonstatemachine.coroutines.CoroutineState
+import com.motorro.notifications.MyNotificationChannel
 import com.motorro.notifications.pages.notification.data.NotificationData
 import com.motorro.notifications.pages.notification.data.NotificationGesture
 import com.motorro.notifications.pages.notification.data.NotificationViewState
@@ -44,11 +45,20 @@ class FormState(private val context: NotificationContext) : CoroutineState<Notif
             is NotificationGesture.TextChanged -> updateData {
                 copy(text = gesture.text)
             }
+            is NotificationGesture.ChannelChanged -> updateData {
+                copy(channel = gesture.channel)
+            }
         }
     }
 
     private fun render(data: NotificationData) {
-        setUiState(NotificationViewState.Form(data, isValid(data)))
+        setUiState(
+            NotificationViewState.Form(
+                data = data,
+                availableChannels = MyNotificationChannel.entries,
+                sendEnabled = isValid(data)
+            )
+        )
     }
 
     companion object {

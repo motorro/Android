@@ -30,6 +30,11 @@ interface MainScreenStateFactory {
     fun askingForPermissions(): MainScreenState
 
     /**
+     * Creates notification channels
+     */
+    fun creatingNotificationChannels(): MainScreenState
+
+    /**
      * Navigates to content
      */
     fun content(): MainScreenState
@@ -52,6 +57,7 @@ interface MainScreenStateFactory {
      */
     class Impl @Inject constructor(
         private val createCheck: Provider<NotificationCheckState.Factory>,
+        private val createCreateChannels: Provider<CreateNotificationChannelsState.Factory>,
         private val pages: @JvmSuppressWildcards ImmutableList<MainScreenStateApi<*, *>>
     ) : MainScreenStateFactory {
 
@@ -62,6 +68,8 @@ interface MainScreenStateFactory {
         override fun permissionsCheck(): NotificationCheckState = createCheck.get()(context)
 
         override fun askingForPermissions() = GettingNotificationEnabledState(context)
+
+        override fun creatingNotificationChannels() = createCreateChannels.get()(context)
 
         override fun content(): MainScreenState = page(pages.first().data)
 
