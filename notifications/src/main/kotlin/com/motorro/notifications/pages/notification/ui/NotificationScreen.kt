@@ -86,6 +86,13 @@ private fun NotificationForm(
         ) {
             Text(stringResource(R.string.btn_send))
         }
+
+        Button(
+            onClick = { onGesture(NotificationGesture.Dismiss) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.btn_dismiss))
+        }
     }
 }
 

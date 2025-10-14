@@ -17,6 +17,7 @@
     <string name="low_channel_description">Makes no sound and doesn\'t appear in the status bar</string>
     <string name="edit_title">Title</string>
     <string name="edit_text">Text</string>
-    <string name="btn_send">Send</string>
     <string name="edit_notification_channel">Notification channel</string>
+    <string name="btn_send">Send notification</string>
+    <string name="btn_dismiss">Dismiss last notification</string>
 </resources>
