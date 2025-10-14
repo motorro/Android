@@ -17,9 +17,11 @@ class SendingNotification(
     override fun doStart() {
         super.doStart()
 
-        var id = getLatestId()
-        if (null == id) {
-            id = 1
+        val latestId = getLatestId()
+        val id = when {
+            null != latestId && toSend.updateLatest -> latestId
+            null != latestId -> latestId + 1
+            else -> 1
         }
         send(id, buildNotification())
         setMachineState(factory.form())
