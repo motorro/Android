@@ -23,7 +23,7 @@ class NotificationCheckState(context: MainScreenContext, private val androidCont
             }
             else -> {
                 d { "Notification permissions granted and enabled" }
-                setMachineState(factory.content())
+                setMachineState(factory.creatingNotificationChannels())
             }
         }
     }
