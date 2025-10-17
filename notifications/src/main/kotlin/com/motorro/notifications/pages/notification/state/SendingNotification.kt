@@ -41,13 +41,26 @@ class SendingNotification(
     /**
      * Builds notification
      */
-    private fun buildNotification(id: Int) =
-        NotificationCompat.Builder(androidContext, toSend.channel.name)
+    private fun buildNotification(id: Int): Notification {
+
+        val replyAction = NotificationCompat.Action
+            .Builder(
+                /* icon */ R.drawable.ic_reply,
+                /* title */ androidContext.getString(R.string.btn_reply),
+                /* intent */notificationActionBuilder.reply(id)
+            )
+            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
+            .setAuthenticationRequired(true)
+            .build()
+
+        return NotificationCompat.Builder(androidContext, toSend.channel.name)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(toSend.title)
             .setContentText(toSend.text)
             .setContentIntent(notificationActionBuilder.openApp(id))
+            .addAction(replyAction)
             .build()
+    }
 
     /**
      * Sends notification

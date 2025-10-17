@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Notifications</string>
     <string name="page_notification">Notification</string>
+    <string name="page_reply">Reply</string>
     <string name="notification_explanation">Please grant notification permission to the app and enable notifications.</string>
     <string name="notification_settings">Settings</string>
 
@@ -24,4 +25,7 @@
     <string name="lbl_notification_action">Notification action: %s</string>
     <string name="lbl_notification_action_unknown">UNKNOWN</string>
     <string name="btn_notification_process">Process</string>
+
+    <string name="btn_reply">Reply</string>
+    <string name="reply_screen_no_reply">No reply.\nSend a reply from the notification to display it here.</string>
 </resources>
