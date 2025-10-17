@@ -3,6 +3,7 @@ package com.motorro.notifications.pages.notification.state
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
+import com.motorro.notifications.NotificationActionBuilder
 import com.motorro.notifications.pages.notification.data.NotificationData
 import javax.inject.Inject
 
@@ -13,7 +14,8 @@ interface NotificationStateFactory {
 
     class Impl @Inject constructor(
         savedStateHandle: SavedStateHandle,
-        app: Application
+        app: Application,
+        private val notificationActionBuilder: NotificationActionBuilder
     ) : NotificationStateFactory {
 
         private val context = object : NotificationContext {
@@ -23,7 +25,7 @@ interface NotificationStateFactory {
         }
 
         override fun form(): NotificationState = FormState(context)
-        override fun sending(toSend: NotificationData) = SendingNotification(context, toSend)
+        override fun sending(toSend: NotificationData) = SendingNotification(context, toSend, notificationActionBuilder)
         override fun dismissingLatest() = DismissingLatestNotification(context)
     }
 }

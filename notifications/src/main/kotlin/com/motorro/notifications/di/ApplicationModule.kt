@@ -1,5 +1,6 @@
 package com.motorro.notifications.di
 
+import com.motorro.notifications.NotificationActionBuilder
 import com.motorro.notifications.NotificationActionBus
 import dagger.Binds
 import dagger.Module
@@ -13,4 +14,7 @@ abstract class ApplicationModule {
     @Binds
     @Singleton
     abstract fun notificationActionBus(impl: NotificationActionBus.Impl): NotificationActionBus
+
+    @Binds
+    abstract fun notificationActionBuilder(impl: NotificationActionBuilder.Impl): NotificationActionBuilder
 }

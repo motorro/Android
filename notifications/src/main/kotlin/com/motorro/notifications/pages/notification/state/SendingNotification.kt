@@ -3,6 +3,7 @@ package com.motorro.notifications.pages.notification.state
 import android.app.Notification
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.motorro.notifications.NotificationActionBuilder
 import com.motorro.notifications.R
 import com.motorro.notifications.pages.notification.data.NotificationData
 
@@ -11,7 +12,8 @@ import com.motorro.notifications.pages.notification.data.NotificationData
  */
 class SendingNotification(
     context: NotificationContext,
-    private val toSend: NotificationData
+    private val toSend: NotificationData,
+    private val notificationActionBuilder: NotificationActionBuilder
 ) : BaseNotificationState(context) {
 
     override fun doStart() {
@@ -23,7 +25,7 @@ class SendingNotification(
             null != latestId -> latestId + 1
             else -> 1
         }
-        send(id, buildNotification())
+        send(id, buildNotification(id))
         setMachineState(factory.form())
     }
 
@@ -39,12 +41,12 @@ class SendingNotification(
     /**
      * Builds notification
      */
-    private fun buildNotification() =
+    private fun buildNotification(id: Int) =
         NotificationCompat.Builder(androidContext, toSend.channel.name)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(toSend.title)
             .setContentText(toSend.text)
-            .setAutoCancel(true)
+            .setContentIntent(notificationActionBuilder.openApp(id))
             .build()
 
     /**
