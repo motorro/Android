@@ -4,17 +4,22 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import com.motorro.notifications.MyNotificationChannel
 import com.motorro.notifications.data.MainScreenViewState
 import javax.inject.Inject
 
-class CreateNotificationChannelsState(context: MainScreenContext, private val androidContext: Context) : BaseMainScreenState(context) {
+class CreateNotificationChannelsState(
+    context: MainScreenContext,
+    private val androidContext: Context,
+    private val intent: Intent
+) : BaseMainScreenState(context) {
 
     override fun doStart() {
         super.doStart()
         setUiState(MainScreenViewState.Loading)
         createChannels()
-        setMachineState(factory.content())
+        setMachineState(factory.startUp(intent))
     }
 
     /**
@@ -39,6 +44,10 @@ class CreateNotificationChannelsState(context: MainScreenContext, private val an
     }
 
     class Factory @Inject constructor(private val app: Application) {
-        operator fun invoke(context: MainScreenContext) = CreateNotificationChannelsState(context, app.applicationContext)
+        operator fun invoke(context: MainScreenContext, intent: Intent) = CreateNotificationChannelsState(
+            context,
+            app.applicationContext,
+            intent
+        )
     }
 }

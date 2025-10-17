@@ -1,9 +1,13 @@
 package com.motorro.notifications.state
 
+import android.content.Intent
 import com.motorro.notifications.data.MainScreenGesture
 import com.motorro.notifications.data.MainScreenViewState
 
-class GettingNotificationEnabledState(context: MainScreenContext) : BaseMainScreenState(context) {
+class GettingNotificationEnabledState(
+    context: MainScreenContext,
+    private val intent: Intent
+) : BaseMainScreenState(context) {
     override fun doStart() {
         super.doStart()
         setUiState(MainScreenViewState.NeedToEnableNotifications)
@@ -17,12 +21,12 @@ class GettingNotificationEnabledState(context: MainScreenContext) : BaseMainScre
             is MainScreenGesture.NotificationPermissionRequested -> {
                 if (gesture.granted) {
                     d { "Notification permission granted" }
-                    setMachineState(factory.permissionsCheck())
+                    setMachineState(factory.permissionsCheck(intent))
                 }
             }
             MainScreenGesture.RecheckNotificationPermissions -> {
                 d { "Rechecking notification permissions" }
-                setMachineState(factory.permissionsCheck())
+                setMachineState(factory.permissionsCheck(intent))
             }
             else -> w { "Gesture not handled: $gesture" }
         }

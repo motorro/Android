@@ -1,11 +1,14 @@
 package com.motorro.notifications.state
 
+import android.content.Intent
 import com.motorro.commonstatemachine.CommonMachineState
 import com.motorro.commonstatemachine.ProxyMachineState
+import com.motorro.core.log.Logging
 import com.motorro.notifications.api.MainScreenPageData
 import com.motorro.notifications.api.MainScreenStateApi
 import com.motorro.notifications.data.MainScreenGesture
 import com.motorro.notifications.data.MainScreenViewState
+import com.motorro.notifications.data.NotificationAction
 import kotlinx.collections.immutable.ImmutableList
 import javax.inject.Inject
 import javax.inject.Provider
@@ -17,35 +20,50 @@ interface MainScreenStateFactory {
     /**
      * Checks for notification permissions
      */
-    fun init(): MainScreenState = permissionsCheck()
+    fun init(intent: Intent): MainScreenState = permissionsCheck(intent)
 
     /**
      * Checks for all required permissions
      */
-    fun permissionsCheck(): MainScreenState
+    fun permissionsCheck(intent: Intent): MainScreenState
 
     /**
      * Asks for notification permission
      */
-    fun askingForPermissions(): MainScreenState
+    fun askingForPermissions(intent: Intent): MainScreenState
 
     /**
      * Creates notification channels
      */
-    fun creatingNotificationChannels(): MainScreenState
+    fun creatingNotificationChannels(intent: Intent): MainScreenState
 
     /**
-     * Navigates to content
+     * Checks the start action
      */
-    fun content(): MainScreenState
+    fun startUp(intent: Intent): MainScreenState
+
+    /**
+     * Processes action
+     */
+    fun handlingAction(startAction: NotificationAction): MainScreenState
+
+    /**
+     * Creates state if page matches [action]
+     */
+    fun pageForAction(action: NotificationAction): MainScreenState?
 
     /**
      * Runs page flow
      * @param page Page to run
-     * @param data Page data
+     * @param action Page data
      * @return Page state
      */
-    fun page(page: MainScreenPageData, data: Any? = null): MainScreenState
+    fun page(page: MainScreenPageData, action: NotificationAction? = null): MainScreenState
+
+    /**
+     * Navigates to content
+     */
+    fun mainContent(): MainScreenState
 
     /**
      * Terminates
@@ -58,25 +76,37 @@ interface MainScreenStateFactory {
     class Impl @Inject constructor(
         private val createCheck: Provider<NotificationCheckState.Factory>,
         private val createCreateChannels: Provider<CreateNotificationChannelsState.Factory>,
-        private val pages: @JvmSuppressWildcards ImmutableList<MainScreenStateApi<*, *>>
-    ) : MainScreenStateFactory {
+        private val createHandlingAction: Provider<HandlingActionState.Factory>,
+        private val pages: @JvmSuppressWildcards ImmutableList<MainScreenStateApi<*, *>>,
+    ) : MainScreenStateFactory, Logging {
 
         private val context = object : MainScreenContext {
             override val factory: MainScreenStateFactory = this@Impl
         }
 
-        override fun permissionsCheck(): NotificationCheckState = createCheck.get()(context)
+        override fun permissionsCheck(intent: Intent): MainScreenState = createCheck.get()(context, intent)
 
-        override fun askingForPermissions() = GettingNotificationEnabledState(context)
+        override fun askingForPermissions(intent: Intent): MainScreenState = GettingNotificationEnabledState(context, intent)
 
-        override fun creatingNotificationChannels() = createCreateChannels.get()(context)
+        override fun creatingNotificationChannels(intent: Intent): MainScreenState = createCreateChannels.get()(context, intent)
 
-        override fun content(): MainScreenState = page(pages.first().data)
+        override fun startUp(intent: Intent) = StartupState(context, intent)
 
-        override fun page(page: MainScreenPageData, data: Any?): MainScreenState = pages.first { page == it.data }.let { api ->
+        override fun handlingAction(startAction: NotificationAction) = createHandlingAction.get()(
+            context,
+            startAction
+        )
+
+        override fun pageForAction(action: NotificationAction): MainScreenState? =
+            pages.firstOrNull { page -> page.data.matchesAction(action) }
+            ?.data
+            ?.also { i { "Found page for action: $action: $it" } }
+            ?.let { page -> page(page, action)}
+
+        override fun page(page: MainScreenPageData, action: NotificationAction?): MainScreenState = pages.first { page == it.data }.let { api ->
             object : ProxyMachineState<MainScreenGesture, MainScreenViewState, Any, Any>(api.getInitialViewState()) {
                 @Suppress("UNCHECKED_CAST")
-                override fun init() = api.init(data) as CommonMachineState<Any, Any>
+                override fun init() = api.init(action) as CommonMachineState<Any, Any>
 
                 override fun doProcess(gesture: MainScreenGesture) {
                     when(gesture) {
@@ -101,6 +131,8 @@ interface MainScreenStateFactory {
                 )
             }
         }
+
+        override fun mainContent(): MainScreenState = page(pages.first().data)
 
         override fun terminated() = TerminatedState(context)
     }

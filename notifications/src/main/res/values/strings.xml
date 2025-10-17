@@ -21,4 +21,7 @@
     <string name="checkbox_update_latest">Update latest notification</string>
     <string name="btn_send">Send notification</string>
     <string name="btn_dismiss">Dismiss last notification</string>
+    <string name="lbl_notification_action">Notification action: %s</string>
+    <string name="lbl_notification_action_unknown">UNKNOWN</string>
+    <string name="btn_notification_process">Process</string>
 </resources>
