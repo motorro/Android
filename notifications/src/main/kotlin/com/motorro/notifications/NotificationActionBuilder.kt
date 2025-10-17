@@ -1,10 +1,18 @@
 package com.motorro.notifications
 
+import android.app.Application
+import android.app.PendingIntent
 import android.content.Intent
+import android.net.Uri
+import androidx.core.app.PendingIntentCompat
 import com.motorro.notifications.data.NotificationAction
+import com.motorro.notifications.pages.notification.api.NotificationPageData
+import javax.inject.Inject
 
 private const val SCHEME = "app"
 private const val EXTRA_NOTIFICATION_ID = "notificationId"
+private const val REQUEST_CODE = 100500
+
 
 /**
  * Retrieves notification ID
@@ -25,4 +33,43 @@ fun Intent.asNotificationActionOrNull(): NotificationAction? = if (isNotificatio
     NotificationAction(this)
 } else {
     null
+}
+
+/**
+ * Builds notification actions
+ */
+interface NotificationActionBuilder {
+    /**
+     * Opens the application
+     */
+    fun openApp(notificationId: Int): PendingIntent
+
+    class Impl @Inject constructor(private val application: Application) : NotificationActionBuilder {
+        override fun openApp(notificationId: Int): PendingIntent {
+            val mainActivityIntent = createActivityIntent(notificationId, NotificationPageData.pathSegments)
+            return requireNotNull(PendingIntentCompat.getActivity(
+                /* context = */ application,
+                /* requestCode = */ REQUEST_CODE,
+                /* intent = */ mainActivityIntent,
+                /* flags = */ PendingIntent.FLAG_ONE_SHOT,
+                /* isMutable = */ false
+            ))
+        }
+
+        private inline fun createActivityIntent(notificationId: Int, segments: List<String>, dataBuilder: Uri.Builder.() -> Unit = { }): Intent {
+            return Intent(application, MainActivity::class.java).apply {
+                // Put extra to get the notification later
+                putExtra(EXTRA_NOTIFICATION_ID, notificationId)
+
+                // Put data
+                val data = Uri.Builder()
+                    .scheme(SCHEME)
+                    .apply { segments.forEach { appendPath(it) } }
+                    .apply { dataBuilder() }
+                    .build()
+
+                setData(data)
+            }
+        }
+    }
 }

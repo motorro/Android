@@ -1,5 +1,6 @@
 package com.motorro.notifications
 
+import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel(assistedFactory = MainActivityViewModel.Factory::class)
 class MainActivityViewModel @AssistedInject constructor(
+    private val app: Application,
     private val factory: MainScreenStateFactory,
     private val notificationActionBus: NotificationActionBus,
     @Assisted intent: Intent
