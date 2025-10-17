@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.core.app.PendingIntentCompat
 import com.motorro.notifications.data.NotificationAction
 import com.motorro.notifications.pages.notification.api.NotificationPageData
+import com.motorro.notifications.pages.reply.api.ReplyPageData
 import javax.inject.Inject
 
 private const val SCHEME = "app"
@@ -44,6 +45,8 @@ interface NotificationActionBuilder {
      */
     fun openApp(notificationId: Int): PendingIntent
 
+    fun reply(notificationId: Int): PendingIntent
+
     class Impl @Inject constructor(private val application: Application) : NotificationActionBuilder {
         override fun openApp(notificationId: Int): PendingIntent {
             val mainActivityIntent = createActivityIntent(notificationId, NotificationPageData.pathSegments)
@@ -51,6 +54,19 @@ interface NotificationActionBuilder {
                 /* context = */ application,
                 /* requestCode = */ REQUEST_CODE,
                 /* intent = */ mainActivityIntent,
+                /* flags = */ PendingIntent.FLAG_ONE_SHOT,
+                /* isMutable = */ false
+            ))
+        }
+
+        override fun reply(notificationId: Int): PendingIntent {
+            val replyIntent = createActivityIntent(notificationId, ReplyPageData.pathSegments) {
+                appendQueryParameter(ReplyPageData.REPLY_TEXT_PARAM, "A reply from your notification")
+            }
+            return requireNotNull(PendingIntentCompat.getActivity(
+                /* context = */ application,
+                /* requestCode = */ REQUEST_CODE,
+                /* intent = */ replyIntent,
                 /* flags = */ PendingIntent.FLAG_ONE_SHOT,
                 /* isMutable = */ false
             ))
