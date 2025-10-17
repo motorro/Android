@@ -18,7 +18,7 @@ sealed class MainScreenViewState {
      * Main screen view state
      */
     @Immutable
-    data class Page(val page: MainScreenPageData, val viewState: Any) : MainScreenViewState()
+    data class Page(val page: MainScreenPageData, val viewState: Any, val notificationAction: NotificationAction? = null) : MainScreenViewState()
 
     /**
      * End of flow

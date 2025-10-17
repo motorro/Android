@@ -8,22 +8,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.motorro.composecore.ui.LoadingScreen
+import com.motorro.notifications.R
 import com.motorro.notifications.api.LocalPages
 import com.motorro.notifications.api.MainScreenPageData
 import com.motorro.notifications.data.MainScreenGesture
 import com.motorro.notifications.data.MainScreenViewState
 
 @Composable
-fun MainScreen(state: MainScreenViewState, onGesture: (MainScreenGesture) -> Unit, onTerminated: () -> Unit) {
+fun MainScreen(
+    state: MainScreenViewState,
+    onGesture: (MainScreenGesture) -> Unit,
+    onTerminated: () -> Unit,
+    onAction: () -> Unit,
+    onDismissAction: () -> Unit
+) {
     val onBack = remember { { onGesture(MainScreenGesture.Back) } }
     val onNavigate = remember { { page: MainScreenPageData -> onGesture(MainScreenGesture.Navigate(page)) } }
     val onContentGesture = remember { { page: MainScreenPageData, gesture: Any -> onGesture(MainScreenGesture.PageGesture(page, gesture)) } }
@@ -36,7 +47,9 @@ fun MainScreen(state: MainScreenViewState, onGesture: (MainScreenGesture) -> Uni
                 currentPage = state,
                 onBack = onBack,
                 onNavigate = onNavigate,
-                onContentGesture = onContentGesture
+                onContentGesture = onContentGesture,
+                onAction = onAction,
+                onDismissAction = onDismissAction
             )
         }
         MainScreenViewState.Terminated -> LaunchedEffect(state) {
@@ -51,10 +64,32 @@ private fun MainScreenContent(
     currentPage: MainScreenViewState.Page,
     onBack: () -> Unit,
     onNavigate: (MainScreenPageData) -> Unit,
-    onContentGesture: (MainScreenPageData, Any) -> Unit
+    onContentGesture: (MainScreenPageData, Any) -> Unit,
+    onAction: () -> Unit,
+    onDismissAction: () -> Unit
 ) {
     val pages = LocalPages.current
     val pageApi = remember(currentPage) { pages.first { currentPage.page == it.data } }
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val context = LocalContext.current
+    val notificationAction = currentPage.notificationAction
+    if (null != notificationAction) {
+        LaunchedEffect(notificationAction) {
+            val result = snackbarHostState.showSnackbar(
+                message = context.getString(
+                    R.string.lbl_notification_action,
+                    notificationAction.pathSegments.joinToString("-")
+                ),
+                actionLabel = context.getString(R.string.btn_notification_process),
+                withDismissAction = true
+            )
+            when (result) {
+                SnackbarResult.ActionPerformed -> onAction()
+                SnackbarResult.Dismissed -> onDismissAction()
+            }
+        }
+    }
 
     BackHandler(onBack = onBack)
     Scaffold(
@@ -77,6 +112,9 @@ private fun MainScreenContent(
                     )
                 }
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         },
         modifier = Modifier.fillMaxSize(),
         content = { contentPadding ->

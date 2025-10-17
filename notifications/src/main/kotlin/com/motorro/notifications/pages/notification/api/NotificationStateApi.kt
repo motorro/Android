@@ -3,6 +3,7 @@ package com.motorro.notifications.pages.notification.api
 import com.motorro.core.log.Logging
 import com.motorro.notifications.api.MainScreenStateApi
 import com.motorro.notifications.data.MainScreenGesture
+import com.motorro.notifications.data.NotificationAction
 import com.motorro.notifications.pages.notification.data.NotificationGesture
 import com.motorro.notifications.pages.notification.data.NotificationViewState
 import com.motorro.notifications.pages.notification.state.NotificationState
@@ -15,7 +16,7 @@ import javax.inject.Inject
 class NotificationStateApi @Inject constructor(private val stateFactory: NotificationStateFactory.Impl) : MainScreenStateApi<NotificationGesture, NotificationViewState>, Logging {
     override val data get() = NotificationPageData
 
-    override fun init(data: Any?): NotificationState {
+    override fun init(data: NotificationAction?): NotificationState {
         d { "Starting Basic Notification flow..." }
         return stateFactory.form()
     }

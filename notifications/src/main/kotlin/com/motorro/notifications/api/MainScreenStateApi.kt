@@ -2,6 +2,7 @@ package com.motorro.notifications.api
 
 import com.motorro.commonstatemachine.CommonMachineState
 import com.motorro.notifications.data.MainScreenGesture
+import com.motorro.notifications.data.NotificationAction
 
 /**
  * Main screen proxy state API
@@ -15,7 +16,7 @@ interface MainScreenStateApi<CG: Any, CU: Any> {
     /**
      * Initializes page
      */
-    fun init(data: Any?) : CommonMachineState<CG, CU>
+    fun init(data: NotificationAction?) : CommonMachineState<CG, CU>
 
     /**
      * Initial view state
