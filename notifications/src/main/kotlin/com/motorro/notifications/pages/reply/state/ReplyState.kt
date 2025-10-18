@@ -1,5 +1,6 @@
 package com.motorro.notifications.pages.reply.state
 
+import androidx.core.app.RemoteInput
 import com.motorro.commonstatemachine.CommonMachineState
 import com.motorro.core.log.Logging
 import com.motorro.notifications.data.NotificationAction
@@ -12,7 +13,7 @@ class ReplyState(private val action: NotificationAction?) : CommonMachineState<U
         setUiState(ReplyViewState(getReply()))
     }
 
-    private fun getReply(): String? {
-        return action?.intent?.data?.getQueryParameter(ReplyPageData.REPLY_TEXT_PARAM)
+    private fun getReply(): String? = action?.intent?.let {
+        RemoteInput.getResultsFromIntent(it)?.getCharSequence(ReplyPageData.REPLY_TEXT_PARAM)?.toString()
     }
 }

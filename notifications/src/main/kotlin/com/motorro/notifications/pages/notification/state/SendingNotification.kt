@@ -3,9 +3,11 @@ package com.motorro.notifications.pages.notification.state
 import android.app.Notification
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.RemoteInput
 import com.motorro.notifications.NotificationActionBuilder
 import com.motorro.notifications.R
 import com.motorro.notifications.pages.notification.data.NotificationData
+import com.motorro.notifications.pages.reply.api.ReplyPageData
 
 /**
  * Sends the notification
@@ -43,6 +45,13 @@ class SendingNotification(
      */
     private fun buildNotification(id: Int): Notification {
 
+        val remoteInput = RemoteInput.Builder(ReplyPageData.REPLY_TEXT_PARAM)
+            .run {
+                setAllowFreeFormInput(true)
+                setLabel(androidContext.getString(R.string.lbl_reply))
+            }
+            .build()
+
         val replyAction = NotificationCompat.Action
             .Builder(
                 /* icon */ R.drawable.ic_reply,
@@ -51,6 +60,7 @@ class SendingNotification(
             )
             .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
             .setAuthenticationRequired(true)
+            .addRemoteInput(remoteInput)
             .build()
 
         return NotificationCompat.Builder(androidContext, toSend.channel.name)

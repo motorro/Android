@@ -60,15 +60,13 @@ interface NotificationActionBuilder {
         }
 
         override fun reply(notificationId: Int): PendingIntent {
-            val replyIntent = createActivityIntent(notificationId, ReplyPageData.pathSegments) {
-                appendQueryParameter(ReplyPageData.REPLY_TEXT_PARAM, "A reply from your notification")
-            }
+            val replyIntent = createActivityIntent(notificationId, ReplyPageData.pathSegments)
             return requireNotNull(PendingIntentCompat.getActivity(
                 /* context = */ application,
                 /* requestCode = */ REQUEST_CODE,
                 /* intent = */ replyIntent,
-                /* flags = */ PendingIntent.FLAG_ONE_SHOT,
-                /* isMutable = */ false
+                /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT,
+                /* isMutable = */ true
             ))
         }
 
