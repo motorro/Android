@@ -2,6 +2,7 @@
     <string name="app_name">Notifications</string>
     <string name="page_notification">Notification</string>
     <string name="page_reply">Reply</string>
+    <string name="page_progress">Progress</string>
     <string name="notification_explanation">Please grant notification permission to the app and enable notifications.</string>
     <string name="notification_settings">Settings</string>
 
@@ -29,4 +30,17 @@
     <string name="btn_reply">Reply</string>
     <string name="lbl_reply">Your reply</string>
     <string name="reply_screen_no_reply">No reply.\nSend a reply from the notification to display it here.</string>
+
+    <string name="lbl_download_progress">Download Progress</string>
+    <string name="content_play_pause">Play/Pause</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_stop">Stop</string>
+    <string name="lbl_connecting">Connecting…</string>
+    <string name="lbl_downloading">Downloading…</string>
+    <string name="lbl_unzipping">Unzipping…</string>
+    <string name="lbl_saving">Saving…</string>
+    <string name="txt_enable_promoted">Please grant the app the Live Updates notification permission as it is essential to track progress.</string>
+    <string name="btn_grant_promoted">Grant Live Updates permission</string>
+    <string name="btn_skip_promoted">Skip</string>
+
 </resources>
