@@ -3,6 +3,7 @@
     <string name="page_notification">Notification</string>
     <string name="page_reply">Reply</string>
     <string name="page_progress">Progress</string>
+    <string name="page_push">Push</string>
     <string name="notification_explanation">Please grant notification permission to the app and enable notifications.</string>
     <string name="notification_settings">Settings</string>
 
@@ -42,5 +43,11 @@
     <string name="txt_enable_promoted">Please grant the app the Live Updates notification permission as it is essential to track progress.</string>
     <string name="btn_grant_promoted">Grant Live Updates permission</string>
     <string name="btn_skip_promoted">Skip</string>
+
+    <string name="push_screen_title">Title:</string>
+    <string name="push_screen_message">Message:</string>
+    <string name="push_screen_data">Data:</string>
+    <string name="push_screen_no_data">No data.\nSend a push with data to display it here.</string>
+    <string name="push_screen_no_data_placeholder">No data</string>
 
 </resources>
