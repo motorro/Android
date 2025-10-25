@@ -21,6 +21,12 @@ sealed class MainScreenViewState {
     data class Page(val page: MainScreenPageData, val viewState: Any, val notificationAction: NotificationAction? = null) : MainScreenViewState()
 
     /**
+     * Main screen error
+     */
+    @Immutable
+    data class Error(val error: Throwable, val isFatal: Boolean) : MainScreenViewState()
+
+    /**
      * End of flow
      */
     data object Terminated : MainScreenViewState()

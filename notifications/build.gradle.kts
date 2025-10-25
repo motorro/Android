@@ -61,8 +61,11 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     ksp(libs.hilt.androidx)
     implementation(libs.hilt.android)
+    implementation(libs.hilt.work)
     implementation(libs.napier)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging)
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.work.ktx)
 }

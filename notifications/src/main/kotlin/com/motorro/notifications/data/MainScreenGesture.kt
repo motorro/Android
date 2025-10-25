@@ -4,6 +4,7 @@ import com.motorro.notifications.api.MainScreenPageData
 
 sealed class MainScreenGesture {
     data object Back : MainScreenGesture()
+    data object Action : MainScreenGesture()
 
     data class NotificationPermissionRequested(val granted: Boolean) : MainScreenGesture()
     data object RecheckNotificationPermissions : MainScreenGesture()
