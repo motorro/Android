@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.gms)
 }
 
 android {
@@ -61,4 +62,7 @@ dependencies {
     ksp(libs.hilt.androidx)
     implementation(libs.hilt.android)
     implementation(libs.napier)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
 }
