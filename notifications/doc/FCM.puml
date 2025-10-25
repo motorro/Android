@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User
+control App #lightblue
+boundary FCM #orange
+boundary AppServer #lightgreen
+
+== Initialization ==
+User -> App: open
+App -> FCM: register
+App <-- FCM: token
+App -> AppServer: set user+token
+
+== PUSH ==
+AppServer -> FCM: token
+FCM -> App: push
+App -> User: ding!
+@enduml

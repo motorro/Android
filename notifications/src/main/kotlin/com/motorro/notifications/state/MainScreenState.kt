@@ -2,13 +2,14 @@ package com.motorro.notifications.state
 
 import androidx.annotation.CallSuper
 import com.motorro.commonstatemachine.CommonMachineState
+import com.motorro.commonstatemachine.coroutines.CoroutineState
 import com.motorro.core.log.Logging
 import com.motorro.notifications.data.MainScreenGesture
 import com.motorro.notifications.data.MainScreenViewState
 
 typealias MainScreenState = CommonMachineState<MainScreenGesture, MainScreenViewState>
 
-abstract class BaseMainScreenState(context: MainScreenContext): MainScreenState(), Logging, MainScreenContext by context {
+abstract class BaseMainScreenState(context: MainScreenContext): CoroutineState<MainScreenGesture, MainScreenViewState>(), Logging, MainScreenContext by context {
     @CallSuper
     override fun doStart() {
         d { "Starting state: ${javaClass.simpleName}" }

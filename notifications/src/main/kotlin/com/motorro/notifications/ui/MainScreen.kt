@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.motorro.composecore.ui.FatalErrorScreen
 import com.motorro.composecore.ui.LoadingScreen
 import com.motorro.notifications.R
 import com.motorro.notifications.api.LocalPages
@@ -52,6 +53,12 @@ fun MainScreen(
                 onDismissAction = onDismissAction
             )
         }
+        is MainScreenViewState.Error -> FatalErrorScreen(
+            error = state.error.message,
+            retriable = state.isFatal,
+            onDismiss = { onGesture(MainScreenGesture.Action) },
+            onBack = { onBack() }
+        )
         MainScreenViewState.Terminated -> LaunchedEffect(state) {
             onTerminated()
         }

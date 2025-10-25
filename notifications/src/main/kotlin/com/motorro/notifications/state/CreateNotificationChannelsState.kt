@@ -19,7 +19,7 @@ class CreateNotificationChannelsState(
         super.doStart()
         setUiState(MainScreenViewState.Loading)
         createChannels()
-        setMachineState(factory.startUp(intent))
+        setMachineState(factory.gettingFcmToken(intent))
     }
 
     /**

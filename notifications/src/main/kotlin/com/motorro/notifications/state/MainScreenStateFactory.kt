@@ -38,6 +38,16 @@ interface MainScreenStateFactory {
     fun creatingNotificationChannels(intent: Intent): MainScreenState
 
     /**
+     * Registers FCM
+     */
+    fun gettingFcmToken(intent: Intent): MainScreenState
+
+    /**
+     * FCM registration error
+     */
+    fun fcmRegistrationError(error: Throwable, intent: Intent): MainScreenState
+
+    /**
      * Checks the start action
      */
     fun startUp(intent: Intent): MainScreenState
@@ -76,6 +86,7 @@ interface MainScreenStateFactory {
     class Impl @Inject constructor(
         private val createCheck: Provider<NotificationCheckState.Factory>,
         private val createCreateChannels: Provider<CreateNotificationChannelsState.Factory>,
+        private val createRegisterFcm: Provider<GettingFcmTokenState.Factory>,
         private val createHandlingAction: Provider<HandlingActionState.Factory>,
         private val pages: @JvmSuppressWildcards ImmutableList<MainScreenStateApi<*, *>>,
     ) : MainScreenStateFactory, Logging {
@@ -89,6 +100,15 @@ interface MainScreenStateFactory {
         override fun askingForPermissions(intent: Intent): MainScreenState = GettingNotificationEnabledState(context, intent)
 
         override fun creatingNotificationChannels(intent: Intent): MainScreenState = createCreateChannels.get()(context, intent)
+
+        override fun gettingFcmToken(intent: Intent): MainScreenState = createRegisterFcm.get()(context, intent)
+
+        override fun fcmRegistrationError(error: Throwable, intent: Intent): MainScreenState  = ErrorState(
+            context,
+            error,
+            { terminated() },
+            { gettingFcmToken(intent) }
+        )
 
         override fun startUp(intent: Intent) = StartupState(context, intent)
 
