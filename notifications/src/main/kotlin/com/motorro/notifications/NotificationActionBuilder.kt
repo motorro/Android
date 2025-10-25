@@ -7,11 +7,13 @@ import android.net.Uri
 import androidx.core.app.PendingIntentCompat
 import com.motorro.notifications.data.NotificationAction
 import com.motorro.notifications.pages.notification.api.NotificationPageData
+import com.motorro.notifications.pages.push.api.PushPageData
 import com.motorro.notifications.pages.reply.api.ReplyPageData
 import javax.inject.Inject
 
 private const val SCHEME = "app"
 private const val EXTRA_NOTIFICATION_ID = "notificationId"
+private const val PUSH_NOTIFICATION_ID = 100500
 private const val REQUEST_CODE = 100500
 
 
@@ -45,7 +47,15 @@ interface NotificationActionBuilder {
      */
     fun openApp(notificationId: Int): PendingIntent
 
+    /**
+     * Replies to the notification
+     */
     fun reply(notificationId: Int): PendingIntent
+
+    /**
+     * Pushes notification
+     */
+    fun push(title: String, message: String, data: String?): Intent
 
     class Impl @Inject constructor(private val application: Application) : NotificationActionBuilder {
         override fun openApp(notificationId: Int): PendingIntent {
@@ -68,6 +78,12 @@ interface NotificationActionBuilder {
                 /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT,
                 /* isMutable = */ true
             ))
+        }
+
+        override fun push(title: String, message: String, data: String?): Intent = createActivityIntent(PUSH_NOTIFICATION_ID, PushPageData.pathSegments).apply {
+            putExtra(PushPageData.PUSH_TITLE_PARAM, title)
+            putExtra(PushPageData.PUSH_MESSAGE_PARAM, message)
+            putExtra(PushPageData.PUSH_DATA_PARAM, data)
         }
 
         private inline fun createActivityIntent(notificationId: Int, segments: List<String>, dataBuilder: Uri.Builder.() -> Unit = { }): Intent {

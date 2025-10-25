@@ -33,7 +33,7 @@ interface MainScreenPageData {
     /**
      * Notification action path if any
      */
-    fun matchesAction(action: NotificationAction): Boolean {
+    open fun matchesAction(action: NotificationAction): Boolean {
         val segments = pathSegments.takeIf { it.isNotEmpty() } ?: return false
         segments.forEachIndexed { index, pathSegment ->
             if (action.pathSegments.getOrNull(index) != pathSegment) {
