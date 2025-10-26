@@ -1,0 +1,41 @@
+@startuml
+title FCM Push Message Delivery Logic
+
+start
+
+:Push message arrives on device;
+
+if (App is in foreground?) then (yes)
+    partition "Application Code" {
+        :onMessageReceived() is triggered;
+        :Developer has full control over handling:
+        - show in-app UI
+        - create notification manually
+        - perform background logic;
+    }
+else (no, background or killed)
+    if (Message contains 'notification' payload?) then (yes)
+        partition "Device / FCM SDK" {
+            :FCM SDK **automatically** displays a system notification;
+            note right
+                Application code
+                (onMessageReceived)
+                **is not executed!**
+            end note
+            :User taps on the notification;
+            :App is launched.
+            Intent with push data
+            is delivered to MainActivity;
+        }
+    else (no, only 'data' payload)
+         partition "Application Code" {
+            :onMessageReceived() is triggered;
+            :Developer handles data in the background
+            (e.g., for data sync or to create
+            a custom notification manually);
+        }
+    endif
+endif
+
+stop
+@enduml
