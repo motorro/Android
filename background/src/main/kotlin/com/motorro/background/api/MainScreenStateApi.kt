@@ -1,0 +1,29 @@
+package com.motorro.background.api
+
+import com.motorro.background.data.MainScreenGesture
+import com.motorro.commonstatemachine.CommonMachineState
+
+/**
+ * Main screen proxy state API
+ */
+interface MainScreenStateApi<CG: Any, CU: Any> {
+    /**
+     * Page data
+     */
+    val data: MainScreenPageData
+
+    /**
+     * Initializes page
+     */
+    fun init(data: Any?) : CommonMachineState<CG, CU>
+
+    /**
+     * Initial view state
+     */
+    fun getInitialViewState(): CU
+
+    /**
+     * Maps gesture to child
+     */
+    fun mapGesture(parent: MainScreenGesture): CG?
+}

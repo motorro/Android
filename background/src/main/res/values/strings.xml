@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Background work</string>
+    <string name="notification_explanation">Please grant notification permission to the app and enable notifications.</string>
+    <string name="notification_settings">Settings</string>
+
+    <string name="ongoing_channel_title">Ongoing notifications</string>
+    <string name="ongoing_channel_description">Ongoing background tasks</string>
+
+    <string name="page_service">Service</string>
+</resources>
