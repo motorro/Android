@@ -7,4 +7,5 @@
     <string name="ongoing_channel_description">Ongoing background tasks</string>
 
     <string name="page_service">Service</string>
+    <string name="page_blog">Blog</string>
 </resources>
