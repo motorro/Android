@@ -107,7 +107,7 @@ class ServiceState(
         }
         i { "Starting timer service..." }
         try {
-            appContext.startService(TimerService.getStartIntent(appContext))
+            appContext.startForegroundService(TimerService.getStartIntent(appContext))
         } catch (e: Throwable) {
             w(e) { "Failed to start service" }
         }

@@ -1,13 +1,22 @@
 package com.motorro.background.pages.service
 
+import android.app.Notification
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.motorro.background.MyNotificationChannel
+import com.motorro.background.R
 import com.motorro.background.ServiceMonitor
 import com.motorro.background.timer.data.TimerState
+import com.motorro.background.timer.ui.formatTimer
 import com.motorro.core.log.Logging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -36,6 +45,11 @@ class TimerService : LifecycleService(), Logging {
          * Service ID for monitoring
          */
         val serviceId = ServiceMonitor.ServiceId(requireNotNull(TimerService::class.qualifiedName))
+
+        /**
+         * Notification ID
+         */
+        private const val NOTIFICATION_ID = 100500
     }
 
     private var timerJob: Job? = null
@@ -107,6 +121,8 @@ class TimerService : LifecycleService(), Logging {
         super.onCreate()
         status { "Service created." }
         startMonitor()
+        startForeground()
+        notifyStatus()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -118,7 +134,50 @@ class TimerService : LifecycleService(), Logging {
     override fun onDestroy() {
         super.onDestroy()
         stopMonitor()
+        stopForeground(STOP_FOREGROUND_REMOVE)
         status { "Service destroyed." }
+    }
+
+    private fun startForeground() {
+        ServiceCompat.startForeground(
+            /* service */ this,
+            /* notification id */ NOTIFICATION_ID,
+            /* notification*/ buildNotification(timerState.value),
+            /* foreground type */ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+            } else {
+                0
+            }
+        )
+    }
+
+    private fun buildNotification(state: TimerState): Notification {
+        return NotificationCompat.Builder(this, MyNotificationChannel.ONGOING.name)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(
+                when (state) {
+                    is TimerState.Running -> getString(R.string.notification_timer_running, state.time.formatTimer())
+                    is TimerState.Stopped -> getString(R.string.notification_timer_stopped, state.time.formatTimer())
+                }
+            )
+            .setSmallIcon(R.drawable.ic_notification)
+            .setOngoing(true)
+            .build()
+    }
+
+    private fun notifyStatus() = lifecycleScope.launch {
+        timerState.collect {
+            notify(it)
+        }
+    }
+
+    private fun notify(state: TimerState) {
+        val notificationManager = NotificationManagerCompat.from(this.applicationContext)
+        val notifications = notificationManager.activeNotifications
+        val ongoingNotification = notifications.find { NOTIFICATION_ID == it.id }
+        if (null != ongoingNotification && notificationManager.areNotificationsEnabled()) {
+            notificationManager.notify(NOTIFICATION_ID, buildNotification(state))
+        }
     }
 
     // endregion
