@@ -37,7 +37,7 @@ fun TimerView(modifier: Modifier = Modifier, title: String?, state: TimerState, 
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(style = MaterialTheme.typography.headlineLarge, text = title.orEmpty())
-                Text(style = MaterialTheme.typography.displayLarge, text = state.time.format())
+                Text(style = MaterialTheme.typography.displayLarge, text = state.time.formatTimer())
                 Button(onClick = { onGesture(TimerGesture.Toggle) }) {
                     Text(
                         style = MaterialTheme.typography.labelMedium,
@@ -52,7 +52,7 @@ fun TimerView(modifier: Modifier = Modifier, title: String?, state: TimerState, 
     }
 }
 
-private fun Duration.format(): String {
+fun Duration.formatTimer(): String {
     fun Number.pad(): String = toString().padStart(2, '0')
     return toComponents { h, m, s, _ ->
         "${h.pad()}:${m.pad()}:${s.pad()}"

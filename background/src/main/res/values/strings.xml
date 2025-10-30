@@ -17,4 +17,8 @@
     <string name="btn_bind">Bind</string>
     <string name="btn_unbind">Unbind</string>
     <string name="title_getting_service_status">Getting service status</string>
+
+    <string name="notification_timer_stopped">Stopped. Current time: %s</string>
+    <string name="notification_timer_running">Running. Current time: %s</string>
+
 </resources>
