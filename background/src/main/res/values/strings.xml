@@ -8,4 +8,13 @@
 
     <string name="page_service">Service</string>
     <string name="page_blog">Blog</string>
+
+    <string name="title_service_timer">Service timer</string>
+    <string name="title_service_launch">Service launch</string>
+    <string name="btn_start">Start</string>
+    <string name="btn_stop">Stop</string>
+    <string name="title_service_binding">Service binding</string>
+    <string name="btn_bind">Bind</string>
+    <string name="btn_unbind">Unbind</string>
+    <string name="title_getting_service_status">Getting service status</string>
 </resources>
