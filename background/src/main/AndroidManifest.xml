@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
 
+    <permission
+        android:name="com.motorro.background.PERMISSION"
+        android:permissionGroup="android.permission-group.READ_MEDIA_AURAL"
+        android:protectionLevel="signature" />
+
     <application
         android:allowBackup="true"
         android:name=".App"
@@ -29,7 +34,13 @@
         <service
             android:name=".pages.service.TimerService"
             android:foregroundServiceType="mediaPlayback"
-            android:exported="false"/>
+            android:enabled="true"
+            android:permission="com.motorro.background.PERMISSION"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.motorro.background.BIND" />
+            </intent-filter>
+        </service>
 
     </application>
 

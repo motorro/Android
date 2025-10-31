@@ -4,7 +4,6 @@ import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
-import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -15,6 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import com.motorro.background.MyNotificationChannel
 import com.motorro.background.R
 import com.motorro.background.ServiceMonitor
+import com.motorro.background.timer.ITimerCallback
+import com.motorro.background.timer.ITimerService
+import com.motorro.background.timer.ITimerState
 import com.motorro.background.timer.data.TimerState
 import com.motorro.background.timer.ui.formatTimer
 import com.motorro.core.log.Logging
@@ -28,6 +30,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -57,11 +60,78 @@ class TimerService : LifecycleService(), Logging {
 
     // region -= Binding =-
 
-    private val binder = ServiceBinder()
+    fun notifyClients() = lifecycleScope.launch {
+        timerState.collect { state ->
+            updateClients(state)
+        }
+    }
+
+    /**
+     * Wraps-up the callback and removes it if remote process dies
+     */
+    private inner class Receiver(val callback: ITimerCallback) : IBinder.DeathRecipient {
+        override fun binderDied() {
+            remove(this)
+        }
+    }
+
+    /**
+     * Registered listeners
+     */
+    private val clients: MutableMap<IBinder, Receiver> = ConcurrentHashMap<IBinder, Receiver>()
+
+    /**
+     * Removes the callback from the list of callbacks.
+     */
+    private fun remove(receiver: Receiver) {
+        val binder = receiver.callback.asBinder()
+        val removed = clients.remove(binder)
+        if (null != removed) {
+            binder.unlinkToDeath(receiver, 0)
+        }
+    }
+
+    private fun updateClients(state: TimerState) {
+        clients.values.forEach { receiver ->
+            receiver.callback.onStateChange(state)
+        }
+    }
+
+    private val timerServiceInterface = object : ITimerService.Stub() {
+        override fun getState(): ITimerState = timerState.value
+
+        override fun subscribe(callback: ITimerCallback) {
+            val binder = callback.asBinder()
+            if (clients.contains(binder)) {
+                return
+            }
+
+            val receiver = Receiver(callback)
+            binder.linkToDeath(receiver, 0)
+            clients[binder] = receiver
+        }
+
+        override fun unsubscribe(callback: ITimerCallback) {
+            clients[callback.asBinder()]?.let(::remove)
+        }
+
+        override fun start() {
+            this@TimerService.start()
+        }
+
+        override fun stop() {
+            this@TimerService.stop()
+        }
+
+        override fun toggle() {
+            this@TimerService.toggle()
+        }
+    }
+
     override fun onBind(intent: Intent): IBinder? {
         status { "Call to bind service" }
         super.onBind(intent)
-        return binder
+        return timerServiceInterface
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -71,12 +141,6 @@ class TimerService : LifecycleService(), Logging {
 
     override fun onRebind(intent: Intent?) {
         status { "Call to rebind service." }
-    }
-
-    inner class ServiceBinder : Binder() {
-        fun getService() : TimerService {
-            return this@TimerService
-        }
     }
 
     // endregion
@@ -93,6 +157,7 @@ class TimerService : LifecycleService(), Logging {
         }
     }
 
+    @Synchronized
     fun start() {
         var currentTime = timerState.value.time
         timerJob?.cancel()
@@ -107,6 +172,7 @@ class TimerService : LifecycleService(), Logging {
         }
     }
 
+    @Synchronized
     fun stop() {
         val currentTime = timerState.value.time
         timerJob?.cancel()
@@ -122,7 +188,10 @@ class TimerService : LifecycleService(), Logging {
         status { "Service created." }
         startMonitor()
         startForeground()
+
+        // Status updates
         notifyStatus()
+        notifyClients()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
