@@ -1,21 +1,22 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
-    namespace = "com.motorro.background.timer"
+    namespace = "com.motorro.background.client"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
+        applicationId = "com.motorro.background.client"
         minSdk = libs.versions.minSdk.get().toInt()
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = 1
+        versionName = "1.0"
     }
 
     buildTypes {
@@ -34,19 +35,24 @@ android {
         }
     }
     buildFeatures {
-        aidl = true
+        compose = true
     }
 }
 
 dependencies {
+    implementation(project(":core"))
     implementation(project(":composecore"))
+    implementation(project(":background:timer"))
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.hilt.android)
-
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.material3.icons)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.napier)
 }

@@ -8,11 +8,14 @@ import com.motorro.background.ServiceMonitor
 import com.motorro.background.pages.service.TimerService
 import com.motorro.background.pages.service.data.ServiceGesture
 import com.motorro.background.pages.service.data.ServiceUiState
+import com.motorro.background.timer.ITimerCallback
+import com.motorro.background.timer.ITimerService
+import com.motorro.background.timer.ITimerState
 import com.motorro.background.timer.data.TimerGesture
 import com.motorro.background.timer.data.TimerState
+import com.motorro.background.timer.data.toTimerState
 import com.motorro.commonstatemachine.coroutines.CoroutineState
 import com.motorro.core.log.Logging
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -26,7 +29,11 @@ class ServiceState(
 ): CoroutineState<ServiceGesture, ServiceUiState>(), ServiceContext by context, Logging {
 
     private val timerState: MutableStateFlow<TimerState> = MutableStateFlow(TimerState.Stopped())
-    private var timerJob: Job? = null
+    private var timerCallback = object : ITimerCallback.Stub() {
+        override fun onStateChange(state: ITimerState) {
+            timerState.value = state.toTimerState()
+        }
+    }
 
     private var isServiceRunning: Boolean? by Delegates.observable(null) {_, _, newValue ->
         if (false == newValue) {
@@ -35,32 +42,21 @@ class ServiceState(
         render()
     }
 
-    private var service: TimerService? by Delegates.observable(null) { _, _, newValue ->
-        if (null != newValue) {
-            listenTime(newValue)
-        } else {
-            stopListenTime()
+    private var service: ITimerService? by Delegates.observable(null) { _, oldService, newService ->
+        oldService?.unsubscribe(timerCallback)
+        newService?.let {
+            timerState.value = it.state.toTimerState()
+            it.subscribe(timerCallback)
         }
         render()
     }
 
     private fun isBound() = null != service
 
-    private fun listenTime(service: TimerService) {
-        timerJob?.cancel()
-        timerJob = stateScope.launch {
-            service.state.collect(timerState)
-        }
-    }
-
-    private fun stopListenTime() {
-        timerJob?.cancel()
-    }
-
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, serviceBinder: IBinder) {
             i { "Service connected" }
-            service = (serviceBinder as TimerService.ServiceBinder).getService()
+            service = ITimerService.Stub.asInterface(serviceBinder)
         }
 
         // Not being called when unbinding service
@@ -95,8 +91,8 @@ class ServiceState(
     private fun unbindService() {
         if (isBound()) {
             i { "Unbinding service..." }
-            appContext.unbindService(serviceConnection)
             service = null
+            appContext.unbindService(serviceConnection)
         }
     }
 
@@ -114,11 +110,9 @@ class ServiceState(
     }
 
     private fun stopService() {
+        service = null
         val result = appContext.stopService(TimerService.getStartIntent(appContext))
         i { "Service found and stopped: $result" }
-        if (result) {
-            service = null
-        }
     }
 
     override fun doProcess(gesture: ServiceGesture) {
