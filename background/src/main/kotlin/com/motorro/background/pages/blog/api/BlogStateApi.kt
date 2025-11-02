@@ -16,7 +16,7 @@ class BlogStateApi @Inject constructor(private val stateFactory: BlogStateFactor
     override val data get() = BlogPageData
 
     override fun init(data: Any?): BlogState {
-        d { "Starting Work flow..." }
+        d { "Starting Blog flow..." }
         return stateFactory.work()
     }
 
