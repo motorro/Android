@@ -9,13 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -59,16 +56,18 @@ fun BlogScreen(
         if (state.posts is LceState.Loading) {
             LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.TopCenter).zIndex(2F))
         }
-        Posts(posts, onGesture, Modifier.align(Alignment.TopCenter).zIndex(1F))
+        Posts(state, onGesture, Modifier.align(Alignment.TopCenter).zIndex(1F))
     }
 }
 
 @Composable
 private fun Posts(
-    postList: PostList,
+    state: BlogUiState,
     onGesture: (BlogGesture) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val postList = state.posts.data ?: return
+
     Column(modifier = modifier.fillMaxSize().padding(AppDimens.margin_all)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -79,12 +78,10 @@ private fun Posts(
                 text = stringResource(R.string.last_update, postList.lastUpdated.toLocalDateTime(TimeZone.currentSystemDefault()).time),
                 style = MaterialTheme.typography.titleMedium
             )
-            IconButton(onClick = { onGesture(BlogGesture.Refresh) }) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = stringResource(R.string.desc_refresh)
-                )
-            }
+            Switch(
+                checked = state.refreshActive,
+                onCheckedChange = { onGesture(BlogGesture.ToggleRefresh) }
+            )
         }
         LazyColumn(verticalArrangement = Arrangement.spacedBy(AppDimens.margin_all)) {
             items(postList.posts, key = { it.id }) { post ->
@@ -132,9 +129,9 @@ private class WorkScreenStateProvider : PreviewParameterProvider<BlogUiState> {
     )
 
     override val values: Sequence<BlogUiState> = sequenceOf(
-        BlogUiState(LceState.Loading()),
-        BlogUiState(LceState.Loading(postList)),
-        BlogUiState(LceState.Content(postList))
+        BlogUiState(LceState.Loading(), false),
+        BlogUiState(LceState.Loading(postList), true),
+        BlogUiState(LceState.Content(postList), false)
     )
 }
 
