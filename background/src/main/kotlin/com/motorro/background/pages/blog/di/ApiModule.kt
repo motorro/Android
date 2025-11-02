@@ -3,7 +3,7 @@ package com.motorro.background.pages.blog.di
 import com.motorro.background.api.MainScreenStateApi
 import com.motorro.background.api.MainScreenUiApi
 import com.motorro.background.pages.blog.api.BlogStateApi
-import com.motorro.background.pages.blog.api.WorkUiApi
+import com.motorro.background.pages.blog.api.BlogUiApi
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,7 +16,7 @@ import dagger.multibindings.IntoSet
 abstract class ApiUiModule {
     @Binds
     @IntoSet
-    abstract fun blogScreen(impl: WorkUiApi): MainScreenUiApi
+    abstract fun blogScreen(impl: BlogUiApi): MainScreenUiApi
 }
 
 @Module

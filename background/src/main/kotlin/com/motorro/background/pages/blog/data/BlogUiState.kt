@@ -1,5 +1,10 @@
 package com.motorro.background.pages.blog.data
 
-object BlogUiState {
-    val EMPTY = BlogUiState
+import com.motorro.background.pages.blog.repository.data.PostList
+import com.motorro.core.lce.LceState
+
+data class BlogUiState(val posts: LceState<PostList, Throwable>) {
+    companion object Companion {
+        val EMPTY = BlogUiState(LceState.Loading())
+    }
 }

@@ -1,3 +1,5 @@
 package com.motorro.background.pages.blog.data
 
-object BlogGesture
+sealed class BlogGesture {
+    data object Refresh : BlogGesture()
+}

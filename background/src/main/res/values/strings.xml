@@ -21,4 +21,7 @@
     <string name="notification_timer_stopped">Stopped. Current time: %s</string>
     <string name="notification_timer_running">Running. Current time: %s</string>
 
+    <string name="desc_refresh">Refresh…</string>
+    <string name="last_update">Last updated: %s</string>
+
 </resources>
