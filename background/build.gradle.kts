@@ -63,6 +63,16 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.napier)
     implementation(libs.faker)
+
+    // Startup initialization
+    implementation(libs.androidx.startup)
+
+    // Work
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.work.ktx)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.androidx)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)

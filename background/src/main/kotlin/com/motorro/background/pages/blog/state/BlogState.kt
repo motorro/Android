@@ -6,24 +6,25 @@ import com.motorro.background.pages.blog.repository.BlogRepository
 import com.motorro.background.pages.blog.repository.data.PostList
 import com.motorro.commonstatemachine.coroutines.CoroutineState
 import com.motorro.core.lce.LceState
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class BlogState(private val context: BlogContext, private val blogRepository: BlogRepository): CoroutineState<BlogGesture, BlogUiState>(), BlogContext by context {
 
-    private val postList: MutableStateFlow<LceState<PostList, Throwable>> = MutableStateFlow(LceState.Loading())
+    private val postList: StateFlow<LceState<PostList, Throwable>> = blogRepository.latestPosts.stateIn(
+        scope = stateScope,
+        started = SharingStarted.Lazily,
+        initialValue = LceState.Loading()
+    )
 
     override fun doStart() {
-        subscribeState()
         subscribeRepo()
     }
 
     private fun subscribeRepo() = stateScope.launch {
-        blogRepository.latestPosts.collect(postList)
-    }
-
-    private fun subscribeState() = stateScope.launch {
         postList.collect {
             render()
         }
