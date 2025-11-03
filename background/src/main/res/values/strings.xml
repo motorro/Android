@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Background work</string>
+    <string name="files_authority">com.motorro.background.files</string>
     <string name="notification_explanation">Please grant notification permission to the app and enable notifications.</string>
     <string name="notification_settings">Settings</string>
 
@@ -8,6 +9,7 @@
 
     <string name="page_service">Service</string>
     <string name="page_blog">Blog</string>
+    <string name="page_review">Review</string>
 
     <string name="title_service_timer">Service timer</string>
     <string name="title_service_launch">Service launch</string>
@@ -23,5 +25,15 @@
 
     <string name="desc_refresh">Refresh…</string>
     <string name="last_update">Last updated: %s</string>
-
+    <string name="desc_star_rating">Star %d</string>
+    <string name="btn_add_photo">Add photo</string>
+    <string name="desc_attachment">Attachment</string>
+    <string name="input_review">Review</string>
+    <string name="btn_delete_photo">Delete photo</string>
+    <string name="btn_submit_review">Submit Review</string>
+    <string name="title_uploading_review">Uploading review</string>
+    <string name="btn_close">Close</string>
+    <string name="title_upload_success">Upload complete!</string>
+    <string name="title_upload_failure">Upload failed!</string>
+    <string name="err_upload_failure">Upload failed!</string>
 </resources>
