@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.napier)
     implementation(libs.faker)
+    implementation(libs.glide)
+    implementation(libs.glide.compose)
 
     // Startup initialization
     implementation(libs.androidx.startup)

@@ -1,7 +1,5 @@
 package com.motorro.background.di
 
-import android.app.Application
-import android.content.Context
 import com.motorro.background.api.MainScreenStateApi
 import com.motorro.background.api.MainScreenUiApi
 import com.motorro.background.state.MainScreenStateFactory
@@ -30,9 +28,6 @@ class MainScreenVmModule {
     fun pages(set: @JvmSuppressWildcards Set<MainScreenStateApi<*, *>>): ImmutableList<MainScreenStateApi<*, *>> {
         return set.sortedBy { it.data.index }.toImmutableList()
     }
-
-    @Provides
-    fun context(application: Application): Context = application.applicationContext
 }
 
 @Module

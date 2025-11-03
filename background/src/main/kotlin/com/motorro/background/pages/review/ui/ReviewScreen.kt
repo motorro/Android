@@ -1,0 +1,31 @@
+package com.motorro.background.pages.review.ui
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.motorro.background.pages.review.data.ReviewGesture
+import com.motorro.background.pages.review.data.ReviewUiState
+import com.motorro.composecore.ui.FatalError
+
+@Composable
+fun ReviewScreen(state: ReviewUiState, onGesture: (ReviewGesture) -> Unit, modifier: Modifier = Modifier) {
+    when(state) {
+        is ReviewUiState.Form -> ReviewForm(
+            state = state,
+            onGesture = onGesture,
+            modifier = modifier
+        )
+        is ReviewUiState.Uploading -> Uploading(
+            state = state,
+            modifier = modifier
+        )
+        ReviewUiState.UploadSuccess -> UploadSuccess(
+            onClose = { onGesture(ReviewGesture.Action) }
+        )
+        is ReviewUiState.UploadFailed -> FatalError(
+            errorMessage = state.error,
+            onDismiss = { onGesture(ReviewGesture.Action) },
+            modifier = modifier,
+            retriable = true
+        )
+    }
+}

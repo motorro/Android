@@ -1,5 +1,7 @@
 package com.motorro.background.di
 
+import android.app.Application
+import android.content.Context
 import com.motorro.background.ServiceMonitor
 import dagger.Binds
 import dagger.Module
@@ -15,6 +17,9 @@ class AppModule {
     @Provides
     @Singleton
     fun clock(): Clock = Clock.System
+
+    @Provides
+    fun context(application: Application): Context = application.applicationContext
 }
 
 @Module
