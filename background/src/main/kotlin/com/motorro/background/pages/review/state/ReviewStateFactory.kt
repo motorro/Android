@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import com.motorro.background.pages.review.data.ReviewData
 import javax.inject.Inject
-import javax.inject.Provider
 
 interface ReviewStateFactory {
 
@@ -14,12 +13,9 @@ interface ReviewStateFactory {
 
     fun uploadSuccess(): ReviewState
 
-    fun uploadError(error: Throwable, data: ReviewData): ReviewState
-
     class Impl @Inject constructor(
         context: Context,
-        savedStateHandle: SavedStateHandle,
-        private val createUploading: Provider<UploadingState.Factory>
+        savedStateHandle: SavedStateHandle
     ) : ReviewStateFactory {
 
         private val context = object : ReviewContext {
@@ -30,15 +26,9 @@ interface ReviewStateFactory {
 
         override fun form() = FormState(context)
 
-        override fun uploading(data: ReviewData) = createUploading.get().invoke(context, data)
+        override fun uploading(data: ReviewData) = UploadingState(context, data)
 
         override fun uploadSuccess() = UploadSuccessState(context)
-
-        override fun uploadError(error: Throwable, data: ReviewData): ReviewState = UploadErrorState(
-            context,
-            error,
-            data
-        )
     }
 }
 
