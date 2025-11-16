@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.hilt)
 }
 
 ksp {
@@ -18,10 +19,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
     }
 
     buildTypes {
@@ -70,6 +67,13 @@ dependencies {
 
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.core)
+    implementation(libs.hilt.android)
+
+    // Work
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.work.ktx)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.androidx)
 
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)
