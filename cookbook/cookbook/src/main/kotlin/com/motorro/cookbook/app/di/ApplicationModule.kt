@@ -2,6 +2,7 @@ package com.motorro.cookbook.app.di
 
 import android.app.Application
 import android.content.Context
+import androidx.work.WorkManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,4 +25,7 @@ class ApplicationModule {
 
     @Provides
     fun clock(): Clock = Clock.System
+
+    @Provides
+    fun workManager(application: Application): WorkManager = WorkManager.getInstance(application)
 }
