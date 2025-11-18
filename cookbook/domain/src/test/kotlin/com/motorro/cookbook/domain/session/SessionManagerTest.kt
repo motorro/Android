@@ -12,6 +12,8 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
@@ -25,16 +27,18 @@ import java.util.LinkedList
 class SessionManagerTest {
     private lateinit var sessionStorage: SessionStorage
     private lateinit var userApi: UserApi
+    private lateinit var userHandler: UserHandler
     private lateinit var sessionManager: SessionManager
 
     @Before
     fun init() {
         sessionStorage = mockk()
         userApi = mockk()
+        userHandler = mockk(relaxed = true)
     }
 
     private inline fun managerTest(crossinline block: suspend TestScope.() -> Unit) = runTest(UnconfinedTestDispatcher()) {
-        sessionManager = SessionManagerImpl(sessionStorage, userApi, backgroundScope)
+        sessionManager = SessionManagerImpl(sessionStorage, userApi, setOf(userHandler), backgroundScope)
         block()
     }
 
@@ -76,6 +80,7 @@ class SessionManagerTest {
 
         coEvery { userApi.getProfile("test", "password") }
         coVerify { sessionStorage.update(session) }
+        coVerify { userHandler.onLoggedIn(profile) }
 
         assertEquals(
             listOf(Session.Loading, session, Session.Loading, session),
@@ -88,8 +93,11 @@ class SessionManagerTest {
         every { sessionStorage.session } returns flowOf(session)
         coEvery { sessionStorage.update(any()) } just Runs
 
+        val currentProfile = sessionManager.session.filterIsInstance<Session.Active>().first().profile
+
         sessionManager.logout()
 
         coVerify { sessionStorage.update(Session.None) }
+        coVerify { userHandler.onLoggedOut(currentProfile) }
     }
 }
