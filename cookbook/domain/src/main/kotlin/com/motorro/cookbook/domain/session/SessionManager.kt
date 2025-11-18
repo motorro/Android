@@ -39,10 +39,15 @@ interface SessionManager {
 }
 
 /**
+ * Gets actual session state
+ */
+suspend fun SessionManager.actualSession(): Session = session.filter { it !is Session.Loading }.first()
+
+/**
  * Checks if user is logged in
  */
 suspend fun SessionManager.requireUserId(): UserId {
-    val session = session.filter { it !is Session.Loading }.first()
+    val session = actualSession()
     return when (session) {
         is Session.Active -> session.profile.id
         else -> throw UnauthorizedException()
