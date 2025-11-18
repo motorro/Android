@@ -4,8 +4,10 @@ import com.motorro.cookbook.core.error.toCore
 import com.motorro.cookbook.core.log.Logging
 import com.motorro.cookbook.domain.session.data.Session
 import com.motorro.cookbook.model.Profile
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +17,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -22,7 +25,8 @@ import javax.inject.Named
 internal class SessionManagerImpl @Inject constructor(
     private val sessionStorage: SessionStorage,
     private val userApi: UserApi,
-    @Named("Application") scope: CoroutineScope
+    private val userHandlers: @JvmSuppressWildcards Set<UserHandler>,
+    @param:Named("Application") private val scope: CoroutineScope
 ) : SessionManager, Logging {
 
     private val loading = MutableStateFlow(false)
@@ -62,11 +66,30 @@ internal class SessionManagerImpl @Inject constructor(
 
         d { "Logged in as ${profile.name}" }
 
+        if (userHandlers.isNotEmpty()) {
+            scope.launch(SupervisorJob() + CoroutineName("Session handling")) {
+                userHandlers.forEach {
+                    launch { it.onLoggedIn(profile) }
+                }
+            }
+        }
+
         return Result.success(profile)
     }
 
     override suspend fun logout() {
         d { "Logging out..." }
+
+        val currentProfile = (session.value as? Session.Active)?.profile
+
         sessionStorage.update(Session.None)
+
+        if (userHandlers.isNotEmpty() && null != currentProfile) {
+            scope.launch(SupervisorJob() + CoroutineName("Session handling")) {
+                userHandlers.forEach {
+                    launch { it.onLoggedOut(currentProfile) }
+                }
+            }
+        }
     }
 }
