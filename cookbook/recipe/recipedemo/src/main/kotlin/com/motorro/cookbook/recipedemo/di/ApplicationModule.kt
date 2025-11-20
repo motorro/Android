@@ -6,11 +6,13 @@ import com.motorro.commonstatemachine.CommonMachineState
 import com.motorro.cookbook.appcore.navigation.auth.AuthGesture
 import com.motorro.cookbook.appcore.navigation.auth.AuthViewState
 import com.motorro.cookbook.appcore.navigation.auth.AuthenticationApi
+import com.motorro.cookbook.domain.session.UserHandler
 import com.motorro.cookbook.model.Profile
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import javax.inject.Named
@@ -41,6 +43,18 @@ class ApplicationModule {
             modifier: Modifier
         ) {
             reject()
+        }
+    }
+
+    @Provides
+    @IntoSet
+    fun mockUserHandler(): UserHandler = object : UserHandler {
+        override suspend fun onLoggedIn(loggedIn: Profile) {
+            // NO-OP
+        }
+
+        override suspend fun onLoggedOut(loggedOut: Profile) {
+            // NO-OP
         }
     }
 }

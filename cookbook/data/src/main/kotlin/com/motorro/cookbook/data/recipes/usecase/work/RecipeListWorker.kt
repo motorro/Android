@@ -6,6 +6,7 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkerParameters
 import com.motorro.cookbook.core.error.toCore
 import com.motorro.cookbook.data.recipes.CookbookApi
@@ -40,6 +41,19 @@ internal class RecipeListWorker @AssistedInject constructor(
          */
         fun buildOneShot() = OneTimeWorkRequestBuilder<RecipeListWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+            .addTag(TAG)
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+            )
+            .build()
+
+        /**
+         * Schedules periodic sync request for recipe list
+         */
+        fun buildPeriodic() = PeriodicWorkRequestBuilder<RecipeListWorker>(SYNC_PERIOD)
+            .setInitialDelay(SYNC_PERIOD)
             .addTag(TAG)
             .setConstraints(
                 Constraints.Builder()
