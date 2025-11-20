@@ -68,9 +68,6 @@ internal class RecipeListUsecaseImpl @Inject constructor(
         // Work status
         val workStatus = workManager.getWorkInfosByTagFlow(RecipeListWorker.TAG).map { it.getCombinedWorkInfo() }
 
-        // Start network sync on subscribe
-        synchronize()
-
         // Take database data and merge it with network state
         // Thus even if we have a network error, we will get some cached data
         combine(
