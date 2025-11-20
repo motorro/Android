@@ -1,16 +1,20 @@
 package com.motorro.cookbook.data.recipes.usecase
 
-import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkManager
 import com.motorro.cookbook.core.log.Logging
 import com.motorro.cookbook.data.recipes.CookbookApi
 import com.motorro.cookbook.data.recipes.db.CookbookDao
 import com.motorro.cookbook.data.recipes.db.entity.toEntity
+import com.motorro.cookbook.data.recipes.usecase.work.AddRecipeWorker
+import com.motorro.cookbook.data.recipes.usecase.work.RecipeListWorker
+import com.motorro.cookbook.data.recipes.usecase.work.UploadImageWorker
 import com.motorro.cookbook.domain.recipes.data.NewRecipe
 import com.motorro.cookbook.domain.session.SessionManager
 import com.motorro.cookbook.domain.session.requireUserId
 import com.motorro.cookbook.model.Image
-import com.motorro.cookbook.model.ImageUpload
 import com.motorro.cookbook.model.Recipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -37,13 +41,15 @@ internal interface AddRecipeUsecase {
  * @param cookbookApi Cookbook network API
  * @param scope Coroutine scope to run synchronisation
  * @param clock Clock instance
+ * @param workManager Work manager
  */
 internal class AddRecipeUsecaseImpl @Inject constructor(
     private val sessionManager: SessionManager,
     private val cookbookDao: CookbookDao,
     private val cookbookApi: CookbookApi,
     @param:Named("Application") private val scope: CoroutineScope,
-    private val clock: Clock
+    private val clock: Clock,
+    private val workManager: WorkManager
 ) : AddRecipeUsecase, Logging {
     override fun invoke(recipe: NewRecipe) {
         scope.launch {
@@ -63,7 +69,7 @@ internal class AddRecipeUsecaseImpl @Inject constructor(
         val recipeId = Uuid.random()
 
         // Common recipe data
-        var recipe = with(newRecipe) {
+        val recipe = with(newRecipe) {
             Recipe(
                 id = recipeId,
                 title = title,
@@ -81,33 +87,25 @@ internal class AddRecipeUsecaseImpl @Inject constructor(
             cookbookDao.insert(list, data)
         }
 
-        // 2. Update server and get back the finalized data
-        recipe = uploadRecipe(recipe).copy(
-            image = image?.let { uploadImage(recipeId, Uri.parse(it.url))?.image }
+        // 2. Update server with a recipe
+        var work = workManager.beginUniqueWork(
+            uniqueWorkName = AddRecipeWorker.getUniqueWorkName(recipeId),
+            existingWorkPolicy = ExistingWorkPolicy.REPLACE,
+            request = AddRecipeWorker.buildRequest(recipe)
         )
 
-        // 3. Reset local copy to final data
-        recipe.toEntity(userId).let { (list, data) ->
-            cookbookDao.insert(list, data)
+        // 3. Upload recipe image if has any
+        if (null != image) {
+            work = work.then(
+                UploadImageWorker.buildRequest(recipeId, image.url.toUri())
+            )
         }
+
+        // 4. Synchronize the list
+        work.then(RecipeListWorker.buildOneShot()).enqueue()
 
         Log.i(TAG, "Created recipe: $recipe")
     }
-
-    /**
-     * Adds recipe record
-     */
-    private suspend fun uploadRecipe(recipe: Recipe): Recipe = cookbookApi.addRecipe(recipe)
-        .onFailure {
-            Log.w(TAG, "Failed to create recipe", it)
-        }
-        .getOrThrow()
-
-    private suspend fun uploadImage(recipeId: Uuid, imageUri: Uri): ImageUpload? = cookbookApi.uploadRecipeImage(recipeId, imageUri)
-        .onFailure {
-            Log.w(TAG, "Failed to upload image", it)
-        }
-        .getOrNull()
 
     companion object {
         private val TAG = AddRecipeUsecase::class.java.simpleName
