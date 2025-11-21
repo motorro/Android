@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Release</string>
+
+    <string name="page_pictures">Pictures</string>
+    <string name="pic_photo">Photo</string>
+    <string name="p_error">Error</string>
+    <string name="p_attachment">Attachment</string>
+    <string name="p_conditioner">Conditioner</string>
+    <string name="p_alarm">Alarm</string>
+    <string name="p_factory">Factory</string>
+    <string name="p_banc">Banc</string>
+    <string name="p_wallet">Wallet</string>
+    <string name="p_album">Album</string>
+
+    <string name="page_reflection">Reflection</string>
+
+</resources>
