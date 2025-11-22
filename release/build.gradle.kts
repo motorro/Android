@@ -8,6 +8,15 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+val vName = "1.15.192"
+val vCode = vName.split(".").map { it.toInt() }.let { (major, minor, patch) ->
+    major * 100000 + minor * 1000 + patch
+}
+
+println("--------VERSION--------")
+println("versionName: $vName")
+println("versionCode: $vCode")
+
 android {
     namespace = "com.motorro.release"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -16,8 +25,8 @@ android {
         applicationId = "com.motorro.release"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = vCode
+        versionName = vName
     }
 
     buildTypes {
