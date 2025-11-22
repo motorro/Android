@@ -8,7 +8,19 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
-val vName = "1.15.192"
+val vName = run {
+    fun parseVersion(description: String): String {
+        val match = "v(\\d+)\\.?(\\d*)\\.?(\\d*)-?(\\d*)".toRegex().find(description) ?: return "0.0.1"
+        val (major, minor, patch, commits) = match.groupValues.drop(1).map { it.toIntOrNull() }
+        return "$major.${minor ?: 0}.${(patch ?: 0) + (commits ?: 0)}"
+    }
+
+    val git = ProcessBuilder("git", "describe", "--tags", "--match", "v[1-9]*").start()
+    val description = git.inputStream.bufferedReader().readText().trim()
+
+    return@run parseVersion(description)
+}
+
 val vCode = vName.split(".").map { it.toInt() }.let { (major, minor, patch) ->
     major * 100000 + minor * 1000 + patch
 }
