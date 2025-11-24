@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -29,7 +30,25 @@ println("--------VERSION--------")
 println("versionName: $vName")
 println("versionCode: $vCode")
 
+val signingPropertiesFile = file("$projectDir/signing/signing.properties")
+val releaseSigningDefined = signingPropertiesFile.exists()
+
 android {
+    signingConfigs {
+        if (releaseSigningDefined) {
+            println("Reading signing properties from $signingPropertiesFile")
+
+            val signingProperties = Properties()
+            signingProperties.load(signingPropertiesFile.inputStream())
+
+            create("release") {
+                storeFile = signingProperties.getProperty("storeFile")?.let { file(it) }
+                storePassword = signingProperties.getProperty("storePassword")
+                keyAlias = signingProperties.getProperty("keyAlias")
+                keyPassword = signingProperties.getProperty("keyPassword")
+            }
+        }
+    }
     namespace = "com.motorro.release"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
@@ -43,6 +62,9 @@ android {
 
     buildTypes {
         release {
+            if (releaseSigningDefined) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
