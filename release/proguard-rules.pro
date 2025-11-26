@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# -- Fixes problem with Reflection screen
+-keep class com.motorro.release.pages.reflection.data.ReflectionDataProvider { *; }

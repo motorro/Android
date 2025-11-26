@@ -67,7 +67,12 @@ android {
             }
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                // File with default rules provided by the Android Gradle Plugin
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                // File with your custom rules
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
