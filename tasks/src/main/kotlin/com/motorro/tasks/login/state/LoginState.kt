@@ -1,5 +1,6 @@
 package com.motorro.tasks.login.state
 
+import com.motorro.commonstatemachine.CommonMachineState
 import com.motorro.commonstatemachine.coroutines.CoroutineState
 import com.motorro.core.log.Logging
 import com.motorro.tasks.login.data.LoginGesture
@@ -8,7 +9,7 @@ import com.motorro.tasks.login.data.LoginUiState
 /**
  * Basic state class with fixed gesture and ui-state systems
  */
-typealias LoginState = CoroutineState<LoginGesture, LoginUiState>
+typealias LoginState = CommonMachineState<LoginGesture, LoginUiState>
 
 /**
  * Base class for login flow state
@@ -16,7 +17,7 @@ typealias LoginState = CoroutineState<LoginGesture, LoginUiState>
  * - Has default gesture processing logic
  * - Tags logging
  */
-abstract class BaseLoginState(context: LoginContext): LoginState(), LoginContext by context, Logging {
+abstract class BaseLoginState(context: LoginContext): CoroutineState<LoginGesture, LoginUiState>(), LoginContext by context, Logging {
     /**
      * A part of [start] template to initialize state
      */

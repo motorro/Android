@@ -5,7 +5,7 @@ plugins {
     application
 }
 
-group = "com.motorro.tasks"
+group = "com.motorro.tasks.server"
 version = "1.0.0"
 application {
     mainClass.set("com.motorro.tasks.server.ApplicationKt")

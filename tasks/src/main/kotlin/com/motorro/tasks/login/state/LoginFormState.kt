@@ -60,7 +60,7 @@ class LoginFormState(context: LoginContext, data: LoginData) : BaseLoginState(co
             }
             LoginGesture.Back -> {
                 d { "Back pressed. Terminating flow..." }
-                setMachineState(factory.terminated())
+                setMachineState(factory.terminated(data))
             }
             is LoginGesture.PasswordChanged -> {
                 data = data.copy(password = gesture.value)

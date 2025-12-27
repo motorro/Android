@@ -1,5 +1,7 @@
 package com.motorro.tasks.login.data
 
+import com.motorro.tasks.auth.data.SessionError
+
 /**
  * Login view states - a sealed collection of all possible screen states found in Login flow.
  * Updates direction: Model -> UI
@@ -25,7 +27,8 @@ sealed class LoginUiState {
     ) : LoginUiState()
 
     /**
-     * The flow has terminated
+     * Login error
+     * @property error Error to display
      */
-    data object Terminated : LoginUiState()
+    data class LoginError(val error: SessionError) : LoginUiState()
 }
