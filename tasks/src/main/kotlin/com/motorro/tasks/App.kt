@@ -1,12 +1,14 @@
 package com.motorro.tasks
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 
 /**
  * Our application available to all other components
  */
+@HiltAndroidApp
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
