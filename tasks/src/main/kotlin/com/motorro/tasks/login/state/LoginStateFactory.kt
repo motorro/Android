@@ -1,6 +1,7 @@
 package com.motorro.tasks.login.state
 
 import com.motorro.tasks.login.data.LoginData
+import javax.inject.Inject
 
 /**
  * Builds logic states for login flow
@@ -31,7 +32,14 @@ interface LoginStateFactory {
      */
     fun terminated(): LoginState
 
-    class Impl: LoginStateFactory {
+    /**
+     * Factory implementation
+     * States require various dependencies so it looks more readable if we use
+     * intermediate factories
+     */
+    class Impl @Inject constructor(
+        private val createCheckingAuthState: CheckingAuthState.Factory
+    ): LoginStateFactory {
 
         private val context = object : LoginContext {
             override val factory: LoginStateFactory = this@Impl
