@@ -1,5 +1,6 @@
 package com.motorro.tasks.login.state
 
+import com.motorro.tasks.USER_NAME
 import com.motorro.tasks.login.data.LoginGesture
 import com.motorro.tasks.login.data.LoginUiState
 import io.mockk.every
@@ -17,8 +18,7 @@ internal class LoginFormStateTest : BaseStateTest() {
         state.start(stateMachine)
 
         verify {
-            stateMachine.setUiState(
-                LoginUiState.Form(
+            stateMachine.setUiState(LoginUiState.Form(
                 userName = USER_NAME,
                 password = "",
                 loginEnabled = false,
@@ -133,12 +133,12 @@ internal class LoginFormStateTest : BaseStateTest() {
 
     @Test
     fun terminatesOnBack() {
-        every { factory.terminated() } returns  nextState
+        every { factory.terminated(any()) } returns  nextState
 
         state.start(stateMachine)
         state.process(LoginGesture.Back)
         verify {
-            factory.terminated()
+            factory.terminated(loginData)
             stateMachine.setMachineState(nextState)
         }
     }

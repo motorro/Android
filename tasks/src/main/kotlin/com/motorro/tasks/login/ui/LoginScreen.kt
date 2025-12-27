@@ -1,4 +1,4 @@
-package com.motorro.tasks.login.view
+package com.motorro.tasks.login.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

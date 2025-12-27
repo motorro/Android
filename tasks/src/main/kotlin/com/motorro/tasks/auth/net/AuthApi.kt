@@ -1,5 +1,6 @@
 package com.motorro.tasks.auth.net
 
+import com.motorro.core.coroutines.DispatcherProvider
 import com.motorro.tasks.core.net.platformUrl
 import com.motorro.tasks.data.AuthRequest
 import com.motorro.tasks.data.HttpResponse
@@ -10,7 +11,6 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -23,9 +23,12 @@ interface AuthApi {
     /**
      * Ktor API implementation
      */
-    class Impl @Inject constructor(private val httpClient: HttpClient) : AuthApi {
+    class Impl @Inject constructor(
+        private val httpClient: HttpClient,
+        private val dispatchers: DispatcherProvider
+    ) : AuthApi {
         override suspend fun login(credentials: AuthRequest): HttpResponse<SessionClaims> {
-            val result = withContext(Dispatchers.IO) {
+            val result = withContext(dispatchers.io) {
                 httpClient.post {
                     platformUrl(listOf("login"))
                     contentType(ContentType.Application.Json)

@@ -1,10 +1,15 @@
 <resources>
     <string name="app_name">Tasks</string>
 
-    <string name="msg_loading">Loading…</string>
+    <string name="msg_logging_in">Logging in…</string>
 
     <string name="title_login">Login</string>
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="btn_login">Login</string>
+    <string name="btn_logout">Logout</string>
+
+    <string name="err_authentication">Authentication error: %s</string>
+    <string name="err_network">Network error. Press Retry to try again or Back to go back.</string>
+    <string name="err_storage">Fatal storage error. Please reinstall the application.</string>
 </resources>
