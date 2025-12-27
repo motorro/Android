@@ -2,9 +2,17 @@
 
 ***[Read in English](#-android-programming-course-repository)***
 
-Добро пожаловать в репозиторий курса "Программирование под ОС Андроид"!
+![Merion Academy](readme/logo_merion.svg)
 
-Этот репозиторий содержит полный набор практических примеров и решений к каждому вебинару и каждой практической работе курса.
+Этот репозиторий - часть **полного курса "Android-разработчик с нуля"**, размещенного на платформе Merion Academy.
+
+Курс содержит **29 лекций** и **22 часа видео** с детальным разбором заданий и примеров, и представляет собой полное руководство для старта в Android-разработке.
+
+[**Перейти на страницу курса**](https://wiki.merionet.ru/merion-academy/course/android-razrabotchik-s-nulya)
+
+---
+
+Репозиторий содержит полный набор практических примеров и решений к каждому вебинару и каждой практической работе курса.
 
 ## ✨ Ключевые особенности проекта
 
@@ -24,7 +32,7 @@
 | **Вводные уроки**                             |                 |                                                                        |                                                                                                                      |
 | 1                                             | Вводный урок    | 0.1 Инструменты Android разработчика                                   | [`webinars/1.HelloWorld`](https://github.com/motorro/Android/tree/webinars/1.HelloWorld)                             |
 | 2                                             | Вводный урок    | 0.2 ОС Android и приложение. Основные компоненты                       | [`webinars/2.Android`](https://github.com/motorro/Android/tree/webinars/2.Android)                                   |
-| 3                                             | Вводный урок    | 0.3 Пример архитектуры Android-приложения, поток данных                | [`webinars/3.Android_app_architecture`](https://github.com/motorro/Android/tree/webinars/3.Android_app_architecture) |
+| 3                                             | Вводный урок    | 0.3 Пример архитектуры Android-приложения, поток данных                | [`webinars/3.Android_app_architecture`](https://github.com/motorro/Android/tree/webinars/3.Android-App-Architecture) |
 | **1. Классический Android**                   |                 |                                                                        |                                                                                                                      |
 | 4                                             | Основные лекции | 1.1 Activity: Intent, Result contracts, запрос разрешений              | [`webinars/4.Activity`](https://github.com/motorro/Android/tree/webinars/4.Activity)                                 |
 | 5                                             | Основные лекции | 1.2 Activity: Жизненный цикл - Lifecycle                               | [`webinars/5.Lifecycle`](https://github.com/motorro/Android/tree/webinars/5.Lifecycle)                               |
@@ -80,9 +88,17 @@
 
 # 🚀 Android Programming Course Repository
 
-Welcome to the official repository for the "Android Programming" course from Merion Academy, developed by Nikolay Kochetkov.
+![Merion Academy](readme/logo_merion.svg)
 
-This repository contains the complete set of practical examples and solutions for every webinar and practical assignment in the course.
+This repository is part of the **full "Android Developer from Scratch" course**, hosted on the Merion Academy platform.
+
+The course includes **29 lectures** and **22 hours of video** with detailed reviews of assignments and examples, and serves as a comprehensive guide for starting Android development.
+
+[**Go to the Course Page**](https://wiki.merionet.ru/merion-academy/course/android-razrabotchik-s-nulya)
+
+---
+
+Thу repository contains the complete set of practical examples and solutions for every webinar and practical assignment in the course.
 
 ## ✨ Key Project Features
 
@@ -99,7 +115,7 @@ This repository contains the complete set of practical examples and solutions fo
 | **Introductory Lessons**                 |                     |                                                                    |                                                                                                                      |
 | 1                                        | Introductory Lesson | 0.1 Android Developer Tools                                        | [`webinars/1.HelloWorld`](https://github.com/motorro/Android/tree/webinars/1.HelloWorld)                             |
 | 2                                        | Introductory Lesson | 0.2 An Application in Android OS. Main Components                  | [`webinars/2.Android`](https://github.com/motorro/Android/tree/webinars/2.Android)                                   |
-| 3                                        | Introductory Lesson | 0.3 Example of Android App Architecture, Data Flow                 | [`webinars/3.Android_app_architecture`](https://github.com/motorro/Android/tree/webinars/3.Android_app_architecture) |
+| 3                                        | Introductory Lesson | 0.3 Example of Android App Architecture, Data Flow                 | [`webinars/3.Android_app_architecture`](https://github.com/motorro/Android/tree/webinars/3.Android-App-Architecture) |
 | **1. Classic Android**                   |                     |                                                                    |                                                                                                                      |
 | 4                                        | Core Lectures       | 1.1 Activity: Intent, Result Contracts, Permission Request         | [`webinars/4.Activity`](https://github.com/motorro/Android/tree/webinars/4.Activity)                                 |
 | 5                                        | Core Lectures       | 1.2 Activity: Lifecycle                                            | [`webinars/5.Lifecycle`](https://github.com/motorro/Android/tree/webinars/5.Lifecycle)                               |
