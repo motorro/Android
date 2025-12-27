@@ -82,7 +82,7 @@ class UpsertTask(context: AppContext, data: AppData, private val task: Task, tas
      * Updates task data
      */
     override suspend fun TasksRepository.runUpdate() {
-        upsertTask(data.user.name, task)
+        upsertTaskAsync(data.user.name, task)
     }
 
     /**
@@ -101,7 +101,7 @@ class DeleteTask(context: AppContext, data: AppData, private val taskId: TaskId,
      * Updates task data
      */
     override suspend fun TasksRepository.runUpdate() {
-        deleteTask(data.user.name, taskId)
+        deleteTaskAsync(data.user.name, taskId)
     }
 
     /**

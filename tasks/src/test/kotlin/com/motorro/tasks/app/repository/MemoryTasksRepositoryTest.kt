@@ -7,6 +7,7 @@ import com.motorro.tasks.app.data.AppError
 import com.motorro.tasks.app.net.TasksApi
 import com.motorro.tasks.app.task1
 import com.motorro.tasks.app.task2
+import com.motorro.tasks.app.work.TaskUpdateWorker
 import com.motorro.tasks.auth.data.SessionError
 import com.motorro.tasks.data.ErrorCode
 import com.motorro.tasks.data.HttpResponse
@@ -17,8 +18,11 @@ import com.motorro.tasks.data.TaskUpdates
 import com.motorro.tasks.data.Version
 import com.motorro.tasks.data.VersionResponse
 import io.mockk.Ordering
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
@@ -39,10 +43,14 @@ import kotlin.test.assertNotEquals
 class MemoryTasksRepositoryTest {
     private val api: TasksApi = mockk()
     private val dispatcher = UnconfinedTestDispatcher()
+    private val scheduler: TaskUpdateWorker.Scheduler = mockk {
+        every { this@mockk.schedule(any(), any()) } just Runs
+    }
 
     private fun createRepository() = TasksRepository.Impl(
         api,
-        MemoryTaskStorage(TestDispatchers(dispatcher))
+        MemoryTaskStorage(TestDispatchers(dispatcher)),
+        scheduler
     )
 
     @Test
@@ -171,6 +179,48 @@ class MemoryTasksRepositoryTest {
                 assertNotEquals(ver1, it.nextVersion)
                 assertEquals(listOf(TaskCommand.Upsert(task2)), it.commands)
             })
+        }
+    }
+
+    @Test
+    fun upsertsTaskAsync() = runTest(dispatcher) {
+        val repository = createRepository()
+        val ver1 = Version("ver1")
+        coEvery { api.getUpdates(anyNullable()) } returns HttpResponse.Data(
+            TaskUpdates(
+                ver1,
+                listOf(task1).map(TaskCommand::Upsert)
+            )
+        )
+        every { scheduler.schedule(any(), any()) } just Runs
+
+        val tasks = LinkedList<Collection<Task>>()
+        val tCollector = launch {
+            repository.getTasks(USER_NAME).take(3).collect(tasks::add)
+        }
+
+        val versions = LinkedList<Version?>()
+        val vCollector = launch {
+            repository.getVersion(USER_NAME).take(2).collect(versions::add)
+        }
+
+        repository.upsertTaskAsync(USER_NAME, task2)
+
+        joinAll(tCollector, vCollector)
+        assertEquals(
+            listOf(emptyList(), listOf(task1), listOf(task1, task2)),
+            tasks.map { it.toList() }
+        )
+        assertEquals(2, versions.size)
+
+        coVerify {
+            api.getUpdates(null)
+            scheduler.schedule(
+                USER_NAME,
+                withArg {
+                    assertEquals(listOf(TaskCommand.Upsert(task2)), it)
+                }
+            )
         }
     }
 

@@ -6,6 +6,7 @@ import com.motorro.tasks.app.data.AppError
 import com.motorro.tasks.app.data.toApp
 import com.motorro.tasks.app.net.TasksApi
 import com.motorro.tasks.app.net.netResult
+import com.motorro.tasks.app.work.TaskUpdateWorker
 import com.motorro.tasks.data.ErrorCode
 import com.motorro.tasks.data.Task
 import com.motorro.tasks.data.TaskCommand
@@ -45,6 +46,13 @@ interface TasksRepository : ReadonlyTasks {
     suspend fun upsertTask(userName: UserName, task: Task)
 
     /**
+     * Insert / update with background sync
+     * @param userName Bound user
+     * @param task Task to update
+     */
+    suspend fun upsertTaskAsync(userName: UserName, task: Task)
+
+    /**
      * Delete task
      * @param userName Bound user
      * @param taskId Task ID
@@ -52,11 +60,26 @@ interface TasksRepository : ReadonlyTasks {
     suspend fun deleteTask(userName: UserName, taskId: TaskId)
 
     /**
+     * Delete task with background sync
+     * @param userName Bound user
+     * @param taskId Task ID
+     */
+    suspend fun deleteTaskAsync(userName: UserName, taskId: TaskId)
+
+    /**
+     * Schedules updates to be synchronized
+     * @param userName Bound user
+     * @param commands Commands to run
+     */
+    suspend fun runUpdates(userName: UserName, commands: List<TaskCommand>)
+
+    /**
      * Repository implementation (memory caching)
      */
     class Impl @Inject constructor(
         private val tasksApi: TasksApi,
-        private val storage: ReadWriteTasks
+        private val storage: ReadWriteTasks,
+        private val updatesScheduler: TaskUpdateWorker.Scheduler
     ) : TasksRepository, ReadonlyTasks by storage, Logging {
         /**
          * Update task list from server
@@ -105,12 +128,73 @@ interface TasksRepository : ReadonlyTasks {
         }
 
         /**
+         * Insert / update with background sync
+         * @param userName Bound user
+         * @param task Task to update
+         */
+        override suspend fun upsertTaskAsync(userName: UserName, task: Task) {
+            d { "Upserting task: $task" }
+            registerUpdates(userName, listOf(TaskCommand.Upsert(task)))
+        }
+
+        /**
          * Delete task
          * @param taskId Task ID
          */
         override suspend fun deleteTask(userName: UserName, taskId: TaskId) {
             d { "Deleting task: $taskId" }
             updateServer(userName, listOf(TaskCommand.Delete(taskId)))
+        }
+
+        /**
+         * Delete task with background sync
+         * @param userName Bound user
+         * @param taskId Task ID
+         */
+        override suspend fun deleteTaskAsync(userName: UserName, taskId: TaskId) {
+            d { "Deleting task: $taskId" }
+            registerUpdates(userName, listOf(TaskCommand.Delete(taskId)))
+        }
+
+        /**
+         * Optimistically registers updates locally
+         * and schedules background sever sync
+         */
+        private suspend fun registerUpdates(userName: UserName, commands: List<TaskCommand>) {
+            val currentVersion = storage.getVersion(userName).firstOrNull()
+            if (null == currentVersion) {
+                d { "Empty version. Updating data..." }
+                doLoad(userName, null).getOrThrow()
+                registerUpdates(
+                    userName,
+                    commands
+                )
+                return
+            }
+
+            // Save to database (optimistic write)
+            d { "Updating database..." }
+            storage.update(
+                userName,
+                TaskUpdates(
+                    currentVersion,
+                    commands
+                )
+            )
+
+            // Schedule updates to server
+            d { "Scheduling server sync..." }
+            updatesScheduler.schedule(userName, commands)
+        }
+
+        /**
+         * Runs a batch of commands
+         * @param userName Bound user
+         * @param commands Commands to run
+         */
+        override suspend fun runUpdates(userName: UserName, commands: List<TaskCommand>) {
+            d { "Running commands: ${commands.size}" }
+            updateServer(userName, commands)
         }
 
         /**

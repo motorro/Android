@@ -7,25 +7,24 @@ import com.motorro.tasks.data.TaskUpdates
 import com.motorro.tasks.data.Version
 import com.motorro.tasks.data.VersionResponse
 import com.motorro.tasks.data.nextVersion
+import io.ktor.util.logging.KtorSimpleLogger
 import java.util.Deque
 import java.util.LinkedList
 import java.util.concurrent.locks.ReentrantReadWriteLock
+
+internal val LOGGER = KtorSimpleLogger("com.motorro.tasks.server.TaskUpdates")
 
 class TaskUpdates(toCreate: Sequence<Task>) {
     private val lock = ReentrantReadWriteLock()
     private val read = lock.readLock()
     private val write = lock.writeLock()
 
-    private val syncList: Deque<SyncEntry>
-
-    init {
-        syncList = LinkedList(listOf(
-            SyncEntry(
-                version = nextVersion(),
-                commands = toCreate.map(TaskCommand::Upsert).toList()
-            )
-        ))
-    }
+    private val syncList: Deque<SyncEntry> = LinkedList(listOf(
+        SyncEntry(
+            version = nextVersion(),
+            commands = toCreate.map(TaskCommand::Upsert).toList()
+        )
+    ))
 
     /**
      * returns current version
@@ -76,6 +75,8 @@ class TaskUpdates(toCreate: Sequence<Task>) {
         if (request.commands.isEmpty()) {
             return getCurrentVersion()
         }
+
+        LOGGER.info("Updating tasks: $request")
 
         write.lock()
         try {
