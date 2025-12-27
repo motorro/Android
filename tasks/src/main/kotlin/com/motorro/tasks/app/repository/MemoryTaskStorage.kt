@@ -8,16 +8,13 @@ import com.motorro.tasks.data.TaskId
 import com.motorro.tasks.data.TaskUpdates
 import com.motorro.tasks.data.UserName
 import com.motorro.tasks.data.Version
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MemoryTaskStorage  @Inject constructor(private val dispatchers: DispatcherProvider, private val scope: CoroutineScope) : ReadWriteTasks, Logging {
+class MemoryTaskStorage  @Inject constructor(private val dispatchers: DispatcherProvider) : ReadWriteTasks, Logging {
     /**
      * Combined tasks
      */
@@ -26,16 +23,16 @@ class MemoryTaskStorage  @Inject constructor(private val dispatchers: Dispatcher
     /**
      * Latest version
      */
-    override fun getVersion(userName: UserName): StateFlow<Version?> = tasks
-        .map { it[userName]?.version }
-        .stateIn(scope, SharingStarted.Lazily, tasks.value[userName]?.version)
+    override fun getVersion(userName: UserName): Flow<Version?> = tasks.map {
+        it[userName]?.version
+    }
 
     /**
      * Flow of tasks
      */
-    override fun getTasks(userName: UserName): StateFlow<Collection<Task>> = tasks
-        .map { it[userName]?.tasks?.values.orEmpty() }
-        .stateIn(scope, SharingStarted.Lazily, tasks.value[userName]?.tasks?.values.orEmpty())
+    override fun getTasks(userName: UserName): Flow<Collection<Task>> = tasks.map {
+        it[userName]?.tasks?.values.orEmpty()
+    }
 
     /**
      * Updates storage with new data
