@@ -112,12 +112,21 @@ dependencies {
 
     // DI
     ksp(libs.hilt.android.compiler)
+    ksp(libs.hilt.androidx)
     implementation(libs.hilt.android)
 
     // Room
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+
+    // Work manager
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.work.ktx)
+    implementation(libs.hilt.work)
+
+    // Startup initialization
+    implementation(libs.androidx.startup)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)

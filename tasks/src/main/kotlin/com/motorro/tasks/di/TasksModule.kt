@@ -9,6 +9,7 @@ import com.motorro.tasks.app.repository.ReadWriteTasks
 import com.motorro.tasks.app.repository.TasksRepository
 import com.motorro.tasks.app.repository.db.TasksDao
 import com.motorro.tasks.app.repository.db.TasksDb
+import com.motorro.tasks.app.work.TaskUpdateWorker
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -51,4 +52,8 @@ interface TasksBindingModule {
     @Binds
     @Singleton
     fun tasksRepository(impl: TasksRepository.Impl): TasksRepository
+
+    @Binds
+    @Singleton
+    fun updateScheduler(impl: TaskUpdateWorker.Scheduler.Impl): TaskUpdateWorker.Scheduler
 }

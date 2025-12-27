@@ -42,8 +42,7 @@ fun newTaskTemplate(userName: UserName): Task = Task(
     due = null
 )
 
-
-    /**
+/**
  * Task update batch
  * Server -> Client
  * @property latestVersion Latest version on server
