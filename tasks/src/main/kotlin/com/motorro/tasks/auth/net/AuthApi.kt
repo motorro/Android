@@ -5,6 +5,7 @@ import com.motorro.tasks.core.net.platformUrl
 import com.motorro.tasks.data.AuthRequest
 import com.motorro.tasks.data.HttpResponse
 import com.motorro.tasks.data.SessionClaims
+import com.motorro.tasks.di.LoginHttp
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -24,7 +25,7 @@ interface AuthApi {
      * Ktor API implementation
      */
     class Impl @Inject constructor(
-        private val httpClient: HttpClient,
+        @LoginHttp private val httpClient: HttpClient,
         private val dispatchers: DispatcherProvider
     ) : AuthApi {
         override suspend fun login(credentials: AuthRequest): HttpResponse<SessionClaims> {

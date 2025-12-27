@@ -4,6 +4,7 @@ import com.motorro.tasks.data.AuthRequest
 import com.motorro.tasks.data.ErrorCode
 import com.motorro.tasks.data.HttpResponse
 import com.motorro.tasks.data.SessionClaims
+import com.motorro.tasks.data.UserName
 import com.motorro.tasks.data.httpResponseModule
 import io.ktor.client.request.accept
 import io.ktor.client.request.get
@@ -65,7 +66,7 @@ class ApplicationTest {
             accept(ContentType.Application.Json)
             contentType(ContentType.Application.Json)
             setBody(
-                json.encodeToString(AuthRequest.serializer(), AuthRequest("cool", "hacker"))
+                json.encodeToString(AuthRequest.serializer(), AuthRequest(UserName("cool"), "hacker"))
             )
         }
         assertEquals(HttpStatusCode.Forbidden, response.status)

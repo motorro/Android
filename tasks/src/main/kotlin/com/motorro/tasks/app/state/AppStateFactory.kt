@@ -1,6 +1,7 @@
 package com.motorro.tasks.app.state
 
 import com.motorro.tasks.app.data.AppData
+import com.motorro.tasks.data.UserName
 import javax.inject.Inject
 
 /**
@@ -22,7 +23,7 @@ interface AppStateFactory {
      * @param userName Username if known
      * @param message Login message if any
      */
-    fun loggingIn(userName: String? = null, message: String? = null): AppState
+    fun loggingIn(userName: UserName? = null, message: String? = null): AppState
 
     /**
      * Logs user out
@@ -66,7 +67,7 @@ interface AppStateFactory {
             onBack = { terminated() }
         )
 
-        override fun loggingIn(userName: String?, message: String?) = createLogin(
+        override fun loggingIn(userName: UserName?, message: String?) = createLogin(
             context = context,
             userName = userName,
             message = message,

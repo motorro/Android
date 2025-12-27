@@ -2,6 +2,7 @@ package com.motorro.tasks.login.state
 
 import com.motorro.tasks.auth.data.SessionError
 import com.motorro.tasks.data.SessionClaims
+import com.motorro.tasks.data.UserName
 import com.motorro.tasks.login.LoginFlowHost
 import com.motorro.tasks.login.data.LoginData
 import javax.inject.Inject
@@ -16,7 +17,7 @@ interface LoginStateFactory {
      * @param userName Known user-name (if any)
      * @param message Login message (if any)
      */
-    fun init(host: LoginFlowHost, userName: String? = null, message: String? = null): LoginState
+    fun init(host: LoginFlowHost, userName: UserName? = null, message: String? = null): LoginState
 
     /**
      * Creates login form
@@ -63,9 +64,9 @@ interface LoginStateFactory {
             override val factory: LoginStateFactory = this@Impl
         }
 
-        override fun init(host: LoginFlowHost, userName: String?, message: String?) = form(LoginData(
+        override fun init(host: LoginFlowHost, userName: UserName?, message: String?) = form(LoginData(
             flowHost = host,
-            userName = userName.orEmpty(),
+            userName = userName?.value.orEmpty(),
             message = message
         ))
 

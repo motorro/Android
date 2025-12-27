@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.motorro.composecore.ui.ScreenScaffold
 import com.motorro.tasks.R
 import com.motorro.tasks.app.data.AppGesture
 import com.motorro.tasks.app.data.AppUiState

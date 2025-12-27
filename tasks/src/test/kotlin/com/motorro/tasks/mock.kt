@@ -2,8 +2,9 @@ package com.motorro.tasks
 
 import com.motorro.tasks.auth.data.Session
 import com.motorro.tasks.data.SessionClaims
+import com.motorro.tasks.data.UserName
 
-internal const val USER_NAME = "username"
+internal val USER_NAME = UserName("username")
 
 internal val activeSession = Session.Active(
     claims = SessionClaims(

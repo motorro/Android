@@ -19,7 +19,7 @@ internal class LoginFormStateTest : BaseStateTest() {
 
         verify {
             stateMachine.setUiState(LoginUiState.Form(
-                userName = USER_NAME,
+                userName = USER_NAME.value,
                 password = "",
                 loginEnabled = false,
                 message = MESSAGE
@@ -38,7 +38,7 @@ internal class LoginFormStateTest : BaseStateTest() {
 
         assertEquals(
             LoginUiState.Form(
-                userName = USER_NAME,
+                userName = USER_NAME.value,
                 password = "",
                 loginEnabled = false,
                 message = MESSAGE
@@ -63,7 +63,7 @@ internal class LoginFormStateTest : BaseStateTest() {
 
         assertEquals(
             LoginUiState.Form(
-                userName = USER_NAME,
+                userName = USER_NAME.value,
                 password = "",
                 loginEnabled = false,
                 message = MESSAGE
@@ -84,7 +84,7 @@ internal class LoginFormStateTest : BaseStateTest() {
         verify {
             stateMachine.setUiState(
                 LoginUiState.Form(
-                    userName = USER_NAME,
+                    userName = USER_NAME.value,
                     password = "",
                     loginEnabled = false,
                     message = MESSAGE

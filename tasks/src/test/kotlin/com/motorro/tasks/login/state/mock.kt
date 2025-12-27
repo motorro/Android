@@ -9,6 +9,6 @@ internal const val MESSAGE = "Please login!"
 
 internal val loginData: LoginData = LoginData(
     flowHost = mockk(),
-    userName = USER_NAME,
+    userName = USER_NAME.value,
     message = MESSAGE
 )
