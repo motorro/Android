@@ -152,7 +152,7 @@ interface SessionManager {
                             emit(LceState.Error(SessionError.Authentication(response.code, response.message)))
                         }
                         else -> {
-                            // In tested an working system, consider all errors as connectivity
+                            // If tested with a working system, consider all errors as connectivity
                             emit(LceState.Error(SessionError.Network(IOException(response.message))))
                         }
                     }
