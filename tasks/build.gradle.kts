@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose)
 }
 
@@ -61,6 +62,7 @@ composeCompiler {
 dependencies {
     implementation(project(":core"))
     implementation(project(":composecore"))
+    implementation(project(":tasks:data"))
 
     // AndroidX
     implementation(libs.androidx.core.ktx)
@@ -83,10 +85,32 @@ dependencies {
     implementation(libs.commonstatemachine.machine)
     implementation(libs.commonstatemachine.coroutines)
 
+    // Serialization
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+
+    // Local storage
+    implementation(libs.androidx.datastore.ptoto)
+
+    // Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.contentJson)
+    implementation(libs.ktor.client.okhttp)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
+
+    androidTestImplementation(libs.kotlin.test)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
