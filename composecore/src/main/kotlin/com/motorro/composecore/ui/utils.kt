@@ -33,10 +33,12 @@ fun ScreenScaffold(
     navigationButton: @Composable () -> Unit = { BackButton(onBack) },
     actions: @Composable RowScope.() -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
+    fab: @Composable () -> Unit = {}
 ) {
     BackHandler(onBack = onBack)
     Scaffold(
         snackbarHost = snackbarHost,
+        floatingActionButton = fab,
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
