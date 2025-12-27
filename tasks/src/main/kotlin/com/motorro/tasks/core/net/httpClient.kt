@@ -1,0 +1,16 @@
+package com.motorro.tasks.core.net
+
+import com.motorro.tasks.data.httpResponseModule
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+
+/**
+ * Creates HTTP client
+ */
+fun getHttpClient() = HttpClient {
+    install(ContentNegotiation) {
+        json(Json { serializersModule = httpResponseModule })
+    }
+}
