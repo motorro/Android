@@ -211,6 +211,42 @@ internal class TaskListStateTest : BaseStateTest() {
     }
 
     @Test
+    fun addsTask() = runTest(dispatcher) {
+        every { tasksRepository.getTasks(any()) } returns flowOf(listOf(task1, task2)).stateIn(this)
+        every { tasksRepository.update(any()) } returns flowOf(
+            LceState.Loading(),
+            LceState.Content(Unit)
+        )
+        every { factory.task(any(), any()) } returns nextState
+
+        state.start(stateMachine)
+        state.process(AppGesture.TaskList.AddClicked)
+
+        coVerify {
+            factory.task(appData, null)
+            stateMachine.setMachineState(nextState)
+        }
+    }
+
+    @Test
+    fun selectsTask() = runTest(dispatcher) {
+        every { tasksRepository.getTasks(any()) } returns flowOf(listOf(task1, task2)).stateIn(this)
+        every { tasksRepository.update(any()) } returns flowOf(
+            LceState.Loading(),
+            LceState.Content(Unit)
+        )
+        every { factory.task(any(), any()) } returns nextState
+
+        state.start(stateMachine)
+        state.process(AppGesture.TaskList.TaskClicked(task1.id))
+
+        coVerify {
+            factory.task(appData, task1)
+            stateMachine.setMachineState(nextState)
+        }
+    }
+
+    @Test
     fun exitsOnBack() = runTest(dispatcher) {
         every { tasksRepository.getTasks(any()) } returns flowOf(listOf(task1, task2)).stateIn(this)
         every { tasksRepository.update(any()) } returns flowOf(

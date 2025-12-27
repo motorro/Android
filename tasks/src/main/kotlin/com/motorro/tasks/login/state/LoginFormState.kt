@@ -49,6 +49,7 @@ class LoginFormState(context: LoginContext, data: LoginData) : BaseLoginState(co
     /**
      * A part of [process] template to process UI gesture
      */
+    @Suppress("REDUNDANT_ELSE_IN_WHEN")
     override fun doProcess(gesture: LoginGesture) {
         when(gesture) {
             LoginGesture.Action -> {

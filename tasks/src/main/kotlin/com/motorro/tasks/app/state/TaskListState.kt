@@ -85,6 +85,15 @@ class TaskListState(
      */
     override fun doProcess(gesture: AppGesture) {
         when(gesture) {
+            AppGesture.TaskList.AddClicked -> {
+                d { "Adding task..." }
+                setMachineState(factory.task(data))
+            }
+            is AppGesture.TaskList.TaskClicked -> {
+                val task = tasks.find { gesture.id == it.id } ?: return
+                d { "Task clicked: ${gesture.id}" }
+                setMachineState(factory.task(data, task))
+            }
             AppGesture.Refresh -> {
                 d { "Refresh gesture" }
                 update()

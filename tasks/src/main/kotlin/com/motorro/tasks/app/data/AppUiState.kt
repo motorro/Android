@@ -2,6 +2,7 @@ package com.motorro.tasks.app.data
 
 import com.motorro.tasks.data.Task
 import com.motorro.tasks.login.data.LoginUiState
+import kotlinx.datetime.LocalDateTime
 
 /**
  * Application UI state
@@ -25,6 +26,17 @@ sealed class AppUiState {
         val tasks: Collection<Task>,
         val isLoading: Boolean,
         val error: AppError?
+    ) : AppUiState()
+
+    /**
+     * Task edit screen
+     */
+    data class EditTask(
+        val title: String,
+        val description: String,
+        val due: LocalDateTime?,
+        val completeVisible: Boolean,
+        val saveEnabled: Boolean
     ) : AppUiState()
 
     /**
