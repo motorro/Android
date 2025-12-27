@@ -21,7 +21,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -35,12 +34,9 @@ class MemoryTasksRepositoryTest {
     private val api: TasksApi = mockk()
     private val dispatcher = UnconfinedTestDispatcher()
 
-    private fun TestScope.createRepository() = TasksRepository.Impl(
+    private fun createRepository() = TasksRepository.Impl(
         api,
-        MemoryTaskStorage(
-            TestDispatchers(dispatcher),
-            backgroundScope
-        )
+        MemoryTaskStorage(TestDispatchers(dispatcher))
     )
 
     @Test

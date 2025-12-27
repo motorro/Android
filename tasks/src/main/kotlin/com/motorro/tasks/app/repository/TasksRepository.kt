@@ -11,6 +11,8 @@ import com.motorro.tasks.data.TaskId
 import com.motorro.tasks.data.UserName
 import com.motorro.tasks.data.Version
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -54,9 +56,9 @@ interface TasksRepository : ReadonlyTasks {
         /**
          * Update task list from server
          */
-        override fun update(userName: UserName): Flow<LceState<Unit, AppError>> {
+        override fun update(userName: UserName): Flow<LceState<Unit, AppError>> = flow {
             d { "Updating..." }
-            return load(userName, storage.getVersion(userName).value)
+            emitAll(load(userName, storage.getVersion(userName).firstOrNull()))
         }
 
         /**
