@@ -3,7 +3,6 @@ package com.motorro.tasks.server
 import com.motorro.tasks.data.AuthRequest
 import com.motorro.tasks.data.HttpResponse
 import com.motorro.tasks.data.SessionClaims
-import com.motorro.tasks.data.UserName
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.UserIdPrincipal
@@ -11,14 +10,7 @@ import io.ktor.server.auth.bearer
 import io.ktor.server.request.receiveNullable
 import io.ktor.server.response.respond
 import io.ktor.server.routing.RoutingContext
-import org.jetbrains.annotations.VisibleForTesting
 
-@VisibleForTesting
-internal const val TOKEN = "token123"
-@VisibleForTesting
-internal val USERNAME = UserName("username")
-@VisibleForTesting
-internal const val PASSWORD = "password"
 
 fun AuthenticationConfig.stubBearer(name: String? = null) {
     bearer(name) {
