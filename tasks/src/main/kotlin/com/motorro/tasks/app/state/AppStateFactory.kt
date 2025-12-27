@@ -91,7 +91,7 @@ interface AppStateFactory {
 
         override fun taskList(data: AppData) = createTaskList(
             context,
-            data
+            data,
         )
 
         override fun terminated(): AppState = Terminated(context)

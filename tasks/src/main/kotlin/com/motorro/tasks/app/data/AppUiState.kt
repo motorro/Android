@@ -1,5 +1,6 @@
 package com.motorro.tasks.app.data
 
+import com.motorro.tasks.data.Task
 import com.motorro.tasks.login.data.LoginUiState
 
 /**
@@ -18,9 +19,13 @@ sealed class AppUiState {
     data class LoggingIn(val child: LoginUiState) : AppUiState()
 
     /**
-     * Task list screen (dummy at this point)
+     * Task list screen
      */
-    data object TaskList : AppUiState()
+    data class TaskList(
+        val tasks: Collection<Task>,
+        val isLoading: Boolean,
+        val error: AppError?
+    ) : AppUiState()
 
     /**
      * Fatal application error
