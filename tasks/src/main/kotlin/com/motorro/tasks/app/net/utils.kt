@@ -27,6 +27,7 @@ suspend inline fun <R: Any> netResult(block: () -> HttpResponse<R>): Result<R> {
         return Result.failure(AppError.Network(e))
     }
 
+    @Suppress("REDUNDANT_ELSE_IN_WHEN")
     return when(response) {
         is HttpResponse.Data -> {
             Result.success(response.data)

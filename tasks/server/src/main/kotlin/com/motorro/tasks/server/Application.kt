@@ -3,11 +3,11 @@ package com.motorro.tasks.server
 import com.motorro.tasks.data.ErrorCode
 import com.motorro.tasks.data.HttpResponse
 import com.motorro.tasks.data.Task
-import com.motorro.tasks.data.TaskId
 import com.motorro.tasks.data.TaskUpdates
 import com.motorro.tasks.data.Version
 import com.motorro.tasks.data.VersionResponse
 import com.motorro.tasks.data.httpResponseModule
+import com.motorro.tasks.data.nextTaskId
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -24,7 +24,6 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import kotlinx.serialization.json.Json
-import java.util.UUID
 
 fun main() {
     embeddedServer(
@@ -37,7 +36,7 @@ fun main() {
 
 private val taskUpdates = TaskUpdates(sequenceOf(
     Task(
-        id = TaskId(UUID.randomUUID().toString()),
+        id = nextTaskId(),
         author = USERNAME,
         title = "My first task",
         description = "Description 1",

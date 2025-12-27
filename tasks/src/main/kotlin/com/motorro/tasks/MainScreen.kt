@@ -9,6 +9,7 @@ import com.motorro.core.error.WithRetry
 import com.motorro.tasks.app.data.AppGesture
 import com.motorro.tasks.app.data.AppUiState
 import com.motorro.tasks.login.ui.LoginFlowScreen
+import com.motorro.tasks.ui.TaskEditScreen
 import com.motorro.tasks.ui.TaskListScreen
 
 @Composable
@@ -22,6 +23,7 @@ fun MainScreen(state: AppUiState, onComplete: () -> Unit, onGesture: (AppGesture
                 onGesture(AppGesture.Login(it))
             }
             is AppUiState.TaskList -> TaskListScreen(state, onGesture)
+            is AppUiState.EditTask -> TaskEditScreen(state, onGesture)
             is AppUiState.Error -> FatalErrorScreen(
                 error = state.error.message,
                 retriable = true == (state.error as? WithRetry)?.retriable,

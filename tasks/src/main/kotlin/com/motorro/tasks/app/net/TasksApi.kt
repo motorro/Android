@@ -42,7 +42,7 @@ interface TasksApi {
      * Ktor API implementation
      */
     class Impl @Inject constructor(
-        @AppHttp private val httpClient: HttpClient,
+        @param:AppHttp private val httpClient: HttpClient,
         private val dispatchers: DispatcherProvider
     ) : TasksApi {
         override suspend fun getVersion(): HttpResponse<VersionResponse> {

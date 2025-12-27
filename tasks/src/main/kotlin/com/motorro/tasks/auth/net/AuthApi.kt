@@ -25,7 +25,7 @@ interface AuthApi {
      * Ktor API implementation
      */
     class Impl @Inject constructor(
-        @LoginHttp private val httpClient: HttpClient,
+        @param:LoginHttp private val httpClient: HttpClient,
         private val dispatchers: DispatcherProvider
     ) : AuthApi {
         override suspend fun login(credentials: AuthRequest): HttpResponse<SessionClaims> {

@@ -5,15 +5,23 @@
 
     <string name="title_login">Login</string>
     <string name="title_task_list">Task list</string>
+    <string name="title_task">Task</string>
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_add">Add task</string>
+    <string name="hint_title">Task title</string>
+    <string name="hint_description">Task description</string>
+    <string name="hint_no_date">No due date</string>
+    <string name="hint_no_time">No due time</string>
     <string name="btn_login">Login</string>
     <string name="btn_logout">Logout</string>
     <string name="btn_refresh">Refresh</string>
     <string name="btn_retry">Retry</string>
     <string name="btn_close">Close</string>
     <string name="btn_dismiss">Dismiss</string>
+    <string name="btn_complete">Complete</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_add">Add task</string>
 
     <string name="err_authentication">Authentication error: %s</string>
     <string name="err_workflow">Workflow error: %s</string>
