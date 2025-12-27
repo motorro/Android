@@ -3,6 +3,7 @@ package com.motorro.tasks.server
 import com.motorro.tasks.data.AuthRequest
 import com.motorro.tasks.data.HttpResponse
 import com.motorro.tasks.data.SessionClaims
+import com.motorro.tasks.data.UserName
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.UserIdPrincipal
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.VisibleForTesting
 @VisibleForTesting
 internal const val TOKEN = "token123"
 @VisibleForTesting
-internal const val USERNAME = "username"
+internal val USERNAME = UserName("username")
 @VisibleForTesting
 internal const val PASSWORD = "password"
 
@@ -24,7 +25,7 @@ fun AuthenticationConfig.stubBearer(name: String? = null) {
         realm = name
         authenticate { credential ->
             if (TOKEN == credential.token) {
-                UserIdPrincipal(USERNAME)
+                UserIdPrincipal(USERNAME.value)
             } else {
                 null
             }

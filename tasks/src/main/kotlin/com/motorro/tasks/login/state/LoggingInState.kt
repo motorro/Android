@@ -3,6 +3,7 @@ package com.motorro.tasks.login.state
 import com.motorro.core.lce.LceState
 import com.motorro.tasks.auth.SessionManager
 import com.motorro.tasks.data.AuthRequest
+import com.motorro.tasks.data.UserName
 import com.motorro.tasks.login.data.LoginData
 import com.motorro.tasks.login.data.LoginGesture
 import com.motorro.tasks.login.data.LoginUiState
@@ -28,7 +29,7 @@ class LoggingInState(
     }
 
     private fun login() {
-        sessionManager.authenticate(AuthRequest(data.userName, data.password))
+        sessionManager.authenticate(AuthRequest(UserName(data.userName), data.password))
             .onEach {
                 when(it) {
                     is LceState.Loading -> {

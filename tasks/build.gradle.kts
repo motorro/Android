@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.contentJson)
     implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.auth)
 
     // DI
     ksp(libs.hilt.android.compiler)

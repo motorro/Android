@@ -9,11 +9,13 @@ import com.motorro.core.lce.LceState
 import com.motorro.tasks.auth.SessionManager.Impl.Companion.SessionSerializer
 import com.motorro.tasks.auth.data.Session
 import com.motorro.tasks.auth.data.SessionError
+import com.motorro.tasks.auth.data.asTokens
 import com.motorro.tasks.auth.net.AuthApi
 import com.motorro.tasks.data.AuthRequest
 import com.motorro.tasks.data.ErrorCode
 import com.motorro.tasks.data.HttpResponse
 import com.motorro.tasks.data.SessionClaims
+import com.motorro.tasks.data.UserName
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +34,7 @@ import java.io.File
 import java.io.IOException
 import java.util.LinkedList
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
@@ -41,11 +44,11 @@ import kotlin.test.assertTrue
 class SessionManagerTest {
 
     private val request = AuthRequest(
-        username = "user",
+        username = UserName("user"),
         password = "password"
     )
     private val claims = SessionClaims(
-        username = "user",
+        username = UserName("user"),
         token = "token"
     )
 
@@ -84,6 +87,15 @@ class SessionManagerTest {
             ),
             manager.session.take(2).toList()
         )
+    }
+
+    @Test
+    fun throwsUnauthorizedErrorIfNoSessionSaved() = runTest(testDispatcher) {
+        val manager = createManager()
+
+        assertFailsWith<SessionError.Authentication> {
+            manager.getTokens()
+        }
     }
 
     @Test
@@ -130,6 +142,20 @@ class SessionManagerTest {
                 LceState.Content(Session.Active(claims))
             ),
             manager.session.take(2).toList()
+        )
+    }
+
+    @Test
+    fun respondsWithTokensIfSessionIsActive() = runTest(testDispatcher) {
+        val dataStore = createDataStore()
+        val manager = createManager(dataStore)
+
+        coEvery { api.login(request) } returns HttpResponse.Data(claims)
+        manager.authenticate(request).toList()
+
+        assertEquals(
+            claims.asTokens(),
+            manager.getTokens()
         )
     }
 
