@@ -31,4 +31,5 @@ android {
 
 dependencies {
     implementation(libs.napier)
+    implementation(libs.kotlinx.coroutines)
 }
