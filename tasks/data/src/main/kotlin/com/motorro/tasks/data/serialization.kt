@@ -17,5 +17,7 @@ fun <D: Any> httpResponseModule(dataSerializer: KSerializer<D>) = SerializersMod
 val httpResponseModule = httpResponseModule(PolymorphicSerializer(Any::class)).plus(SerializersModule {
     polymorphic(Any::class) {
         subclass(SessionClaims::class)
+        subclass(TaskUpdates::class)
+        subclass(VersionResponse::class)
     }
 })

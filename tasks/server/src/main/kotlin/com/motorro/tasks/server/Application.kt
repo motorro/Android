@@ -2,21 +2,29 @@ package com.motorro.tasks.server
 
 import com.motorro.tasks.data.ErrorCode
 import com.motorro.tasks.data.HttpResponse
+import com.motorro.tasks.data.Task
+import com.motorro.tasks.data.TaskId
+import com.motorro.tasks.data.TaskUpdates
+import com.motorro.tasks.data.Version
+import com.motorro.tasks.data.VersionResponse
 import com.motorro.tasks.data.httpResponseModule
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.authenticate
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import kotlinx.serialization.json.Json
+import java.util.UUID
 
 fun main() {
     embeddedServer(
@@ -27,7 +35,18 @@ fun main() {
     ).start(wait = true)
 }
 
+private val taskUpdates = TaskUpdates(sequenceOf(
+    Task(
+        id = TaskId(UUID.randomUUID().toString()),
+        author = USERNAME,
+        title = "My first task",
+        description = "Description 1",
+        complete = false
+    )
+))
+
 fun Application.module() {
+
     install(ContentNegotiation) {
         json(Json { serializersModule = httpResponseModule })
     }
@@ -72,6 +91,17 @@ fun Application.module() {
         }
         post("/login") {
             login()
+        }
+        authenticate("client-area") {
+            get("/tasks/version") {
+                call.respond<HttpResponse<VersionResponse>>(HttpResponse.Data(taskUpdates.getCurrentVersion()))
+            }
+            get("/tasks/updates") {
+                call.respond<HttpResponse<TaskUpdates>>(HttpResponse.Data(taskUpdates.get(call.request.queryParameters["version"]?.let(::Version))))
+            }
+            post("/tasks/updates") {
+                call.respond<HttpResponse<VersionResponse>>(HttpResponse.Data(taskUpdates.register(call.receive())))
+            }
         }
     }
 }
