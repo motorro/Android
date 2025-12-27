@@ -27,3 +27,5 @@ rootProject.name = "Android"
 include(":core")
 include(":composecore")
 include(":tasks")
+include(":tasks:data")
+include(":tasks:server")
