@@ -9,7 +9,7 @@ rebase() {
 
 check() {
   echo Checking...
-  ./gradlew check
+  ./gradlew assembleDebug test
 }
 
 assemble() {
