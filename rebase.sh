@@ -1,14 +1,23 @@
-# !/bin/bash
+#!/usr/bin/env bash
 set -e
 
-rebaseCheck() {
+rebase() {
   echo Rebasing $1 onto $2...
   git checkout $1
   git rebase $2
-  ./gradlew test
 }
 
-onMaster=(
+check() {
+  echo Checking...
+  ./gradlew check
+}
+
+assemble() {
+  echo Assembling Debug...
+  ./gradlew assembleDebug
+}
+
+webinars=(
     "webinars/1.HelloWorld"
     "webinars/10.Resources-2"
     "webinars/11.View-2"
@@ -38,49 +47,65 @@ onMaster=(
     "webinars/6.Activity-Navigation"
     "webinars/7.Resources-1"
     "webinars/9.View-1"
-    "practice/1.Activity"
-    "practice/2.Layout"
-    "practice/3.Navigation"
-    "practice/4.Coroutines"
-    "practice/5.IO"
 )
 
-onPracticeNav=(
-    "practice/3.Navigation-solution"
+declare -A p1t=([branch]="practice/1.Activity" [check]="assemble")
+declare -a p1=(p1t)
+
+declare -A p2t=([branch]="practice/2.Layout" [check]="assemble")
+declare -a p2=(p2t)
+
+declare -A p3t=([branch]="practice/3.Navigation" [check]="assemble")
+declare -A p3s=([branch]="practice/3.Navigation-solution" [check]="check")
+declare -a p3=(p3t p3s)
+
+declare -A p4t=([branch]="practice/4.Coroutines" [check]="assemble")
+declare -a p4=(p4t)
+
+declare -A p5t=([branch]="practice/5.IO" [check]="assemble")
+declare -A p5s=([branch]="practice/5.IO-solution" [check]="check")
+declare -A p6t=([branch]="practice/6.DI" [check]="assemble")
+declare -A p6s=([branch]="practice/6.DI-solution" [check]="check")
+declare -A p7t=([branch]="practice/7.Compose" [check]="assemble")
+declare -A p7s=([branch]="practice/7.Compose-solution" [check]="check")
+declare -A p8t=([branch]="practice/8.Background" [check]="assemble")
+declare -A p8s=([branch]="practice/8.Background-solution" [check]="check")
+declare -a project=(
+    p5t
+    p5s
+    p6t
+    p6s
+    p7t
+    p7s
+    p8t
+    p8s
 )
 
-onPracticeCookbook=(
-    "practice/5.IO-solution"
-    "practice/6.DI"
-    "practice/6.DI-solution"
-    "practice/7.Compose"
-    "practice/7.Compose-solution"
-    "practice/8.Background"
-    "practice/8.Background-solution"
+declare -a practice=(
+  p1
+  p2
+  p3
+  p4
+  project
 )
 
 echo "===================="
-echo "= Rebase on master ="
+echo "=     Webinars     ="
 echo "===================="
-for b in ${onMaster[@]}; do
-    rebaseCheck $b "master"
+for b in ${webinars[@]}; do
+    rebase $b "master"
+    check
 done
 
-echo "======================="
-echo "= Rebase nav-practice ="
-echo "======================="
-base="practice/3.Navigation"
-for b in ${onPracticeNav[@]}; do
-    rebaseCheck $b "$base"
-    base=$b
+echo "===================="
+echo "=     Practice     ="
+echo "===================="
+declare -n prak actions
+for prak in "${practice[@]}"; do
+    declare base="master"
+    for actions in "${prak[@]}"; do
+        rebase ${actions[branch]} $base
+        base=${actions[branch]}
+        ${actions[check]}
+    done
 done
-
-echo "============================"
-echo "= Rebase cookbook-practice ="
-echo "============================"
-base="practice/5.IO"
-for b in ${onPracticeCookbook[@]}; do
-    rebaseCheck $b "$base"
-    base=$b
-done
-
