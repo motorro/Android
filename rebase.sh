@@ -16,7 +16,6 @@ rebase() {
 }
 
 check() {
-  echo "CCC: $Check"
   if [ $Check -eq 1 ]; then
       echo Checking...
       ./gradlew testDebugUnitTest --no-daemon --rerun-tasks
@@ -24,7 +23,6 @@ check() {
 }
 
 assemble() {
-  echo "CCC: $Check"
   if [ $Check -eq 1 ]; then
       echo Assembling Debug...
       ./gradlew assembleDebug --no-daemon --rerun-tasks
@@ -125,3 +123,5 @@ for prak in "${practice[@]}"; do
         ${actions[check]}
     done
 done
+
+git checkout master
