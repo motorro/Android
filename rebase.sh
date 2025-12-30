@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
+Check=1
+while getopts ':c' option; do
+  case $option in
+    c) # No check
+      Check=0
+  esac
+done
+
 rebase() {
   echo Rebasing $1 onto $2...
   git checkout $1
@@ -8,13 +16,19 @@ rebase() {
 }
 
 check() {
-  echo Checking...
-  ./gradlew testDebugUnitTest --no-daemon --rerun-tasks
+  echo "CCC: $Check"
+  if [ $Check -eq 1 ]; then
+      echo Checking...
+      ./gradlew testDebugUnitTest --no-daemon --rerun-tasks
+  fi
 }
 
 assemble() {
-  echo Assembling Debug...
-  ./gradlew assembleDebug --no-daemon --rerun-tasks
+  echo "CCC: $Check"
+  if [ $Check -eq 1 ]; then
+      echo Assembling Debug...
+      ./gradlew assembleDebug --no-daemon --rerun-tasks
+  fi
 }
 
 webinars=(
