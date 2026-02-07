@@ -1,5 +1,7 @@
 # Вебинар 32. StateMachine
 
+***[Read in English](#webinar-32-statemachine)***
+
 1. Узкие места официально рекомендуемой архитектуры и [Jetpack Navigation](https://developer.android.com/guide/navigation/use-graph/conditional)
 2. Navigation Inversion - смена традиционного подхода к навигации и архитектуре в приложении
 3. StateMachine - вариант простой и доступной UDF-архитектуры
@@ -27,3 +29,35 @@
       при этом каждый переход определен. В MVI StateMachine используется внутри ViewModel для управления сложной бизнес-логикой и генерации нового состояния 
       на основе входящих Intent и текущего состояния, обеспечивая предсказуемость.
    [] Паттерн StateMachine предназначен для сохранения состояния приложения в базе данных.
+
+---
+   
+# Webinar 32. StateMachine
+
+1.  Bottlenecks of the officially recommended architecture and [Jetpack Navigation](https://developer.android.com/guide/navigation/use-graph/conditional)
+2.  Navigation Inversion - changing the traditional approach to navigation and architecture in the application
+3.  StateMachine - a simple and accessible UDF architecture option
+
+## Self-check questions:
+
+1.  What are the difficulties of navigating with Jetpack Compose from within a `ViewModel`?
+    [] A ViewModel cannot interact with Composable functions.
+    [] A ViewModel does not have direct access to `NavController` or `Context`, which complicates direct navigation. It must delegate navigation events to the 
+       UI layer (Composable) through states or one-time events.
+    [] Jetpack Compose does not support navigation from a ViewModel.
+2.  What is the problem with the maintainability of monolithic ViewModels that serve multiple screens?
+    [] Monolithic ViewModels consume too much RAM.
+    [] Monolithic ViewModels become too large, difficult to understand, test, and modify, as they contain logic for multiple screens, which leads to tight 
+       coupling and hinders code reuse.
+    [] Monolithic ViewModels automatically block the main UI thread.
+3.  What are the main features of the MVI architecture for an external `ViewModel` client? How do we pass user actions and receive screen updates?
+    [] In MVI, the ViewModel directly manipulates UI elements.
+    [] MVI (Model-View-Intent) is characterized by a unidirectional data flow: users send actions (Intent) to the ViewModel, the ViewModel processes them and
+       generates a new state (State), which is then displayed in the View. The View only displays the state and sends Intents.
+    [] In MVI, the View directly modifies the data model.
+4.  What is the principle of the StateMachine pattern, and how does it relate to the MVI architecture?
+    [] The StateMachine pattern is used for automatic UI code generation.
+    [] The StateMachine pattern describes a system that can be in one of a finite number of states and transition between them in response to events, with each 
+       transition being defined. In MVI, a StateMachine is used inside the ViewModel to manage complex business logic and generate a new state based on incoming 
+       Intents and the current state, ensuring predictability.
+    [] The StateMachine pattern is intended for saving the application state in a database.
