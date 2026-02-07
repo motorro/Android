@@ -1,13 +1,13 @@
 [versions]
-ksp = "2.3.4"
-agp = "8.13.2"
+ksp = "2.3.5"
+agp = "9.0.0"
 minSdk = "26"
 compileSdk = "36"
 targetSdk = "36"
-kotlin = "2.2.21"
+kotlin = "2.3.10"
 kotlinImmutable = "0.4.0"
 coroutines = "1.10.2"
-serialization = "1.9.0"
+serialization = "1.10.0"
 dateTime = "0.7.1"
 desugar = "2.1.5"
 coreKtx = "1.17.0"
@@ -18,49 +18,51 @@ coreTesting = "2.2.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
-activity = "1.12.2"
+activity = "1.12.3"
 fragment = "1.8.9"
 constraintlayout = "2.2.1"
 lifecycleLivedataKtx = "2.10.0"
 lifecycleViewmodelKtx = "2.10.0"
 lifecycleViewmodelCompose = "2.10.0"
-navigation = "2.9.6"
+navigation = "2.9.7"
 lifecycle = "2.10.0"
 recyclerview = "1.4.0"
-composeBom = "2025.12.01"
+composeBom = "2026.01.01"
 composeHotReload = "1.0.0"
-composeMultiplatform = "1.9.3"
-activityCompose = "1.12.2"
-statemachine = "3.2.2"
+composeMultiplatform = "1.10.0"
+composeMultiplatformMaterial = "1.9.0"
+composeMultiplatformMaterialIcons = "1.7.3"
+activityCompose = "1.12.3"
+statemachine = "4.0.2"
 napier = "2.7.1"
-mockk = "1.14.7"
+mockk = "1.14.9"
 jetbrainsKotlinJvm = "2.1.0"
-ktor = "3.3.3"
-logback = "1.5.23"
+ktor = "3.4.0"
+logback = "1.5.27"
 datastore = "1.2.0"
-dagger = "2.57.2"
-hilt = "2.57.2"
+dagger = "2.59.1"
+hilt = "2.59.1"
 hiltAndroidx = "1.3.0"
 room = "2.8.4"
-work = "2.11.0"
+work = "2.11.1"
 startup = "1.2.0"
-camerax = "1.5.2"
+camerax = "1.5.3"
 faker = "1.0.2"
 glide = "5.0.5"
 glideCompose = "1.0.0-beta08"
 mlkit = "16.0.1"
 exif = "1.4.2"
-protobuf = "4.33.2"
+protobuf = "4.33.5"
 protobufPlugin = "0.9.6"
 crypto = "1.1.0"
 sqlite = "2.6.2"
 sqlite-jdbc = "3.51.1.0"
 okhttp = "5.3.2"
 retrofit = "3.0.0"
-exposed = "1.0.0-rc-4"
-mockmp = "2.0.2"
+exposed = "1.0.0"
+mockery = "3.1.1"
 gmsPlugin = "4.4.4"
-firebaseBom = "34.7.0"
+firebaseBom = "34.9.0"
 localbroadcast = "1.1.0"
 
 [libraries]
@@ -172,9 +174,17 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 
+compose-multiplatform-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
+compose-multiplatform-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
+compose-multiplatform-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
+compose-multiplatform-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMultiplatformMaterial" }
+compose-multiplatform-material3-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "composeMultiplatformMaterialIcons" }
+compose-multiplatform-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
+compose-multiplatform-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin"}
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
@@ -189,7 +199,7 @@ google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
-mockmp = { id = "org.kodein.mock.mockmp", version.ref = "mockmp" }
+mockery = { id = "dev.mokkery", version.ref = "mockery" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 
 [bundles]
