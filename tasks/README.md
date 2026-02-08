@@ -1,5 +1,7 @@
 # Вебинар 3. Современный технологический стек
 
+***[Read in English](#webinar-3-modern-technology-stack)***
+
 1. Современный UI: Jetpack Compose
 2. Состояние приложения и логика
 3. Обмен данными по сети
@@ -46,5 +48,53 @@
       перезагрузке устройства, а также соблюдая системные ограничения и оптимизируя потребление ресурсов.
    [] Планировщик нужен только для выполнения задач, которые должны выполняться строго по расписанию, например, будильник.
    [] Планировщик значительно усложняет код и не дает никаких реальных преимуществ.
- 
- 
+
+---
+   
+# Webinar 3. Modern Technology Stack
+
+1. Modern UI: Jetpack Compose
+2. Application state and logic
+3. Data exchange over the network
+4. Dependency management - DI
+5. Local data storage and offline-first
+6. Background tasks and scheduler
+
+## Test server:
+
+To start the server, use the `run` task of the corresponding module from the Gradle panel or enter the command:
+```shell
+./gradlew :tasks:server:run
+```
+Username: `username`
+Password: `password`
+
+The application is designed to run the server on a local computer and the application on an emulator.
+If you want to install the application on a phone, change the server address in [this file](src/main/kotlin/ru/merionet/tasks/core/Config.kt).
+
+## Self-check questions:
+
+1. What is the main principle behind Jetpack Compose?
+   [] A declarative approach to building a user interface, where you describe how the UI should look for a given state, and Compose manages the changes itself.
+   [] An imperative approach that requires explicit management of UI elements and their attributes.
+   [] XML markup to describe the UI, and then imperatively changing it in the code.
+2. What do we expect from application architecture, and why do we need it?
+   [] From the application architecture, we expect scalability, testability, maintainability, and separation of concerns. It is needed to organize the code 
+      in such a way that it is understandable, easily modifiable, and resistant to errors.
+   [] The application architecture is only needed to make it look beautiful.
+   [] The application architecture does not affect its performance in any way.
+3. What facilitates data exchange with the server?
+   [] The use of libraries for working with the network (e.g., Ktor, Retrofit), which abstract the low-level details of HTTP requests and responses, provide 
+      convenient APIs for data serialization/deserialization and error handling.
+   [] Manual implementation of all network requests using standard Java classes.
+   [] No data exchange with the server at all, as it is always difficult.
+4. What types of local storage do you know?
+   [] Local data storage can be implemented using: Room Persistence Library (for structured data in a SQLite database), files (for large amounts of unstructured
+      data), and DataStore (for asynchronous and type-safe data storage).
+   [] All data should only be stored on a remote server.
+   [] Local data storage makes no sense in modern applications.
+5. What are the advantages of using a scheduler?
+   [] Using a scheduler (WorkManager) allows you to effectively manage background tasks, ensuring their execution even when the application is closed or 
+      the device is rebooted, as well as complying with system restrictions and optimizing resource consumption.
+   [] The scheduler is only needed for tasks that must be performed strictly on schedule, such as an alarm clock.
+   [] The scheduler significantly complicates the code and provides no real advantages.
