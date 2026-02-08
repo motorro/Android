@@ -1,4 +1,7 @@
 # Вебинар 8. Ресурсы. Часть 1
+
+***[Read in English](#webinar-8-resources-part-1)***
+
 Демо-приложение к вебинару Resources #1
 
 ## Содержание
@@ -49,3 +52,55 @@
    [] `dp` (density-independent pixels) для размеров UI-элементов (масштабируются в зависимости от плотности экрана), `sp` (scale-independent pixels) 
       для размеров текста (масштабируются в зависимости от плотности экрана и настроек размера шрифта пользователя), `px` (pixels) для абсолютных размеров, 
       `in` (inches) и `mm` (millimeters) для физических размеров.
+
+---
+
+# Webinar 8. Resources. Part 1
+
+Demo application for the Resources #1 webinar
+
+## Contents
+
+1. Without resources
+2. First text resource
+3. Localization and qualifiers
+4. Formatting
+5. Vector images
+6. Dimensions
+
+## Self-check questions
+
+1. What are resources and what are the advantages of using them?
+   [] Resources are system libraries of Android that the application uses to access basic functions.
+   [] Resources are background processes that manage the lifecycle of application components.
+   [] Resources are external files (images, strings, layouts, etc.) that are separated from the application code. Advantages include easy localization, support 
+      for different device configurations (screens, orientation), and simplification of application maintenance and updates.
+2. What types of resources do you know?
+   [] Functions, methods, interfaces.
+   [] Databases, network requests, inner classes.
+   [] Strings, layouts, drawables, colors, styles and themes, dimensions, raw resources, animations, menus.
+3. What resource qualifiers do you know and what are they used for?
+   [] Qualifiers determine the order in which resources are loaded when the application starts.
+   [] Qualifiers allow Android to select the most appropriate resources for the current device configuration. Examples: `ru` (Russian), `en` (English), `land` 
+      (landscape orientation), `port` (portrait orientation), `hdpi` (screen density), `sw600dp` (screen width 600dp or more).
+   [] Qualifiers are used to restrict access to resources from different application modules.
+4. What text formatting methods do you know?
+   [] Text formatting is achieved by creating separate string resources for each text variant.
+   [] Only external CSS files are used for text formatting in Android.
+   [] String formatting using placeholders (e.g., `%s`, `%d`), using HTML tags within string resources for basic formatting (e.g., `<b>`, `<i>`), and using 
+      SpannableString for more complex formatting in code.
+5. How to access resources from code?
+   [] Resources are accessed by directly reading files from the device's file system.
+   [] To access resources, you need to create an instance of the `ResourceLoader` class.
+   [] Resources are accessed through the `R` class. For example, `R.string.my_string`, `R.layout.my_layout`, `R.drawable.my_image`. To get the value of 
+      a resource, `Context` methods such as `getString(R.string.my_string)` and `getDrawable(R.drawable.my_image)` are used.
+6. What are the advantages of using vector images?
+   [] Vector images load faster than raster images, regardless of their complexity.
+   [] Vector images scale without loss of quality on any screen size, take up less space in the APK compared to raster images for different densities, and are 
+      easy to modify (color, size) without recreating the file.
+   [] Vector images support a wider range of color spaces.
+7. What units of measurement are used in resources?
+   [] Only `px` (pixels) for all types of dimensions.
+   [] `pt` (points) and `pc` (picas) for all types of dimensions.
+   [] `dp` (density-independent pixels) for UI element dimensions (scale depending on screen density), `sp` (scale-independent pixels) for text sizes (scale 
+      depending on screen density and user's font size settings), `px` (pixels) for absolute sizes, `in` (inches) and `mm` (millimeters) for physical sizes.
