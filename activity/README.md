@@ -1,5 +1,7 @@
 # Вебинар 4. Activity
 
+***[Read in English](#webinar-4-activity)***
+
 1. Компонента Activity
 2. Запуск Activity, Intent, передача данных
 3. Получение результата от Activity и Result Contracts
@@ -49,3 +51,56 @@
       как эта функция будет использоваться. Запрашивать их следует нечасто, чтобы не раздражать пользователя.
    [] Runtime Permissions следует запрашивать при каждом запуске приложения, независимо от того, нужны ли они.
    [] Runtime Permissions следует запрашивать только один раз, при установке приложения.
+
+---
+
+# Webinar 4. Activity
+
+1. The Activity Component
+2. Starting an Activity, Intent, passing data
+3. Getting a result from an Activity and Result Contracts
+4. Requesting Runtime Permissions
+
+## Self-check questions:
+
+1. What tasks does the Activity component solve?
+   [] An Activity provides a screen for user interaction with the application, manages the lifecycle of that screen, handles user input, and displays information.
+   [] An Activity is responsible for performing background network requests without user intervention.
+   [] An Activity is used exclusively for storing global application settings.
+
+2. What are the two main types of Intent?
+   [] Explicit Intents, which specify a specific component to start (by class name), and Implicit Intents, which declare an action, allowing the system 
+      to choose a suitable component.
+   [] Intents for sending data and Intents for receiving data.
+   [] Intents for starting an Activity and Intents for stopping an Activity.
+
+3. How and what data can we pass in an Intent?
+   [] Data can be passed in an Intent using `putExtra()` for primitive types and objects that implement `Parcelable` or `Serializable`. You can pass strings, 
+      numbers, boolean values, arrays, as well as complex objects.
+   [] Only string data can be passed in an Intent.
+   [] Only data that can fit in a URL can be passed in an Intent.
+
+4. What is Parcelable?
+   [] `Parcelable` is an Android interface for efficient object serialization, allowing them to be passed between application components (e.g., via Intent) with 
+      high performance, as it is optimized for Android IPC.
+   [] `Parcelable` is a file format for storing images in Android.
+   [] `Parcelable` is a data type used for working with SQLite databases.
+
+5. Using what mechanism can we get a result from starting an Activity?
+   [] A result from starting an Activity can be obtained using `registerForActivityResult()` and `ActivityResultContracts`, which provide a type-safe way 
+      to interact and handle results.
+   [] A result from an Activity can only be obtained if the Activity returns data through a global static variable.
+   [] It is impossible to get a result from an Activity because the components work completely in isolation.
+
+6. What are Runtime Permissions and how do you request them?
+   [] Runtime Permissions are permissions that the application requests from the user at runtime, rather than at installation. They are requested using 
+      `requestPermissions()` or `ActivityResultContracts.RequestPermission()`/`RequestMultiplePermissions()` when the application needs access to sensitive 
+      data or resources.
+   [] Runtime Permissions are permissions that are granted automatically when the application is installed.
+   [] Runtime Permissions are permissions that are requested only once when the application is first launched and cannot be changed.
+
+7. How often and when should Runtime Permissions be requested?
+   [] Runtime Permissions should be requested only when they are really needed to perform a specific function, and immediately before that function is to be 
+      used. They should be requested infrequently so as not to annoy the user.
+   [] Runtime Permissions should be requested every time the application is launched, regardless of whether they are needed.
+   [] Runtime Permissions should be requested only once, when the application is installed.
