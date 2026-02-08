@@ -1,5 +1,7 @@
 # Вебинар 5. Жизненный цикл Activity
 
+***[Read in English](#webinar-5-activity-lifecycle)***
+
 1. Жизненный цикл - Activity Lifecycle
 2. Смена конфигурации
 3. О процессе приложения
@@ -40,3 +42,48 @@
    [] Состояние Activity можно сохранить только путем записи всех данных в файл на внешнем хранилище.
    [] Сохранить состояние Activity позволяют методы `onSaveInstanceState()` (для небольшого объема данных, сохраняемых в `Bundle`) и 
       `onRetainNonConfigurationInstance()` (для более сложных объектов, которые не должны пересоздаваться при смене конфигурации).
+
+---
+
+# Webinar 5. Activity Lifecycle
+
+1. Lifecycle - Activity Lifecycle
+2. Configuration Change
+3. About the Application Process
+4. Saving State (Instance State)
+
+## Self-check questions:
+
+1. What is the purpose of the Activity lifecycle?
+   [] The Activity lifecycle is needed to keep the application always active in the background.
+   [] The Activity lifecycle is used to determine the launch order of other application components.
+   [] The Activity lifecycle is needed to manage the state of an activity, use resources efficiently, and ensure the correct behavior of the application during 
+      various events (e.g., screen rotation, incoming call, switching between applications).
+
+2. Which method is called when an Activity is created?
+   [] The `onCreate()` method is called when an Activity is created.
+   [] The `onStop()` method is called when an Activity is created.
+   [] The `onDestroy()` method is called when an Activity is created.
+
+3. Which pair of methods is called when an Activity goes into the background and returns?
+   [] When an Activity goes into the background, `onStart()` is called, and when it returns, `onStop()` is called.
+   [] When an Activity goes into the background, `onRestart()` is called, and when it returns, `onCreate()` is called.
+   [] When an Activity goes into the background, `onPause()` is called, and when it returns from the background, `onResume()` is called.
+
+4. What is a configuration change and how does it affect the internal state of an Activity?
+   [] A configuration change is a change in the application's theme, which does not affect the state of the Activity.
+   [] A configuration change is a change in the device's characteristics, such as screen orientation, keyboard availability, or language. It leads to the 
+      destruction and recreation of the Activity by default, which can lead to the loss of temporary state if it is not saved.
+   [] A configuration change is an update to the Android version on the device, which does not affect the application's operation.
+
+5. Which processes can be destroyed by the system and why?
+   [] The system destroys processes only at the user's request.
+   [] The system destroys all processes after 24 hours of continuous operation.
+   [] The system can destroy processes when it is low on memory, usually starting with processes that are in the cache (Activity in the `onStop()` 
+      or `onDestroy()` state), to free up resources for more important active processes.
+
+6. Which methods allow you to save the state of an Activity?
+   [] The state of an Activity is saved automatically by the system without developer intervention.
+   [] The state of an Activity can only be saved by writing all data to a file on external storage.
+   [] The state of an Activity can be saved using the `onSaveInstanceState()` method (for a small amount of data saved in a `Bundle`) 
+      and `onRetainNonConfigurationInstance()` (for more complex objects that should not be recreated on configuration change).
