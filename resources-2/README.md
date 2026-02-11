@@ -1,5 +1,7 @@
 # Вебинар 10. Стили и темы
 
+***[Read in English](#webinar-10-styles-and-themes)***
+
 1. Стили и темы. Что это такое, и как они работают.
 2. Стили. Как их создавать и использовать.
 3. Темы. Создание и использование.
@@ -45,3 +47,54 @@
    [] Собственный атрибут темы создается в XML-файле (`res/values/attrs.xml`) с использованием тега `<attr>` внутри тега `<declare-styleable>`, а затем 
       используется в теме.
    [] Собственный атрибут темы создается путем модификации системных файлов Android.
+
+---
+
+# Webinar 10. Styles and Themes
+
+1. Styles and themes. What they are and how they work.
+2. Styles. How to create and use them.
+3. Themes. Creating and using them.
+4. Component attributes and their priorities.
+
+## Self-check questions
+
+1. What is a style and for what types of resources is it used?
+   [] A style is a Java class that manages the application's logic.
+   [] A style is a collection of attributes that defines the appearance and formatting of a single View or ViewGroup. It is used for resource types such as text
+      fields, buttons, layouts, and other user interface elements.
+   [] A style is a way of organizing files in an Android project.
+2. How to create a style?
+   [] A style is created by calling the `createStyle()` method in Java code.
+   [] A style is created in an XML file, usually `res/values/styles.xml`, using the `<style>` tag and defining attributes within it.
+   [] A style is created automatically by Android Studio when the project is compiled.
+3. How to apply a style to a component?
+   [] A style is applied to a component in the XML layout using the `style="@style/MyStyle"` attribute.
+   [] A style is applied to a component by inheriting from it in Java code.
+   [] A style is applied to a component through the project settings in Gradle.
+4. What is a theme and how is it related to styles?
+   [] A theme is just a set of icons for the application.
+   [] A theme is a collection of styles that is applied to an entire application or Activity, rather than to an individual View. Themes and styles are related 
+      in that a theme can inherit from other themes and override or supplement their styles. A theme also provides values for attributes that styles refer to.
+   [] A theme is a way to manage network requests in an application.
+5. What are the scopes of styles and themes?
+   [] A style only affects Views created in code, and a theme only affects Views created in XML.
+   [] A style is applied to an individual View or ViewGroup. A theme is applied to an entire application (in the manifest), to a specific Activity 
+     (in the manifest), or to a part of the View hierarchy (in code using `ContextThemeWrapper` or in XML using `<androidx.appcompat.widget.ThemeUtils>` 
+     or similar).
+   [] A style and a theme have a global scope and are applied to all applications on the device.
+6. How to create a theme?
+   [] A theme is created using a special tool in Android Studio that generates code.
+   [] A theme is created similarly to a style in an XML file (`res/values/themes.xml`) using the `<style>` tag, but it usually inherits from an existing Android 
+      theme (e.g., `Theme.MaterialComponents.DayNight.NoActionBar`) and overrides or adds theme attributes.
+   [] A theme is created by changing the background color of each Activity in the application.
+7. How to apply a theme to an application?
+   [] A theme is applied to the entire application by calling the `applyTheme()` method in the main application class.
+   [] A theme is applied to the entire application by adding the `android:theme="@style/MyApplicationTheme"` attribute to the `<application>` tag 
+      in the `AndroidManifest.xml` file.
+   [] A theme is applied to the application automatically based on the user's device settings.
+8. How to create a custom theme attribute?
+   [] A custom theme attribute is created by adding a new variable to the `R` class.
+   [] A custom theme attribute is created in an XML file (`res/values/attrs.xml`) using the `<attr>` tag inside a `<declare-styleable>` tag, and then used 
+      in the theme.
+   [] A custom theme attribute is created by modifying the Android system files.
