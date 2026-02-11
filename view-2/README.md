@@ -1,5 +1,7 @@
 # Вебинар 11. View-2
 
+***[Read in English](#webinar-11-view-2)***
+
 1. Подходы к созданию собственных компонентов View
 2. Составной компонент на основе группы элементов
 3. Атрибуты и стили компонентов
@@ -31,6 +33,45 @@
    [] `onDraw()`
    [] `onMeasure()`
 6. Какой метод отвечает за отрисовку компонента?
+   [] `onMeasure()`
+   [] `onDraw()`
+   [] `onLayout()`
+
+---
+
+# Webinar 11. View-2
+
+1. Approaches to creating custom View components
+2. Composite component based on a group of elements
+3. Component attributes and styles
+4. Custom View component
+
+## Self-check questions:
+
+1. What approaches to creating custom View components do you know?
+   [] Using only standard Views from the Android SDK.
+   [] Composition (creating a composite component from existing Views) and custom drawing (inheriting from View and overriding `onDraw()`).
+   [] Only creating Views through XML files.
+2. How to create a composite component based on a group of elements?
+   [] Create a new class that inherits from `View` and override all drawing methods.
+   [] Create an XML layout that contains several Views, and then inflate this layout in a custom class that inherits from `ViewGroup` (e.g., `LinearLayout` 
+      or `ConstraintLayout`).
+   [] Create a separate class for each element and combine them in code.
+3. How do we get the values of component attributes and styles?
+   [] Extract them directly from the XML file using a parser.
+   [] Use the `Context.obtainStyledAttributes()` method with a set of attributes defined in `declare-styleable` in `attrs.xml` to get a `TypedArray` from which 
+      values can be extracted.
+   [] They are passed to the View's constructor automatically.
+4. How to create a custom View component?
+   [] Inherit from the `Activity` class and override the `onCreate()` method.
+   [] Create a new class that inherits from `View` (for custom drawing) or from `ViewGroup` (for a composite component), and implement the necessary 
+      constructors and methods (e.g., `onMeasure()`, `onDraw()`).
+   [] Create a Java class and add it to `AndroidManifest.xml`.
+5. Which method is responsible for measuring the component's dimensions?
+   [] `onLayout()`
+   [] `onDraw()`
+   [] `onMeasure()`
+6. Which method is responsible for drawing the component?
    [] `onMeasure()`
    [] `onDraw()`
    [] `onLayout()`
