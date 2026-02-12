@@ -1,5 +1,7 @@
 # Вебинар 15. Фрагменты
 
+***[Read in English](#webinar-15-fragments)***
+
 1. Фрагмент - компонент пользовательского интерфейса.
 2. FragmentManager - управление фрагментами.
 3. Повторное использование фрагментов для разных типов устройств.
@@ -37,3 +39,44 @@
    [] Общие модели (ViewModel), привязанные к жизненному циклу Activity или родительского фрагмента, позволяют нескольким фрагментам получать доступ к одним 
       и тем же данным и обмениваться ими. Изменения в ViewModel автоматически отображаются во всех подписанных фрагментах.
    [] Общие модели используются для создания статических методов, доступных всем фрагментам.
+
+---
+
+# Webinar 15. Fragments
+
+1. Fragment - user interface component.
+2. FragmentManager - managing fragments.
+3. Reusing fragments for different types of devices.
+4. Using callback functions for interaction between fragments.
+5. Passing parameters to a fragment and back.
+6. Using shared models to communicate between fragments.
+
+## Self-check questions:
+
+1. What is a fragment?
+   [] A fragment is a separate execution thread in an Android application.
+   [] A fragment is a part of an Activity's user interface that has its own lifecycle and can be reused in different Activities.
+   [] A fragment is a component responsible for background operations.
+2. How does a fragment differ from a custom View?
+   [] A fragment is always displayed full-screen, while a View can be of any size.
+   [] A fragment has its own lifecycle, which is closely tied to the lifecycle of the Activity, and can contain multiple Views. A custom View is a single 
+      UI element that does not have its own lifecycle, but only the lifecycle of its parent View or Activity.
+   [] A fragment cannot be added to an XML layout, but a View can.
+3. How are fragments managed?
+   [] Fragments are managed directly using the `Context`.
+   [] Fragments are managed using the `FragmentManager`, which allows adding, removing, replacing, and interacting with fragments in an Activity.
+   [] Fragments are managed automatically by the Android system without developer intervention.
+4. How to pass parameters to a fragment?
+   [] Parameters are passed to a fragment using global variables.
+   [] Parameters are passed to a fragment using a `Bundle` and the `setArguments()` method. These arguments can be retrieved in the fragment's constructor.
+   [] Parameters are passed to a fragment directly through its constructor.
+5. How to get a result from a fragment?
+   [] A result from a fragment is always returned via an `Intent` in the parent Activity's `onActivityResult()`.
+   [] A result from a fragment can be obtained using the `Fragment Result API` (setting a result listener in the parent component and setting the result 
+      in the fragment), shared `ViewModel`s, or through callbacks (interfaces) implemented in the parent Activity/Fragment.
+   [] A result cannot be obtained from a fragment because a fragment does not return any values.
+6. How to use shared models for communication between fragments?
+   [] Shared models are used to store data that will be accessible to only one fragment.
+   [] Shared models (ViewModel), tied to the lifecycle of an Activity or a parent fragment, allow multiple fragments to access and exchange the same data. 
+      Changes in the ViewModel are automatically reflected in all subscribed fragments.
+   [] Shared models are used to create static methods accessible to all fragments.
