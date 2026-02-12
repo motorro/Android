@@ -1,5 +1,7 @@
 # Вебинар 16. Навигация с помощью Android Jetpack Navigation
 
+***[Read in English](#webinar-16-navigation-with-android-jetpack-navigation)***
+
 1. Что такое навигационный граф?
 2. Как создать навигационный граф?
 3. Интеграция компонентов Android View с навигацией.
@@ -30,7 +32,7 @@
    [] Навигационный граф связывается с `BottomNavigationView` путем переопределения метода `onNavigationItemSelected()`.
 5. Как связать навигационный граф с Toolbar?
    [] Навигационный граф связывается с `Toolbar` путем установки слушателя кликов на кнопку "назад".
-   [] Навигационный граф связывается с `Toolbar` с помощью метода расширения `setupWithNavController()` из библиотеки `NavigationUI`. Это обеспечивает 
+   [] Навигационный граф связывается с `Toolbar` с помощью метода расшижения `setupWithNavController()` из библиотеки `NavigationUI`. Это обеспечивает 
       автоматическую настройку кнопки "назад" и отображение заголовка текущего пункта назначения.
    [] Навигационный граф связывается с `Toolbar` через глобальные переменные приложения.
 6. Каким образом можно передавать аргументы между фрагментами?
@@ -38,3 +40,45 @@
    [] Аргументы передаются между фрагментами с помощью `Bundle` и `setArguments()`, либо безопаснее и предпочтительнее с помощью Safe Args плагина, который 
       генерирует классы для безопасной передачи типов.
    [] Аргументы передаются между фрагментами через базу данных.
+
+---
+
+# Webinar 16. Navigation with Android Jetpack Navigation
+
+1. What is a navigation graph?
+2. How to create a navigation graph?
+3. Integrating Android View components with navigation.
+4. Safe argument passing between fragments.
+5. Nested navigation graphs.
+6. Deep-links
+
+## Self-check questions:
+
+1. What is a navigation graph?
+   [] A navigation graph is an XML file that describes all possible navigation paths in an application, including destinations and actions between them.
+   [] A navigation graph is a database that stores all application user data.
+   [] A navigation graph is a set of Java/Kotlin classes that manage the Activity lifecycle.
+2. How to create a navigation graph?
+   [] A navigation graph is created automatically when a new Android project is created.
+   [] A navigation graph is created in the `res/navigation` folder as a new resource file (`.xml`).
+   [] A navigation graph is created by adding dependencies to the `build.gradle` file.
+3. How to link a navigation graph with an Activity?
+   [] A navigation graph is linked with an Activity through the `AndroidManifest.xml` file.
+   [] A navigation graph is linked with an Activity by adding a `NavHostFragment` to the Activity's layout. The `NavHostFragment` is a container for 
+      the navigation graph and its destinations.
+   [] A navigation graph is linked with an Activity by calling the `bindNavigationGraph()` method in the Activity's `onCreate()`.
+4. How to link a navigation graph with a BottomNavigationView?
+   [] A navigation graph is linked with a `BottomNavigationView` by adding a click listener to each menu item.
+   [] A navigation graph is linked with a `BottomNavigationView` using the `setupWithNavController()` extension method from the `NavigationUI` library, which 
+      automatically handles menu item selection and corresponding navigation.
+   [] A navigation graph is linked with a `BottomNavigationView` by overriding the `onNavigationItemSelected()` method.
+5. How to link a navigation graph with a Toolbar?
+   [] A navigation graph is linked with a `Toolbar` by setting a click listener on the back button.
+   [] A navigation graph is linked with a `Toolbar` using the `setupWithNavController()` extension method from the `NavigationUI` library. This provides 
+      automatic back button setup and displays the title of the current destination.
+   [] A navigation graph is linked with a `Toolbar` through global application variables.
+6. How can arguments be passed between fragments?
+   [] Arguments are passed between fragments using global static fields.
+   [] Arguments are passed between fragments using a `Bundle` and `setArguments()`, or more safely and preferably using the Safe Args plugin, which generates 
+      classes for type-safe passing.
+   [] Arguments are passed between fragments through a database.
