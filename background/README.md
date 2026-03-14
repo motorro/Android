@@ -1,5 +1,7 @@
 # Вебинар 35. Фоновая работа
 
+***[Read in English](#webinar-35-background-work)***
+
 1. Фоновая работа в Android. Общие понятия.
 2. Started и Bound сервисы.
 3. Периодические задачи в WorkManager
@@ -49,3 +51,52 @@
    then(sendReportWorkRequest).enqueue()`.
    [] Для такой задачи достаточно создать один `Worker`, который внутри себя будет по очереди вызывать методы для загрузки файлов, а затем 
    метод для отправки отчета, без использования цепочек `WorkManager`.
+
+---
+
+# Webinar 35. Background Work
+
+1. Background work in Android. General concepts.
+2. Started and Bound services.
+3. Periodic tasks in WorkManager
+4. Composite tasks in WorkManager
+
+## Self-check questions:
+
+1. What is the fundamental difference between a `Service` and a `Thread` in terms of lifecycle and execution flow management?
+   [] A `Service` is an Android component that runs on the main thread of the application by default and is intended for performing long-running operations 
+   without UI interaction. Its lifecycle is managed by the Android system. A `Thread` is a low-level construct for executing code in a separate thread, 
+   not directly related to the lifecycle of Android components, and has no UI of its own.
+   [] A `Service` always runs in a separate background thread created by the system, which frees up the application's main thread. A `Thread`, on the other hand, 
+   always starts on the main thread and blocks the UI until it completes.
+   [] A `Service` and a `Thread` are essentially the same thing, just that `Service` has a convenient API for managing background work, but both are managed by 
+   the JVM, not the Android system.
+2. For what task would you choose a `Foreground Service`, and what is the main requirement the Android system imposes on its operation?
+   [] A `Foreground Service` is used for any task that requires a high priority, even if it is short-lived. The system requires it to show a notification that 
+   the user can dismiss at any time.
+   [] A `Foreground Service` is chosen for tasks that must be visible to the user and continue even if the application is not active (e.g., playing music, 
+   tracking location). The main requirement is the presence of a persistent notification, visible to the user, informing about the service's operation.
+   [] A `Foreground Service` is intended for performing long-running background operations that do not require direct user interaction and should not display 
+   a notification so as not to distract the user.
+3. What role does the `onBind()` method play in a `Service` component and in what case is it called?
+   [] `onBind()` is called immediately after `onCreate()` for all types of services to prepare the service to receive commands, even if no one binds to it.
+   [] The `onBind()` method is called only in a `Started Service` to initialize background work, returning `null` because binding is not possible 
+   in such a service.
+   [] The `onBind()` method is called when another application component (e.g., an `Activity`) tries to bind to the `Service` to interact with it. It returns 
+   an `IBinder` object, which is the interface for the client's interaction with the service.
+4. In what situation would you prefer `WorkManager` over a `Foreground Service` for performing a background task? Provide an example for each.
+   [] `WorkManager` should be used when immediate task execution and UI progress display are required, for example, for downloading a large file with an indicator. 
+   `Foreground Service` is suitable for very short operations without user interaction.
+   [] `WorkManager` is preferable for deferred, guaranteed, and background tasks that do not require immediate execution or should not be constantly visible 
+   to the user (e.g., syncing data once a day, downloading images in the background). `Foreground Service` is for tasks that require immediate and continuous 
+   execution, visible to the user (e.g., audio streaming).
+   [] `WorkManager` is ideal for any background task that must be executed immediately and with maximum priority. `Foreground Service` is used only for tasks 
+   that can be deferred and are not critical to the user, but still require background work.
+5. How to organize the sequential execution of tasks using `WorkManager`, where several files are first downloaded, and then a final report with the results 
+   of their download is sent?
+   [] `WorkManager` does not support the direct sequential execution of several independent tasks. Instead, you need to run all download tasks in parallel 
+   and then manually initiate the report sending after they are completed.
+   [] For sequential execution of tasks in `WorkManager`, you can use `WorkManager.beginWith()`, then `then()` to add subsequent tasks. For example: 
+   `WorkManager.getInstance(context).beginWith(uploadFileAWorkRequest).then(uploadFileBWorkRequest).then(sendReportWorkRequest).enqueue()`.
+   [] For such a task, it is enough to create a single `Worker` that will sequentially call methods for downloading files and then a method for sending a report, 
+   without using `WorkManager` chains.
